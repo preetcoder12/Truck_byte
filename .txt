@@ -1,0 +1,11 @@
+name -> LOADMATE
+moto : -> – Your best mate for heavy loads
+
+backend dependency :
+express → Backend framework
+mongoose → MongoDB ORM
+cors → Enable Cross-Origin Resource Sharing
+dotenv → Manage environment variables
+jsonwebtoken (JWT) → Authentication & authorization
+bcryptjs → Password hashing
+multer → Handle file uploads
