@@ -1,0 +1,28 @@
+{
+    "drivername": "Amit Kumar",
+    "age": 35,
+    "email": "amitkumar@example.com",
+    "phone": "9876543210",
+    "photo": "https://example.com/photo.jpg",
+    "gender": "Male",
+    "licenseNumber": "DL012345678901",
+    "licenseType": "Commercial",
+    "experience": 10,
+    "address": {
+        "street": "456 MG Road",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001"
+    },
+    "emergencyContact": {
+        "name": "Sunil Kumar",
+        "phone": "9876543211",
+        "relation": "Brother"
+    },
+    "bankDetails": {
+        "accountNumber": "123456789012",
+        "ifscCode": "HDFC0001234",
+        "bankName": "HDFC Bank"
+    },
+    "status": "Active"
+}
