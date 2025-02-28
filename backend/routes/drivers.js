@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const routes = Router();
-const { Filldrivedrdetails } = require("../controllers/drivers")
+const { FillDriverDetails,upload } = require("../controllers/drivers")
 
-routes.post("/filldetails", Filldrivedrdetails);
+routes.post("/filldetails", upload.single("photo"), FillDriverDetails);
 
 module.exports = routes;

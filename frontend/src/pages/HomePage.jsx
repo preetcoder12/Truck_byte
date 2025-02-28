@@ -30,8 +30,8 @@ const HomePage = () => {
               <a href="/login" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                 Login
               </a>
-              <a href="/signup" className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
-                SignUp
+              <a href="/dashboard" className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                Dashboard
               </a>
             </div>
 

@@ -8,6 +8,7 @@ const UserRoutes = require("./routes/user");
 const DriverRoutes = require("./routes/drivers");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+
 app.use(cookieParser());
 
 app.use(cors({
