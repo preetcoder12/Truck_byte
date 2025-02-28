@@ -4,16 +4,18 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import Dashboard from "./pages/DashBoard";
 import BecomeDriver from "./pages/BecomeDriver";
-
+import Protect from "./components/protect";
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/becomedriver" element={<BecomeDriver />} />
+        {/*protected routes :)  */}
+        <Route path="/" element={<Protect element={<HomePage />} />} />
+        <Route path="/dashboard" element={<Protect element={<Dashboard />} />} />
+        <Route path="/becomedriver" element={<Protect element={<BecomeDriver />} />} />
+
       </Routes>
     </Router>
   );

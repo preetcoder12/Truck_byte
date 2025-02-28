@@ -1,10 +1,19 @@
 import React from 'react';
-import { Truck, BarChart3, Shield, Clock, Zap, Check, ChevronRight, Menu, X, Home } from 'lucide-react';
-
+import { Truck, BarChart3, Shield, Clock, Zap, Check, LayoutDashboard, ChevronRight, Menu, X, Home } from 'lucide-react';
+import toast from 'react-hot-toast';
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    toast.success("Logout Successfull !")
+    setTimeout(() => {
+      window.location.href = "/login"
+    }, 300);
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -27,12 +36,11 @@ const HomePage = () => {
             </div>
 
             <div className="hidden md:flex items-center space-x-4">
-              <a href="/login" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+              {/* <a href="/login" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                 Login
-              </a>
-              <a href="/dashboard" className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
-                Dashboard
-              </a>
+              </a> */}
+              <button onClick={handleLogout}
+                className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">Logout</button>
             </div>
 
             {/* Mobile menu button */}
@@ -82,7 +90,8 @@ const HomePage = () => {
                   href="/dashboard"
                   className="bg-blue-600 text-white px-8 py-4 rounded-md text-center text-lg font-medium hover:bg-blue-700 transition-colors"
                 >
-                  Request Free Demo
+                  <div className='flex gap-2'><LayoutDashboard />Dashboard</div>
+
                 </a>
                 <a
                   href="#learn-more"
@@ -95,9 +104,9 @@ const HomePage = () => {
             <div className="md:w-1/2">
               <div className="bg-white p-4 rounded-lg shadow-xl">
                 <img
-                  src="/api/placeholder/600/400"
+                  src="/dashboard.png"
                   alt="LoadMate dashboard preview"
-                  className="rounded-md w-full"
+                  className="rounded-md w-full hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </div>

@@ -25,6 +25,9 @@ const SignupPage = () => {
             const response = await axios.post("http://localhost:8000/user/signup", formData, {
                 headers: { "Content-Type": "application/json" },
             });
+
+            localStorage.setItem("user", JSON.stringify(response.data.user))
+            localStorage.setItem("token", response.data.token)
             console.log("Signup response:", response.data);
             toast.success("Signup successful!");
             setTimeout(() => {
