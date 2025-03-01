@@ -1,7 +1,15 @@
-import  { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Truck, BarChart3, Calendar, Users, AlertTriangle, Clock, MapPin, Settings, Search, User, CirclePlus, Bell, ChevronRight, Filter } from 'lucide-react';
+import axios from 'axios';
+import { FaUser } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
+    const [profileRoute, setProfileRoute] = useState("/");
+    const [driver, setDriver] = useState(null);
+    const token = localStorage.getItem("driverToken");
+
     const [fleetStats, setFleetStats] = useState({
         activeVehicles: 42,
         inMaintenance: 7,
@@ -21,6 +29,54 @@ const Dashboard = () => {
         { id: 3, truck: 'TRK-0872', destination: 'Dallas, TX', driver: 'Mike Chen', eta: '5h 45m' }
     ]);
 
+
+    useEffect(() => {
+        const storedId = localStorage.getItem("driverId");  // Fetch from localStorage
+        if (!storedId) {
+            console.log("No driver ID found, redirecting to login...");
+            setDriver(null);
+            setProfileRoute("/driverlogin");
+            return;
+        }
+
+        const fetchDriverDetails = async () => {
+            try {
+                if (!token) {
+                    console.error("No token found, redirecting to login...");
+                    setDriver(null);
+                    setProfileRoute("/driverlogin");
+                    return;
+                }
+
+                const response = await axios.get(`http://localhost:8000/driver/details/${storedId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                console.log("Driver details:", response.data);
+                setDriver(response.data);  // Ensure correct data is set
+                setProfileRoute("/driverprofile");
+            } catch (error) {
+                console.error("Error fetching driver's details:", error);
+                setDriver(null);
+                setProfileRoute("/driverlogin");
+            }
+        };
+
+        fetchDriverDetails();
+    }, []); // 🔥 Empty dependency array to run only once
+
+
+
+
+    const formattedDate = driver?.createdAt
+        ? new Date(driver.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })
+        : "N/A"; // Default value if createdAt is missing
+
+
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
             <div className="flex">
@@ -30,7 +86,7 @@ const Dashboard = () => {
                         <div className="bg-blue-500 p-2 rounded-lg mr-3">
                             <Truck className="w-6 h-6" />
                         </div>
-                        <a href='/'><h1 className="text-xl font-bold tracking-tight">LoadMate</h1></a>
+                        <a href='/'><h1 className="text-xl font-bold tracking-tight">LorryWale</h1></a>
                     </div>
 
                     <nav>
@@ -84,14 +140,28 @@ const Dashboard = () => {
                     </nav>
 
                     <div className="mt-auto pt-10">
-                        <div className="bg-slate-800 p-4 rounded-xl">
-                            <div className="flex items-center">
-                                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
-                                    JS
-                                </div>
+                        <div
+                            className="bg-slate-800 p-4 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition duration-300 cursor-pointer"
+                            onClick={() => navigate(profileRoute)}
+                        >
+                            <div className="flex items-center gap-4">
+                                {/* Profile Picture Placeholder */}
                                 <div>
-                                    <p className="font-medium">James Smith</p>
-                                    <p className="text-xs text-slate-400">Fleet Manager</p>
+                                    {driver?.photo ? (
+                                        <img
+                                            src={`http://localhost:8000/uploads/${driver.photo}`}
+                                            alt={driver?.drivername || "Driver"}
+                                            className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold"
+                                        />
+                                    ) : (
+                                        <FaUser className="text-gray-400 text-2xl" />
+                                    )}
+                                </div>
+
+                                {/* Driver Details */}
+                                <div>
+                                    <p className="font-medium text-white">{driver?.drivername || "Login as Driver"}</p>
+                                    <p className="text-xs text-slate-400">Joined: {formattedDate}</p>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
+import { User } from "lucide-react"
 
 const BecomeDriver = () => {
     const [formData, setFormData] = useState({
@@ -66,28 +67,36 @@ const BecomeDriver = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Submitting form data:", formData);
+
         try {
             const response = await axios.post("http://localhost:8000/driver/filldetails",
                 formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            
-            console.log("filling dirver details response:", response.data);
+
+            const { drivertoken, driverId } = response.data;
+
+            localStorage.setItem("driverToken", drivertoken);
+            localStorage.setItem("driverId", driverId);
+
+            console.log("Driver registration response:", response.data);
             toast.success("Driver registration successful! Welcome aboard!");
+
             setTimeout(() => {
                 window.location.href = "/";
             }, 400);
         } catch (error) {
-            console.error("filling dirver details error:", error.response ? error.response.data : error.message);
-            toast.error(error);
+            console.error("Filling driver details error:", error.response ? error.response.data : error.message);
+            toast.error(error.response?.data?.error || "An error occurred");
         }
     };
+
 
     return (
         <>
             <div className="bg-gray-600 flex justify-center " >
 
-                <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">LoadMate</span></a>
+                <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">LorryWale</span></a>
             </div>
             <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center py-12 px-4"
                 style={{
@@ -105,8 +114,8 @@ const BecomeDriver = () => {
                     <div className="p-8 md:p-12">
                         <div className="mb-8 text-center">
                             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 tracking-tight">
-                                <span className="bg-clip-text text-white">
-                                    Become a Driver
+                                <span className="bg-clip-text text-white ">
+                                    <div className="flex justify-center gap-2 ">Become a Driver <User className="size-[3rem]" /></div>
                                 </span>
                             </h1>
                             <p className="text-gray-200 text-lg">Join our elite team and start earning today</p>
@@ -577,6 +586,11 @@ const BecomeDriver = () => {
                                         Submit Application
                                     </button>
                                 )}
+                            </div>
+                            <div>
+                                <p className="mt-4 text-[1rem] text-white text-sm">
+                                    Already have an account? <a href="/driverlogin" className="text-blue-400 hover:underline">Login</a>
+                                </p>
                             </div>
                         </form>
                     </div >

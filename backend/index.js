@@ -26,6 +26,7 @@ console.log("MONGO_URI:", process.env.MONGO_URI);
 // my middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 // default routes
 app.get("/", (req, res) => {

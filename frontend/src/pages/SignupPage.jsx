@@ -48,7 +48,7 @@ const SignupPage = () => {
                     <div className="bg-blue-500 p-3 rounded-xl inline-block mb-4">
                         <Truck className="w-12 h-12" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-2">LoadMate</h1>
+                    <h1 className="text-4xl font-bold mb-2">LorryWale</h1>
                     <p className="text-slate-300 text-lg">Fleet Management System</p>
                 </div>
 
@@ -69,7 +69,7 @@ const SignupPage = () => {
             {/* Signup Form */}
             <div className="bg-white lg:w-1/2 w-full max-w-md p-8 lg:p-12 rounded-2xl shadow-lg">
                 <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Create an Account</h2>
-                <p className="text-gray-600 mb-8 text-center">Sign up to get started with LoadMate</p>
+                <p className="text-gray-600 mb-8 text-center">Sign up to get started with LorryWale</p>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <input

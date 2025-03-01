@@ -23,7 +23,7 @@ const HomePage = () => {
           <div className="flex justify-between h-20">
             <div className="flex items-center">
               <Truck className="h-10 w-10 text-blue-600" />
-              <a href="/"> <span className="ml-3 text-2xl font-bold text-gray-900">LoadMate</span></a>
+              <a href="/"> <span className="ml-3 text-2xl font-bold text-gray-900">LorryWale</span></a>
             </div>
 
             {/* Desktop Navigation */}
@@ -82,7 +82,7 @@ const HomePage = () => {
                 Manage Your Fleet with Precision and Ease
               </h1>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl">
-                LoadMate gives you complete control over your truck fleet, optimizing routes,
+                LorryWale gives you complete control over your truck fleet, optimizing routes,
                 reducing costs, and improving efficiency with our advanced management solution.
               </p>
               <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -105,7 +105,7 @@ const HomePage = () => {
               <div className="bg-white p-4 rounded-lg shadow-xl">
                 <img
                   src="/dashboard.png"
-                  alt="LoadMate dashboard preview"
+                  alt="LorryWale dashboard preview"
                   className="rounded-md w-full hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -189,7 +189,7 @@ const HomePage = () => {
                 Transform Your Trucking Operations
               </h2>
               <p className="mt-4 text-lg text-gray-600">
-                Join hundreds of companies that have revolutionized their fleet management with LoadMate
+                Join hundreds of companies that have revolutionized their fleet management with LorryWale
               </p>
 
               <div className="mt-8 space-y-4">
@@ -300,7 +300,7 @@ const HomePage = () => {
               Trusted by Industry Leaders
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-              See what our customers have to say about LoadMate
+              See what our customers have to say about LorryWale
             </p>
           </div>
 
@@ -316,7 +316,7 @@ const HomePage = () => {
                 </div>
               </div>
               <p className="text-gray-600 mb-4">
-                "LoadMate has completely transformed how we manage our fleet. The real-time tracking and maintenance alerts have reduced our downtime by 35%."
+                "LorryWale has completely transformed how we manage our fleet. The real-time tracking and maintenance alerts have reduced our downtime by 35%."
               </p>
               <div className="border-t pt-4">
                 <p className="font-medium">Michael Rodriguez</p>
@@ -394,7 +394,7 @@ const HomePage = () => {
             Ready to Transform Your Fleet Management?
           </h2>
           <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join thousands of companies who have optimized their operations with LoadMate.
+            Join thousands of companies who have optimized their operations with LorryWale.
             Get started with a free demo today.
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -421,7 +421,7 @@ const HomePage = () => {
             <div>
               <div className="flex items-center">
                 <Truck className="h-8 w-8 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">LoadMate</span>
+                <span className="ml-2 text-xl font-bold">LorryWale</span>
               </div>
               <p className="mt-4 text-gray-400">
                 The complete solution for modern fleet management.
@@ -460,7 +460,7 @@ const HomePage = () => {
           </div>
 
           <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© 2025 LoadMate. All rights reserved.</p>
+            <p className="text-gray-400">© 2025 LorryWale. All rights reserved.</p>
             <div className="mt-4 md:mt-0 flex space-x-6">
               <a href="#terms" className="text-gray-400 hover:text-white transition-colors">Terms</a>
               <a href="#privacy" className="text-gray-400 hover:text-white transition-colors">Privacy</a>

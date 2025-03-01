@@ -28,7 +28,7 @@ const driverSchema = new Schema({
     gender: {
         type: String,
         required: true,
-        enum: ["male", "female", "other"],
+        enum: ["Male", "Female", "Other"],
     },
     licenseNumber: {
         type: String,
@@ -37,7 +37,7 @@ const driverSchema = new Schema({
     },
     licenseType: {
         type: String,
-        enum: ["Light", "Heavy", "Commercial"],
+        enum: ["Non-Commercial", "Heavy Vehicle", "Commercial"],
         required: true,
     },
     experience: {

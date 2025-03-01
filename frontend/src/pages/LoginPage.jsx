@@ -50,7 +50,7 @@ const LoginPage = () => {
                     <div className="bg-blue-500 p-3 rounded-xl inline-block mb-4">
                         <Truck className="w-12 h-12" />
                     </div>
-                    <h1 className="text-4xl font-bold mb-2">LoadMate</h1>
+                    <h1 className="text-4xl font-bold mb-2">LorryWale</h1>
                     <p className="text-slate-300 text-lg">Fleet Management System</p>
                 </div>
 
@@ -74,7 +74,7 @@ const LoginPage = () => {
                     <div className="bg-blue-500 p-2 rounded-lg mr-3">
                         <Truck className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold">LoadMate</h1>
+                    <h1 className="text-2xl font-bold">LorryWale</h1>
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome back</h2>
