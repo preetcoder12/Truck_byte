@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaTruck, FaPhone, FaEnvelope, FaMapMarkerAlt, FaIdCard, FaUser } from "react-icons/fa";
 import { RingLoader } from "react-spinners";
 import toast from "react-hot-toast";
+import { FaGears } from "react-icons/fa6";
 
 const DriverProfile = () => {
     const [driver, setDriver] = useState(null);
@@ -13,7 +14,7 @@ const DriverProfile = () => {
     useEffect(() => {
 
         if (!id) {
-            window.location.href="/becomedriver"
+            window.location.href = "/becomedriver"
             setLoading(false);
             return;
         }
@@ -94,6 +95,13 @@ const DriverProfile = () => {
                         </h1>
                         <p className="text-gray-400">Driver ID: {id}</p>
                         <p className="text-gray-300 mt-1">Joined: {formattedDate}</p>
+                        {driver.status === "Active" ? (
+                            <p className="text-green-500 mt-1 font-bold text-[1.4rem] poppins">{driver.status}</p>
+                        ) : driver.status === "Inactive" ? (
+                            <p className="text-red-500 mt-1 font-bold text-[1.4rem] poppins">{driver.status}</p>
+                        ) : (
+                            <p className="text-orange-500 mt-1 font-bold text-[1.4rem] poppins">{driver.status}</p>
+                        )}
                     </div>
                 </div>
 
@@ -154,9 +162,12 @@ const DriverProfile = () => {
                             <button className="bg-blue-500 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 transition-transform duration-300">
                                 Go to Dashboard
                             </button>
-                            <button onClick={handlelogoutdriver} className="bg-red-500 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 transition-transform duration-300">
+                            <button onClick={handlelogoutdriver} className="bg-red-500 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 transition-transform duration-300">
                                 Logout
                             </button>
+                            <a href="/editdriverprofile" className="bg-green-500 flex gap-2 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 transition-transform duration-300">
+                                <FaGears className="size-6" />Edit
+                            </a>
                         </div>
                     </a>
                 </div>

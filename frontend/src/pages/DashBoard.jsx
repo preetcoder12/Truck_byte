@@ -124,7 +124,7 @@ const Dashboard = () => {
                                 <User className="w-5 h-5 mr-3" />
                                 <span>Become Driver</span>
                             </a>
-                            <a href="#" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
+                            <a href="/addtruck" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
                                 <CirclePlus className="w-5 h-5 mr-3" />
                                 <span>Add Truck</span>
                             </a>

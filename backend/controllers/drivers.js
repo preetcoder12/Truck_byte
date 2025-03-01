@@ -148,4 +148,22 @@ const LoginAsDriver = async (req, res) => {
     }
 }
 
-module.exports = { FillDriverDetails, upload, DriverDetails, LoginAsDriver };
+const DriverDetailsupdate = async (req, res) => {
+    try {
+        const driverId = req.params.id;
+        const updateData = req.body;
+        const updatedriver = await Driver.findByIdAndUpdate(driverId, updateData, { new: true });
+
+        if (!updatedriver) {
+            return res.status(404).json({ message: "Driver not found" });
+        }
+        res.status(200).json(updatedriver);
+
+    } catch (error) {
+        console.error("Driver edit error:", error);
+        res.status(500).json({ error: "Server error during driver details editing!." });
+    }
+}
+
+
+module.exports = { FillDriverDetails, upload, DriverDetails, LoginAsDriver, DriverDetailsupdate };

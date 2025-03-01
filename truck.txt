@@ -1,0 +1,12 @@
+{
+    "truckNumber": "UP32AB5234",
+    "model": "Tata",
+    "manufacturer": "Tata Motors",
+    "registrationDate": "2023-02-10",
+    "insuranceExpiry": "2026-05-10",
+    "capacity": 12,
+    "truckType": "Flatbed",
+    "status": "Available",
+    "ownerType": "Individual",
+    "ownerId": "65dc9a6e8f1b2a001bc6f123"
+}

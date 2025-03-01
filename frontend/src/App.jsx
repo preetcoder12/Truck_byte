@@ -7,6 +7,8 @@ import BecomeDriver from "./pages/BecomeDriver";
 import Protect from "./components/protect";
 import DriverProfile from "./components/DriverProfile";
 import DriverLogin from "./components/SigninDriver";
+import EditDriverProfile from "./pages/EditDriverProfile";
+import AddTruck from "./pages/AddTruck";
 function App() {
   return (
     <Router>
@@ -19,6 +21,8 @@ function App() {
         <Route path="/becomedriver" element={<Protect element={<BecomeDriver />} />} />
         <Route path="/driverprofile" element={<Protect element={<DriverProfile />} />} />
         <Route path="/driverlogin" element={<Protect element={<DriverLogin />} />} />
+        <Route path="/editdriverprofile" element={<Protect element={<EditDriverProfile />} />} />
+        <Route path="/addtruck" element={<Protect element={<AddTruck />} />} />
 
       </Routes>
     </Router>

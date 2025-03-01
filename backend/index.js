@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const UserRoutes = require("./routes/user");
 const DriverRoutes = require("./routes/drivers");
+const TrouckRoutes = require("./routes/trucks")
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 // my Routes
 app.use('/user', UserRoutes);
 app.use('/driver', DriverRoutes);
+app.use('/trucks', TrouckRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port ${PORT}`);
