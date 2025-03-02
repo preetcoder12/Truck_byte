@@ -31,7 +31,7 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-        const storedId = localStorage.getItem("driverId");  // Fetch from localStorage
+        const storedId = localStorage.getItem("driverId");
         if (!storedId) {
             console.log("No driver ID found, redirecting to login...");
             setDriver(null);
@@ -116,7 +116,7 @@ const Dashboard = () => {
 
                         <div className="mb-8">
                             <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-4">Actions</p>
-                            <a href="#" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
+                            <a href="/booktrucks" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
                                 <Truck className="w-5 h-5 mr-3" />
                                 <span>Book Truck</span>
                             </a>

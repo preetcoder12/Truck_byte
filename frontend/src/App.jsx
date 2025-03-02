@@ -9,13 +9,16 @@ import DriverProfile from "./components/DriverProfile";
 import DriverLogin from "./components/SigninDriver";
 import EditDriverProfile from "./pages/EditDriverProfile";
 import AddTruck from "./pages/AddTruck";
+import BookTrucks from "./pages/BookTrucks";
+import BookTruckProfile from "./components/BookTruckProfile";
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        {/*protected routes :)  */}
+        {/* Protected routes */}
         <Route path="/" element={<Protect element={<HomePage />} />} />
         <Route path="/dashboard" element={<Protect element={<Dashboard />} />} />
         <Route path="/becomedriver" element={<Protect element={<BecomeDriver />} />} />
@@ -23,11 +26,11 @@ function App() {
         <Route path="/driverlogin" element={<Protect element={<DriverLogin />} />} />
         <Route path="/editdriverprofile" element={<Protect element={<EditDriverProfile />} />} />
         <Route path="/addtruck" element={<Protect element={<AddTruck />} />} />
-
+        <Route path="/booktrucks" element={<Protect element={<BookTrucks />} />} />
+        <Route path="/booktrucksdetails/:truckId" element={<Protect element={<BookTruckProfile />} />} />
       </Routes>
     </Router>
   );
 }
 
-
-export default App
+export default App;

@@ -50,7 +50,19 @@ const truckSchema = new Schema({
     images: {
         type: [String],
         default: []
+    },
+
+    pricePerKm: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+    contactInfo: {
+        name: { type: String, required: true },
+        phone: { type: String, required: true,}, 
+        email: { type: String, required: true, }
     }
+
 }, { timestamps: true });
 
 const Truck = mongoose.model("Truck", truckSchema);

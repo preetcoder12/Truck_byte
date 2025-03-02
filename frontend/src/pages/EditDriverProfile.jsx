@@ -186,8 +186,7 @@ const EditDriverProfile = () => {
                                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             >
                                 <option value="Commercial">Commercial</option>
-                                <option value="Private">Private</option>
-                                <option value="Motorcycle">Motorcycle</option>
+                                <option value="Non-Commercial">Non-Commercial</option>
                                 <option value="Heavy Vehicle">Heavy Vehicle</option>
                             </select>
                         </div>
