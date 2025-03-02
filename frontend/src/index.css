@@ -22,47 +22,39 @@
     font-family: "Poppins", sans-serif;
 }
 
-.pulse {
-    width: 22.4px;
-    height: 22.4px;
-    border-radius: 50%;
-    background: #474bff;
-    box-shadow: 0 0 0 0 rgba(71, 75, 255, 0.5);
-    animation: pulse-animation 1.5s infinite linear;
+.dots {
+    width: 13.4px;
+    height: 13.4px;
     position: relative;
-}
-
-.pulse:before,
-.pulse:after {
+ }
+ 
+ .dots::before,
+ .dots::after {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: inherit;
-    box-shadow: 0 0 0 0 rgba(71, 75, 255, 0.5);
-    animation: pulse-animation 1.5s infinite linear;
-}
-
-.pulse:after {
-    animation-delay: -0.75s;
-}
-
-/* Keyframes for animation */
-@keyframes pulse-animation {
-    0% {
-        box-shadow: 0 0 0 0 rgba(71, 75, 255, 0.5);
-    }
-
-    50% {
-        box-shadow: 0 0 10px 10px rgba(71, 75, 255, 0);
-    }
-
+    border-radius: 50%;
+    background: #474bff;
+ }
+ 
+ .dots::before {
+    box-shadow: -26.9px 0 #474bff;
+    animation: dots-dm1l1cmd 0.6s infinite linear;
+ }
+ 
+ .dots::after {
+    transform: rotate(0deg) translateX(26.9px);
+    animation: dots-dh1qq5md 0.6s infinite linear;
+ }
+ 
+ @keyframes dots-dm1l1cmd {
     100% {
-        box-shadow: 0 0 0 0 rgba(71, 75, 255, 0);
+       transform: translateX(26.9px);
     }
-}
-
-@keyframes pulse-kefe91md {
+ }
+ 
+ @keyframes dots-dh1qq5md {
     100% {
-        box-shadow: 0 0 0 44.8px #0000;
+       transform: rotate(-180deg) translateX(26.9px);
     }
-}
+ }

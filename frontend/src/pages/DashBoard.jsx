@@ -83,16 +83,16 @@ const Dashboard = () => {
                 {/* Sidebar - Modern Dark Theme */}
                 <div className="bg-slate-900 text-white w-72 min-h-screen p-6">
                     <div className="flex items-center mb-10">
-                        <div className="bg-blue-500 p-2 rounded-lg mr-3">
-                            <Truck className="w-6 h-6" />
-                        </div>
+                        
+                        <img className='size-[5rem]' src="/logo.png" alt="logo" />
+
                         <a href='/'><h1 className="text-xl font-bold tracking-tight">LorryWale</h1></a>
                     </div>
 
                     <nav>
                         <div className="mb-8">
                             <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-4">Dashboard</p>
-                            <a href="#" className="flex items-center p-3 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl mb-2 shadow-md">
+                            <a href="/dashboard" className="flex items-center p-3 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl mb-2 shadow-md">
                                 <BarChart3 className="w-5 h-5 mr-3" />
                                 <span className="font-medium">Overview</span>
                             </a>

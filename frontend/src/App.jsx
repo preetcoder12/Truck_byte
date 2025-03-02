@@ -12,6 +12,7 @@ import AddTruck from "./pages/AddTruck";
 import BookTrucks from "./pages/BookTrucks";
 import BookTruckProfile from "./components/BookTruckProfile";
 import RazorPay_page from "./pages/RazorPay_page";
+import LearnMore from "./pages/Learnmore";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         {/* Protected routes */}
         <Route path="/" element={<Protect element={<HomePage />} />} />
+        <Route path="/learnmore" element={<Protect element={<LearnMore />} />} />
         <Route path="/dashboard" element={<Protect element={<Dashboard />} />} />
         <Route path="/becomedriver" element={<Protect element={<BecomeDriver />} />} />
         <Route path="/driverprofile" element={<Protect element={<DriverProfile />} />} />

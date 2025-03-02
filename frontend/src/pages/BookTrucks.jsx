@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Truck, AlertCircle, Filter, IndianRupee, Weight, StepBack } from "lucide-react";
+import Loader from "../components/Loader"
 import { useNavigate } from "react-router-dom";
 
 const BookTrucks = () => {
@@ -69,10 +70,11 @@ const BookTrucks = () => {
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-                <p className="text-gray-600 font-medium">Loading available trucks...</p>
+                <Loader/> {/* Add Loader component here */}
             </div>
         );
     }
+
 
 
     return (
@@ -80,7 +82,8 @@ const BookTrucks = () => {
             <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 px-4 shadow-md">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex items-center mb-4">
-                        <Truck size={32} className="mr-3" />
+                        <img className='size-[5rem]' src="/logo.png" alt="logo" />
+
                         <h1 className="text-3xl font-bold">Find Your Perfect Truck</h1>
                     </div>
                     <p className="text-blue-100 max-w-xl">Browse our fleet of reliable trucks and find the perfect match for your transportation needs.</p>
@@ -135,7 +138,7 @@ const BookTrucks = () => {
                                     placeholder="Enter maximum price"
                                 />
                             </div>
-                            
+
                         </div>
                     )}
 
@@ -254,7 +257,7 @@ const BookTrucks = () => {
                     )}
                 </div>
                 <a href="/dashboard" className="bg-red-800 hover:bg-red-700 text-white font-semibold py-2 px-2 w-20 align-center justify-center  rounded-md flex">
-                <StepBack /> Back
+                    <StepBack /> Back
                 </a>
             </div>
         </div>

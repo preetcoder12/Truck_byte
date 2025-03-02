@@ -1,9 +1,9 @@
-import "./index.css";
 
 const Loader = () => {
   return (
     <div>
-      <div className='pulse'></div>
+      <div className="dots"></div>
+
     </div>
   )
 }
