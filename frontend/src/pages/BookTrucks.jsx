@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Truck, AlertCircle, Loader, Filter, IndianRupee, Weight } from "lucide-react";
+import { Truck, AlertCircle, Filter, IndianRupee, Weight, StepBack } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const BookTrucks = () => {
@@ -34,25 +34,26 @@ const BookTrucks = () => {
         fetchAllTrucks();
     }, []);
 
-    const handleSelectTruck = (truckId) => {
-        navigate(`/booktrucksdetails/${String(truckId)}`);
+    const handleSelectTruck = (truck) => {
+        setSelectedTruck(truck._id); // Ensure we store only the ID
     };
 
     const handleSubmit = (truckId) => {
-        if (selectedTruck) {
-            navigate(`/booktrucksdetails/${String(truckId)}`);
-        } else {
-            alert("Please select a truck first.");
+        if (!truckId) {
+            console.log("Please select a truck first."); // Debugging
+            return;
         }
+        localStorage.setItem("selectedtruckid", truckId);
+        console.log("Navigating to:", `/booktrucksdetails/${truckId}`); // Debugging
+        navigate(`/booktrucksdetails/${truckId}`);
     };
+
 
     const toggleFilters = () => {
         setShowFilters(!showFilters);
     };
 
-    const applyFilters = () => {
-        console.log("Applying filters:", filters);
-    };
+
 
     const getFilteredTrucks = () => {
         return trucks.filter(truck => {
@@ -134,14 +135,7 @@ const BookTrucks = () => {
                                     placeholder="Enter maximum price"
                                 />
                             </div>
-                            <div className="md:col-span-3">
-                                <button
-                                    onClick={applyFilters}
-                                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                                >
-                                    Apply Filters
-                                </button>
-                            </div>
+                            
                         </div>
                     )}
 
@@ -172,11 +166,12 @@ const BookTrucks = () => {
                                     <div className="h-56 overflow-hidden bg-gray-200 relative">
                                         {truck.images && truck.images.length > 0 ? (
                                             <img
-                                                src={`http://localhost:8000${truck.images[0]}`}
+                                                src={`http://localhost:8000${truck.images[0]}`} // Always show the first image as default
                                                 alt={`${truck.manufacturer} ${truck.model}`}
                                                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                                             />
                                         ) : (
+
                                             <div className="flex items-center justify-center h-full bg-gray-100">
                                                 <Truck size={64} className="text-gray-400" />
                                                 <p className="text-gray-500 ml-2">No image available</p>
@@ -220,7 +215,7 @@ const BookTrucks = () => {
 
                                         {truck.status === "Available" ? (
                                             <button
-                                                onClick={handleSubmit}
+                                                onClick={() => handleSubmit(truck._id)} // Pass truck._id directly
                                                 className="w-full bg-blue-600 text-white py-2.5 rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center"
                                             >
                                                 <Truck size={18} className="mr-2" />
@@ -231,7 +226,10 @@ const BookTrucks = () => {
                                                 <AlertCircle size={18} className="mr-2" />
                                                 Currently Unavailable
                                             </button>
-                                        )}
+                                        )
+                                        }
+
+
                                     </div>
 
                                     {truck.images && truck.images.length > 1 && (
@@ -249,11 +247,15 @@ const BookTrucks = () => {
                                             </div>
                                         </div>
                                     )}
+
                                 </div>
                             ))}
                         </div>
                     )}
                 </div>
+                <a href="/dashboard" className="bg-red-800 hover:bg-red-700 text-white font-semibold py-2 px-2 w-20 align-center justify-center  rounded-md flex">
+                <StepBack /> Back
+                </a>
             </div>
         </div>
     );
