@@ -13,14 +13,19 @@ import BookTrucks from "./pages/BookTrucks";
 import BookTruckProfile from "./components/BookTruckProfile";
 import RazorPay_page from "./pages/RazorPay_page";
 import LearnMore from "./pages/Learnmore";
+import Select_ROle from "./components/Select_ROle";
+import AdminSignup from "./pages/AdminSignupPage";
+
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/selectroles" element={<Select_ROle />} />
+
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        {/* Protected routes */}
+        {/* Protected routes Reloated to User*/}
         <Route path="/" element={<Protect element={<HomePage />} />} />
         <Route path="/learnmore" element={<Protect element={<LearnMore />} />} />
         <Route path="/dashboard" element={<Protect element={<Dashboard />} />} />
@@ -32,6 +37,9 @@ function App() {
         <Route path="/booktrucks" element={<Protect element={<BookTrucks />} />} />
         <Route path="/booktrucksdetails/:truckId" element={<Protect element={<BookTruckProfile />} />} />
         <Route path="/pay" element={<Protect element={<RazorPay_page />} />} />
+
+        {/* Admin routes */}
+        <Route  path="/adminsignup" element={<AdminSignup />} />
       </Routes>
     </Router>
   );

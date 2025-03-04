@@ -7,6 +7,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const UserRoutes = require("./routes/user");
 const DriverRoutes = require("./routes/drivers");
 const TrouckRoutes = require("./routes/trucks")
+const AdminRoutes = require("./routes/Admin")
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
 app.use('/user', UserRoutes);
 app.use('/driver', DriverRoutes);
 app.use('/trucks', TrouckRoutes);
+app.use('/admin', AdminRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port ${PORT}`);

@@ -36,7 +36,7 @@ const BookTrucks = () => {
     }, []);
 
     const handleSelectTruck = (truck) => {
-        setSelectedTruck(truck._id); // Ensure we store only the ID
+        setSelectedTruck(truck._id); 
     };
 
     const handleSubmit = (truckId) => {
