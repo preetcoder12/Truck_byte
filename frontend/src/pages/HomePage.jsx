@@ -7,8 +7,8 @@ const HomePage = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.clear();
+
     toast.success("Logout Successfull !")
     setTimeout(() => {
       window.location.href = "/login"
@@ -345,7 +345,7 @@ const HomePage = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <a
-              href="#demo"
+              href="/dashboard"
               className="bg-white text-blue-600 px-8 py-4 rounded-md text-lg font-medium hover:bg-blue-50"
             >
               Schedule Free Demo

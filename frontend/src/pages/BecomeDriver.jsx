@@ -94,10 +94,12 @@ const BecomeDriver = () => {
 
     return (
         <>
-            <div className="bg-gray-600 flex justify-center " >
+<div className="bg-gradient-to-r from-gray-700 to-gray-900 flex justify-center items-center py-4 shadow-md">
+    <a href="/dashboard" className="text-white text-4xl font-bold transition-transform transform hover:scale-105">
+        LorryWale
+    </a>
+</div>
 
-                <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">LorryWale</span></a>
-            </div>
             <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center py-12 px-4"
                 style={{
                     background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), 
@@ -208,7 +210,7 @@ const BecomeDriver = () => {
                                                     onChange={handleChange}
                                                     required
                                                     className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="9876543210"
+                                                    placeholder="1234567890"
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
@@ -549,7 +551,7 @@ const BecomeDriver = () => {
                                                 required
                                             />
                                             <label htmlFor="terms" className="text-sm text-gray-200">
-                                                I agree to the terms and conditions, if the world was ending i wanna be next to youuuu...  ❤️
+                                                I agree to the terms and conditions
                                             </label>
                                         </div>
                                     </div>

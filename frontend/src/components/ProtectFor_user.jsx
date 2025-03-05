@@ -1,8 +1,8 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
-const ProtectLogin = ({ element }) => {
-    const role_user = localStorage.getItem("role_User");
-    return role_user ? element : <Navigate to="/login" />
-}
+const Protect = ({ element }) => {
+    const role_user = localStorage.getItem("userRole");
+    return role_user === "100" ? element : <Navigate to="/login" />;
+};
 
-export default ProtectLogin
+export default Protect;

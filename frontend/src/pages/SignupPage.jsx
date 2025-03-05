@@ -1,6 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { EyeIcon, EyeOffIcon, Truck } from "lucide-react";
+import {
+    EyeIcon, EyeOffIcon,
+    Truck, User, MapPin,
+    Phone, Mail, Lock,
+    ArrowRight
+} from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 
 const SignupPage = () => {
@@ -28,7 +33,6 @@ const SignupPage = () => {
 
             localStorage.setItem("user", JSON.stringify(response.data.user))
             localStorage.setItem("token", response.data.token)
-            console.log("Signup response:", response.data);
             toast.success("Signup successful!");
             setTimeout(() => {
                 window.location.href = "/login";
@@ -41,106 +45,175 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
-            {/* Left Side Branding */}
-            <div className="bg-slate-900 hidden lg:flex lg:w-1/2 h-screen flex-col items-center justify-center text-white p-10 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-                <div className="mb-8">
-                    <div className="bg-blue-500 p-3 rounded-xl inline-block mb-4">
-                        <Truck className="w-12 h-12" />
+        <div className="min-h-screen  bg-gradient-to-br from-blue-500 to-red-500 flex items-center justify-center p-4 font-sans">
+            <div className="w-full max-w-5xl bg-white shadow-2xl rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+                {/* Left Side - Branding & Information */}
+                <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-12 flex flex-col justify-center text-white">
+                    <div className="mb-8">
+                        <div className="bg-blue-500 p-4 rounded-xl inline-block mb-4 shadow-lg">
+                            <Truck className="w-12 h-12" />
+                        </div>
+                        <h1 className="text-4xl font-bold mb-2">LorryWale</h1>
+                        <p className="text-blue-200 text-lg">Connecting Transportation Solutions</p>
                     </div>
-                    <h1 className="text-4xl font-bold mb-2">LorryWale</h1>
-                    <p className="text-slate-300 text-lg">Fleet Management System</p>
+
+                    <div className="space-y-6 bg-slate-800 bg-opacity-50 p-6 rounded-xl">
+                        <div className="flex items-start space-x-4">
+                            <MapPin className="w-8 h-8 text-blue-400 mt-1" />
+                            <div>
+                                <h3 className="font-semibold text-xl mb-2">Smart Routing</h3>
+                                <p className="text-gray-300">Optimize your trips with intelligent route planning</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start space-x-4">
+                            <Truck className="w-8 h-8 text-blue-400 mt-1" />
+                            <div>
+                                <h3 className="font-semibold text-xl mb-2">Fleet Management</h3>
+                                <p className="text-gray-300">Complete visibility and control of your transportation</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="bg-slate-800 bg-opacity-50 p-6 rounded-xl max-w-md">
-                    <h2 className="text-xl font-medium mb-4 text-blue-300">Streamline Your Fleet Operations</h2>
-                    <p className="text-slate-300 mb-4">
-                        Manage your entire fleet in one place with real-time tracking,
-                        maintenance scheduling, and performance analytics.
+                <div className="p-12 flex flex-col justify-center">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+                        Create Your Account
+                    </h2>
+                    <p className="text-gray-600 mb-8 text-center">
+                        Your best mate for heavy loads
                     </p>
-                    <div className="flex space-x-2 mt-6">
-                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-blue-400 opacity-70 rounded-full"></div>
-                        <div className="w-3 h-3 bg-blue-400 opacity-40 rounded-full"></div>
-                    </div>
-                </div>
-            </div>
 
-            {/* Signup Form */}
-            <div className="bg-white lg:w-1/2 w-full max-w-md p-8 lg:p-12 rounded-2xl shadow-lg">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Create an Account</h2>
-                <p className="text-gray-600 mb-8 text-center">Sign up to get started with LorryWale</p>
-
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                        className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                    <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Phone Number"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        pattern="[0-9]{10}"
-                        title="Phone number should be 10 digits"
-                        required
-                        className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                    <div className="relative">
-                        <input
-                            type={viewPassword ? "text" : "password"}
-                            name="password"
-                            placeholder="Password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            minLength="4"
-                            required
-                            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setViewPassword(!viewPassword)}
-                            className="absolute right-4 top-4 text-gray-500 hover:text-gray-700 transition"
+                    {/* User Type Selection */}
+                    <div className="flex justify-center mb-8 space-x-4">
+                        <div
+                            className={`px-6 py-2 rounded-full transition-all flex items-center space-x-2 
+                                `}
                         >
-                            {viewPassword ? <EyeOffIcon size={22} /> : <EyeIcon size={22} />}
-                        </button>
-                    </div>
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className={`w-full p-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all flex items-center justify-center ${isLoading ? 'opacity-80 cursor-not-allowed' : ''}`}
-                    >
-                        {isLoading ? (
-                            <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        ) : 'Sign Up'}
-                    </button>
-                </form>
+                            <User size={20} />
+                            <span>User / Driver</span>
+                        </div>
 
-                <div className="mt-8 text-center">
-                    <p className="text-gray-600">
-                        Already have an account? <a href="/login" className="text-blue-600 font-medium hover:text-blue-800">Login</a>
-                    </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="relative">
+                            <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                required
+                                className="w-full pl-12 p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="relative">
+                            <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email Address"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                className="w-full pl-12 p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="relative">
+                            <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <input
+                                type="tel"
+                                name="phone"
+                                placeholder="Phone Number"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                pattern="[0-9]{10}"
+                                title="Phone number should be 10 digits"
+                                required
+                                className="w-full pl-12 p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="relative">
+                            <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <input
+                                type={viewPassword ? "text" : "password"}
+                                name="password"
+                                placeholder="Create Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                minLength="4"
+                                required
+                                className="w-full pl-12 pr-12 p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setViewPassword(!viewPassword)}
+                                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-600"
+                            >
+                                {viewPassword ? <EyeOffIcon size={22} /> : <EyeIcon size={22} />}
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className={`w-full py-3 bg-blue-600 text-white rounded-xl 
+                            font-semibold hover:bg-blue-700 transition-all 
+                            flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {isLoading ? (
+                                <div className="flex items-center">
+                                    <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Creating Account...
+                                </div>
+                            ) : (
+                                <div className="flex items-center">
+                                    Create Account
+                                    <ArrowRight className="ml-2" size={20} />
+                                </div>
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="text-center mt-6">
+                        <p className="text-gray-600">
+                            Already have an account?
+                            <a
+                                href="/login"
+                                className="ml-2 text-blue-600 font-medium hover:underline"
+                            >
+                                Log In
+                            </a>
+                        </p>
+                        <p className="text-gray-600">
+                            Select roles again
+                            <a
+                                href="/selectroles"
+                                className="ml-2 text-blue-600 font-medium hover:underline"
+                            >
+                                Roles
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <Toaster position="top-right" reverseOrder={false} />
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+                toastOptions={{
+                    style: {
+                        background: '#333',
+                        color: '#fff',
+                    },
+                }}
+            />
         </div>
     );
 };

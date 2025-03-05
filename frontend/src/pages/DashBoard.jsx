@@ -23,12 +23,6 @@ const Dashboard = () => {
         { id: 3, type: 'Fuel Alert', truck: 'TRK-0513', message: 'Low fuel level', time: '5 hours ago' }
     ]);
 
-    const [upcomingDeliveries, setUpcomingDeliveries] = useState([
-        { id: 1, truck: 'TRK-1024', destination: 'Chicago, IL', driver: 'John Smith', eta: '2h 15m' },
-        { id: 2, truck: 'TRK-0513', destination: 'Atlanta, GA', driver: 'Sarah Johnson', eta: '4h 30m' },
-        { id: 3, truck: 'TRK-0872', destination: 'Dallas, TX', driver: 'Mike Chen', eta: '5h 45m' }
-    ]);
-
 
     useEffect(() => {
         const storedId = localStorage.getItem("driverId");
@@ -100,18 +94,12 @@ const Dashboard = () => {
                                 <Truck className="w-5 h-5 mr-3" />
                                 <span>Fleet Management</span>
                             </a>
-                            <a href="#" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
-                                <Calendar className="w-5 h-5 mr-3" />
-                                <span>Scheduling</span>
-                            </a>
+                          
                             <a href="#" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
                                 <Users className="w-5 h-5 mr-3" />
                                 <span>Drivers</span>
                             </a>
-                            <a href="#" className="flex items-center p-3 hover:bg-slate-800 rounded-xl mb-2 text-slate-300 hover:text-white transition-all">
-                                <MapPin className="w-5 h-5 mr-3" />
-                                <span>Route Planning</span>
-                            </a>
+                            
                         </div>
 
                         <div className="mb-8">
@@ -283,18 +271,15 @@ const Dashboard = () => {
 
                         {/* Quick Action Buttons */}
                         <div className="flex mb-8 space-x-4">
-                            <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                            <a href='/addtruck' className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
                                 <CirclePlus className="w-4 h-4 mr-2" />
                                 <span>Add Vehicle</span>
-                            </button>
+                            </a>
                             <button className="flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm border border-gray-200">
                                 <Filter className="w-4 h-4 mr-2" />
                                 <span>Filter View</span>
                             </button>
-                            <button className="flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm border border-gray-200">
-                                <Truck className="w-4 h-4 mr-2" />
-                                <span>Schedule Delivery</span>
-                            </button>
+                          
                         </div>
 
                         {/* Main Sections - Updated Styling */}
@@ -353,78 +338,9 @@ const Dashboard = () => {
                                 </div>
                             </div>
 
-                            {/* Upcoming Deliveries - Modern Table */}
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h3 className="font-semibold text-lg text-gray-800">Upcoming Deliveries</h3>
-                                    <button className="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
-                                        Schedule New
-                                    </button>
-                                </div>
-                                <div className="overflow-hidden rounded-lg border border-gray-200">
-                                    <table className="w-full">
-                                        <thead>
-                                            <tr className="bg-gray-50">
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Truck ID</th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ETA</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-200">
-                                            {upcomingDeliveries.map(delivery => (
-                                                <tr key={delivery.id} className="hover:bg-gray-50">
-                                                    <td className="px-4 py-3 text-sm font-medium text-gray-800">{delivery.truck}</td>
-                                                    <td className="px-4 py-3 text-sm text-gray-600">{delivery.destination}</td>
-                                                    <td className="px-4 py-3 text-sm text-gray-600">{delivery.driver}</td>
-                                                    <td className="px-4 py-3">
-                                                        <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                                                            {delivery.eta}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                           
 
-                            {/* Weekly Stats - Modern Cards */}
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h3 className="font-semibold text-lg text-gray-800">Weekly Performance</h3>
-                                    <div className="text-sm">
-                                        <select className="border rounded-lg p-2 text-gray-600 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                            <option>This Week</option>
-                                            <option>Last Week</option>
-                                            <option>Last Month</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-50 h-48 rounded-lg flex items-center justify-center border border-gray-200">
-                                    <div className="bg-blue-50 border-2 border-dashed border-blue-200 rounded-lg p-6 text-center w-4/5">
-                                        <BarChart3 className="w-10 h-10 text-blue-400 mx-auto mb-2" />
-                                        <p className="text-gray-500">Performance chart would be displayed here</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-4 mt-6">
-                                    <div className="bg-white p-4 rounded-lg border border-gray-100 text-center">
-                                        <p className="text-gray-500 text-sm font-medium">Deliveries</p>
-                                        <p className="font-bold text-2xl mt-1 text-gray-800">248</p>
-                                        <p className="text-xs font-medium mt-1 text-green-600 bg-green-50 rounded-full py-1 inline-block px-2">↑ 12%</p>
-                                    </div>
-                                    <div className="bg-white p-4 rounded-lg border border-gray-100 text-center">
-                                        <p className="text-gray-500 text-sm font-medium">Fuel Used</p>
-                                        <p className="font-bold text-2xl mt-1 text-gray-800">2,540 gal</p>
-                                        <p className="text-xs font-medium mt-1 text-red-600 bg-red-50 rounded-full py-1 inline-block px-2">↑ 5%</p>
-                                    </div>
-                                    <div className="bg-white p-4 rounded-lg border border-gray-100 text-center">
-                                        <p className="text-gray-500 text-sm font-medium">Avg. Time</p>
-                                        <p className="font-bold text-2xl mt-1 text-gray-800">4.2 hrs</p>
-                                        <p className="text-xs font-medium mt-1 text-green-600 bg-green-50 rounded-full py-1 inline-block px-2">↓ 8%</p>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
