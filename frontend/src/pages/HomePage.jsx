@@ -11,7 +11,7 @@ const HomePage = () => {
 
     toast.success("Logout Successfull !")
     setTimeout(() => {
-      window.location.href = "/login"
+      window.location.href = "/selectroles"
     }, 300);
   }
   const marqueeRef = useRef(null);

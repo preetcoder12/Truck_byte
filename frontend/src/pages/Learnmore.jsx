@@ -1,4 +1,4 @@
-import { FaTruck, FaUsers, FaMoneyCheckAlt, FaShieldAlt } from "react-icons/fa";
+import { FaTruck, FaUsers, FaMoneyCheckAlt, FaShieldAlt, FaHome } from "react-icons/fa";
 
 
 const LearnMore = () => {
@@ -91,9 +91,13 @@ const LearnMore = () => {
       <div className="text-center py-16">
         <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
         <p className="mt-4 text-gray-600">Sign up now and experience seamless truck booking.</p>
-        <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition">
-          Get Started
-        </button>
+        <a
+          href="/"
+          className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition flex items-center gap-2 justify-center w-fit mx-auto"
+        >
+          <FaHome /> Home
+        </a>
+
       </div>
     </div>
   );

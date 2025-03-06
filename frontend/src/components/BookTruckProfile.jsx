@@ -11,6 +11,7 @@ const BookTruckProfile = () => {
     const [toDate, setToDate] = useState("");
     const [days, setDays] = useState(null);
     const [price, setprice] = useState("");
+    const [bookOn, setbookOn] = useState(false);
 
     const params = useParams();
     const truckId = params.truckId;
@@ -25,11 +26,12 @@ const BookTruckProfile = () => {
 
             const diffTime = end - start;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
-
             if (diffDays >= 0) {
                 setDays(diffDays);
+                setbookOn(true);
             } else {
                 setDays(null);
+                setbookOn(false);
                 alert("End date must be after start date!");
             }
         }
@@ -78,7 +80,7 @@ const BookTruckProfile = () => {
     );
 
     const handlePay = () => {
-        navigate("/pay");
+        navigate("/payment");
     }
 
     return (
@@ -257,12 +259,18 @@ const BookTruckProfile = () => {
 
                             {/* Action buttons */}
                             <div className="mt-8 flex gap-4">
-                                <a href="/booktrucks"  className="bg-red-800 hover:bg-red-700 text-white font-semibold py-2 px-2 w-20 align-center justify-center  rounded-md flex">
+                                <a href="/booktrucks" className="bg-red-800 hover:bg-red-700 text-white font-semibold py-2 px-2 w-20 align-center justify-center  rounded-md flex">
                                     Back
                                 </a>
-                                <button onClick={handlePay} className="bg-green-800 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md flex-1">
-                                    Book This Truck
-                                </button>
+                                {bookOn ? (
+                                    <button onClick={handlePay}  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md flex-1">
+                                        Book This Truck
+                                    </button>
+                                ) : (
+                                    <button onClick={handlePay} disabled className="bg-gray-400 text-white font-semibold py-2 px-6 rounded-md flex-1">
+                                        Book This Truck
+                                    </button>
+                                )}
                                 <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2 px-6 rounded-md">
                                     Contact Owner
                                 </button>

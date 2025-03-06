@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
-import { User } from "lucide-react"
+import { User } from "lucide-react";
 
 const BecomeDriver = () => {
     const [formData, setFormData] = useState({
@@ -33,8 +33,14 @@ const BecomeDriver = () => {
         status: "",
     });
 
+    const [errors, setErrors] = useState({});
     const [step, setStep] = useState(1);
     const totalSteps = 6;
+    const [termsAccepted, setTermsAccepted] = useState(false);
+
+    const Handledashboard = () => {
+        window.location.href = "/dashboard";
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -48,16 +54,194 @@ const BecomeDriver = () => {
                     [field]: value
                 }
             }));
+
+            // Clear error when user starts typing
+            if (errors[`${section}.${field}`]) {
+                setErrors(prev => ({
+                    ...prev,
+                    [`${section}.${field}`]: null
+                }));
+            }
         } else {
             setFormData(prev => ({
                 ...prev,
                 [name]: value
             }));
+
+            // Clear error when user starts typing
+            if (errors[name]) {
+                setErrors(prev => ({
+                    ...prev,
+                    [name]: null
+                }));
+            }
         }
     };
 
+    const validateStep = (currentStep) => {
+        const newErrors = {};
+        let isValid = true;
+
+        // Validation for Step 1: Personal Information
+        if (currentStep === 1) {
+            if (!formData.drivername.trim()) {
+                newErrors.drivername = "Full name is required";
+                isValid = false;
+            }
+
+            if (!formData.age) {
+                newErrors.age = "Age is required";
+                isValid = false;
+            } else if (parseInt(formData.age) < 18) {
+                newErrors.age = "Age should be at least a ≥18";
+                isValid = false;
+            }
+
+            if (!formData.email.trim()) {
+                newErrors.email = "Email is required";
+                isValid = false;
+            } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+                newErrors.email = "Invalid email format";
+                isValid = false;
+            }
+
+            if (!formData.phone.trim()) {
+                newErrors.phone = "Phone number is required";
+                isValid = false;
+            } else if (!/^\d{10}$/.test(formData.phone)) {
+                newErrors.phone = "Phone number must be exactly 10 digits";
+                isValid = false;
+            }
+
+            if (!formData.gender) {
+                newErrors.gender = "Please select a gender";
+                isValid = false;
+            }
+
+            if (!formData.photo) {
+                newErrors.photo = "Profile photo is required";
+                isValid = false;
+            }
+        }
+
+        // Validation for Step 2: License Information
+        else if (currentStep === 2) {
+            if (!formData.licenseNumber.trim()) {
+                newErrors.licenseNumber = "License number is required";
+                isValid = false;
+            } else if (!/^[A-Z]{2}\d{12}$/.test(formData.licenseNumber)) {
+                newErrors.licenseNumber = "License number must be in format (Example: DL123456789123)";
+                isValid = false;
+            }
+
+            if (!formData.licenseType) {
+                newErrors.licenseType = "Please select a license type";
+                isValid = false;
+            }
+
+            if (!formData.experience) {
+                newErrors.experience = "Years of experience is required";
+                isValid = false;
+            } else if (parseInt(formData.experience) <= 0) {
+                newErrors.experience = "Experience should be greater than 0";
+                isValid = false;
+            }
+        }
+
+        // Validation for Step 3: Address Information
+        else if (currentStep === 3) {
+            if (!formData.address.street.trim()) {
+                newErrors["address.street"] = "Street address is required";
+                isValid = false;
+            }
+
+            if (!formData.address.city.trim()) {
+                newErrors["address.city"] = "City is required";
+                isValid = false;
+            }
+
+            if (!formData.address.state.trim()) {
+                newErrors["address.state"] = "State is required";
+                isValid = false;
+            }
+
+            if (!formData.address.pincode.trim()) {
+                newErrors["address.pincode"] = "Pincode is required";
+                isValid = false;
+            } else if (!/^\d{6}$/.test(formData.address.pincode)) {
+                newErrors["address.pincode"] = "Pincode must be 6 digits";
+                isValid = false;
+            }
+        }
+
+        // Validation for Step 4: Bank Details
+        else if (currentStep === 4) {
+            if (!formData.bankDetails.accountNumber.trim()) {
+                newErrors["bankDetails.accountNumber"] = "Account number is required";
+                isValid = false;
+            } else if (!/^\d{9,18}$/.test(formData.bankDetails.accountNumber)) {
+                newErrors["bankDetails.accountNumber"] = "Account number must be between 9 to 18 digits";
+                isValid = false;
+            }
+
+            if (!formData.bankDetails.ifscCode.trim()) {
+                newErrors["bankDetails.ifscCode"] = "IFSC code is required";
+                isValid = false;
+            } else if (!/^[A-Z]{4}\d{7}$/.test(formData.bankDetails.ifscCode)) {
+                newErrors["bankDetails.ifscCode"] = "Invalid IFSC code format (e.g. ABCD0123456)";
+                isValid = false;
+            }
+
+            if (!formData.bankDetails.bankName.trim()) {
+                newErrors["bankDetails.bankName"] = "Bank name is required";
+                isValid = false;
+            }
+        }
+
+        // Validation for Step 5: Emergency Contact Information
+        else if (currentStep === 5) {
+            if (!formData.emergencyContact.name.trim()) {
+                newErrors["emergencyContact.name"] = "Emergency contact name is required";
+                isValid = false;
+            }
+
+            if (!formData.emergencyContact.phone.trim()) {
+                newErrors["emergencyContact.phone"] = "Emergency contact phone is required";
+                isValid = false;
+            } else if (!/^\d{10}$/.test(formData.emergencyContact.phone)) {
+                newErrors["emergencyContact.phone"] = "Emergency contact number must be 10 digits";
+                isValid = false;
+            }
+
+            if (!formData.emergencyContact.relation.trim()) {
+                newErrors["emergencyContact.relation"] = "Relation to driver is required";
+                isValid = false;
+            }
+        }
+
+        // Validation for Step 6: Status
+        else if (currentStep === 6) {
+            if (!formData.status) {
+                newErrors.status = "Please select a status";
+                isValid = false;
+            }
+
+            if (!termsAccepted) {
+                newErrors.terms = "You must accept the terms and conditions";
+                isValid = false;
+            }
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
     const nextStep = () => {
-        setStep(prev => Math.min(prev + 1, totalSteps));
+        if (validateStep(step)) {
+            setStep(prev => Math.min(prev + 1, totalSteps));
+        } else {
+            toast.error("Please correct the errors before proceeding");
+        }
     };
 
     const prevStep = () => {
@@ -66,13 +250,35 @@ const BecomeDriver = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateStep(step)) {
+            toast.error("Please correct the errors before submitting");
+            return;
+        }
+
         console.log("Submitting form data:", formData);
 
+        const formDataToSend = new FormData();
+
+        // Append all form fields to FormData
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key === 'photo' && value instanceof File) {
+                formDataToSend.append('photo', value);
+            } else if (typeof value === 'object' && value !== null && !(value instanceof File)) {
+                formDataToSend.append(key, JSON.stringify(value));
+            } else {
+                formDataToSend.append(key, value);
+            }
+        });
+
         try {
-            const response = await axios.post("http://localhost:8000/driver/filldetails",
-                formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            const response = await axios.post(
+                "http://localhost:8000/driver/filldetails",
+                formDataToSend,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                }
+            );
 
             const { drivertoken, driverId } = response.data;
 
@@ -84,21 +290,28 @@ const BecomeDriver = () => {
 
             setTimeout(() => {
                 window.location.href = "/";
-            }, 400);
+            }, 2000);
         } catch (error) {
             console.error("Filling driver details error:", error.response ? error.response.data : error.message);
-            toast.error(error.response?.data?.error || "An error occurred");
+            toast.error(error.response?.data?.error || "An error occurred during registration");
         }
+    };
+
+    // Helper function to display error message
+    const ErrorMessage = ({ field }) => {
+        return errors[field] ? (
+            <p className="text-red-500 text-sm mt-1 ml-1">{errors[field]}</p>
+        ) : null;
     };
 
 
     return (
         <>
-<div className="bg-gradient-to-r from-gray-700 to-gray-900 flex justify-center items-center py-4 shadow-md">
-    <a href="/dashboard" className="text-white text-4xl font-bold transition-transform transform hover:scale-105">
-        LorryWale
-    </a>
-</div>
+            <div className="bg-gradient-to-r from-gray-700 to-gray-900 flex justify-center items-center py-4 shadow-md">
+                <a href="/dashboard" className="text-white text-4xl font-bold transition-transform transform hover:scale-105">
+                    LorryWale
+                </a>
+            </div>
 
             <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center py-12 px-4"
                 style={{
@@ -169,6 +382,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="address.drivername" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1" >Age</label>
@@ -184,6 +399,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="address.age" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Email</label>
@@ -199,12 +416,14 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="email" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Phone Number</label>
                                             <div className="relative">
                                                 <input
-                                                    type="tel"
+                                                    type="number"
                                                     name="phone"
                                                     value={formData.phone}
                                                     onChange={handleChange}
@@ -214,6 +433,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="phone" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Gender</label>
@@ -238,6 +459,8 @@ const BecomeDriver = () => {
                                                 </div>
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="gender" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Profile Photo URL</label>
@@ -251,6 +474,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="photo" />
+
                                         </div>
                                     </div>
                                 </div>
@@ -278,6 +503,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="licenseNumber" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">License Type</label>
@@ -301,6 +528,8 @@ const BecomeDriver = () => {
                                                 </div>
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="licenseType" />
+
                                         </div>
                                         <div className="group md:col-span-2">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Years of Experience</label>
@@ -316,6 +545,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="experience" />
+
                                         </div>
                                     </div>
                                 </div>
@@ -342,6 +573,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="address.street" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">City</label>
@@ -356,6 +589,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="address.city" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">State</label>
@@ -370,6 +605,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="address.state" />
+
                                         </div>
                                         <div className="group">
                                             <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Pincode</label>
@@ -384,6 +621,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="address.pincode" />
+
                                         </div>
                                     </div>
                                 </div>
@@ -411,6 +650,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="bankDetails.accountNumber" />
+
                                             <div className="group">
                                                 <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">IFSC Code</label>
                                                 <div className="relative">
@@ -425,6 +666,8 @@ const BecomeDriver = () => {
                                                     />
                                                     <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                                                     </div>
+                                                    <ErrorMessage field="bankDetails.ifscCode" />
+
                                                 </div>
                                             </div>
                                             <div className="group">
@@ -441,6 +684,8 @@ const BecomeDriver = () => {
                                                     />
                                                     <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                                                     </div>
+                                                    <ErrorMessage field="bankDetails.bankName" />
+
                                                 </div>
                                             </div>
 
@@ -471,6 +716,8 @@ const BecomeDriver = () => {
                                                 />
                                                 <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
+                                            <ErrorMessage field="emergencyContact.name" />
+
                                             <div className="group">
                                                 <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Phone Number</label>
                                                 <div className="relative">
@@ -485,6 +732,8 @@ const BecomeDriver = () => {
                                                     />
                                                     <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                                                     </div>
+                                                    <ErrorMessage field="emergencyContact.phone" />
+
                                                 </div>
                                             </div>
                                             <div className="group">
@@ -501,6 +750,8 @@ const BecomeDriver = () => {
                                                     />
                                                     <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                                                     </div>
+                                                    <ErrorMessage field="emergencyContact.relation" />
+
                                                 </div>
                                             </div>
 
@@ -539,6 +790,8 @@ const BecomeDriver = () => {
                                             </div>
                                             <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                         </div>
+                                        <ErrorMessage field="emergencyContact.status" />
+
                                     </div>
 
                                     <div className="mt-12 bg-gray-800 p-6 rounded-xl">
@@ -560,34 +813,43 @@ const BecomeDriver = () => {
 
                             {/* Navigation Buttons */}
                             < div className="flex justify-between pt-4">
-                                {step > 1 ? (
-                                    <button
-                                        type="button"
-                                        onClick={prevStep}
-                                        className="px-6 py-3 bg-gray-600 text-white rounded-xl font-semibold hover:bg-gray-700 transition-all"
-                                    >
-                                        Previous
-                                    </button>
-                                ) : (
-                                    <div></div>
-                                )}
+                                
+                                <div className="flex gap-[36rem]">
+                                    {step == 1 ? (
+                                        <button
+                                            type="button"
+                                            onClick={Handledashboard}
+                                            className="px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
+                                        >
+                                            Dashboard
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={prevStep}
+                                            className="px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
+                                        >
+                                            Back
+                                        </button>
+                                    )}
 
-                                {step < totalSteps ? (
-                                    <button
-                                        type="button"
-                                        onClick={nextStep}
-                                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
-                                    >
-                                        Continue
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="submit"
-                                        className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-blue-500/30 transition-all"
-                                    >
-                                        Submit Application
-                                    </button>
-                                )}
+                                    {step < totalSteps ? (
+                                        <button
+                                            type="button"
+                                            onClick={nextStep}
+                                            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
+                                        >
+                                            Continue
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="submit"
+                                            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-blue-500/30 transition-all"
+                                        >
+                                            Submit Application
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                             <div>
                                 <p className="mt-4 text-[1rem] text-white text-sm">

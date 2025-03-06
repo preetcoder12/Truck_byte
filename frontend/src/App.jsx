@@ -11,13 +11,13 @@ import EditDriverProfile from "./pages/EditDriverProfile";
 import AddTruck from "./pages/AddTruck";
 import BookTrucks from "./pages/BookTrucks";
 import BookTruckProfile from "./components/BookTruckProfile";
-import RazorPay_page from "./pages/RazorPay_page";
 import LearnMore from "./pages/LearnMore";
 import SelectRole from "./components/Select_ROle"
 import AdminSignup from "./pages/AdminSignupPage";
 import Admin_LoginPage from "./pages/Admin_LoginPage";
 import ProtectAdmin from "./components/Protect_admin";
 import AdminPage from "./pages/AdminPage";
+import PaymentPage from "./pages/PaymentPage";
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
         <Route path="/addtruck" element={<Protect element={<AddTruck />} />} />
         <Route path="/booktrucks" element={<Protect element={<BookTrucks />} />} />
         <Route path="/booktrucksdetails/:truckId" element={<Protect element={<BookTruckProfile />} />} />
-        <Route path="/pay" element={<Protect element={<RazorPay_page />} />} />
+        <Route path="/payment" element={<Protect element={<PaymentPage />} />} />
 
         {/* Admin Routes */}
         <Route path="/adminsignup" element={<AdminSignup />} />
