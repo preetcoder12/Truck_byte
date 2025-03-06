@@ -25,7 +25,7 @@ const truckSchema = new Schema({
     },
     capacity: {
         type: Number,
-        required: true // in tons
+        required: true 
     },
     truckType: {
         type: String,

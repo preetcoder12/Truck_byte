@@ -14,8 +14,8 @@ const cors = require("cors");
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow frontend
-    credentials: true, // Allow cookies if needed
+    origin: 'http://localhost:5173', 
+    credentials: true, 
 }));
 
 mongoose.connect(process.env.MONGO_URI)
@@ -25,17 +25,14 @@ mongoose.connect(process.env.MONGO_URI)
 
 console.log("MONGO_URI:", process.env.MONGO_URI);
 
-// my middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
-// default routes
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-// my Routes
 app.use('/user', UserRoutes);
 app.use('/driver', DriverRoutes);
 app.use('/trucks', TrouckRoutes);

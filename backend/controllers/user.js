@@ -3,17 +3,14 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// 🔹 Validate Email Format
 const validateEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
-// 🔹 Validate Password Strength
 const validatePassword = (password) => {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password);
 };
 
-// 🔹 User Signup Controller
 const userSignup = async (req, res) => {
     try {
         const { username, email, password, phone } = req.body;
@@ -48,7 +45,6 @@ const userSignup = async (req, res) => {
     }
 };
 
-// 🔹 User Login Controller
 const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;

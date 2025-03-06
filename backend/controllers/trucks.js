@@ -74,7 +74,6 @@ const Addtruck = async (req, res) => {
 
         await newTruck.save();
 
-        // Generate Truck Token
         const trucktoken = jwt.sign({ id: newTruck._id }, JWT_SECRET, { expiresIn: "1h" });
 
         res.status(201).json({

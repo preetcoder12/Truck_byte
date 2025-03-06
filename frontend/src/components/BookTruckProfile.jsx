@@ -58,7 +58,6 @@ const BookTruckProfile = () => {
         fetchTruckDetails();
     }, [extractedId]);
 
-    // Format date to readable format
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
