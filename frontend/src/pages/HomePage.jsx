@@ -1,20 +1,54 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Truck, BarChart3, Shield, Clock, Zap, Check, LayoutDashboard, ChevronRight, Menu, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { MdDarkMode } from "react-icons/md";
+import { FaLightbulb } from "react-icons/fa";
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [themeText, setThemeText] = useState("Dark Mode");
+  const marqueeRef = useRef(null);
+
+  // Initialize dark mode from localStorage on component mount
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedDarkMode);
+    setThemeText(savedDarkMode ? "Light Mode" : "Dark Mode");
+
+    if (savedDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const handleDarkMode = () => {
+    setDarkMode(prevMode => {
+      const newMode = !prevMode;
+      localStorage.setItem("darkMode", newMode.toString());
+      setThemeText(newMode ? "Light Mode" : "Dark Mode");
+
+      if (newMode) {
+        document.documentElement.classList.add("dark");
+        console.log("Theme set to dark mode");
+      } else {
+        document.documentElement.classList.remove("dark");
+        console.log("Theme set to light mode");
+      }
+
+      return newMode;
+    });
+  };
+
   const handleLogout = () => {
     localStorage.clear();
-
-    toast.success("Logout Successfull !")
+    toast.success("Logout Successful!");
     setTimeout(() => {
-      window.location.href = "/selectroles"
+      window.location.href = "/selectroles";
     }, 300);
-  }
-  const marqueeRef = useRef(null);
+  };
 
   useEffect(() => {
     const marquee = marqueeRef.current;
@@ -23,24 +57,28 @@ const HomePage = () => {
       marquee.innerHTML += clone;
     }
   }, []);
+
+  // Rest of your HomePage component code...
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
+      <nav className={darkMode ? "darkmode " : "bg-white shadow-sm"}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20">
             <div className="flex items-center">
               <img className='size-[5rem]' src="/logo.png" alt="logo" />
-              <a href="/"> <span className="ml-1 text-2xl font-bold text-gray-900">LorryWale</span></a>
+              <a href="/"> <span className={darkMode ? "darkmode-text ml-1 text-2xl font-bold" : "ml-1 text-2xl font-bold text-gray-900"}
+              >LorryWale</span></a>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">Features</a>
-              <a href="#benefits" className="text-gray-600 hover:text-blue-600 transition-colors">Benefits</a>
-              <a href="#testimonials" className="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a>
-              <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition-colors">Pricing</a>
-              <a href="#contact" className="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+
+              <a href="#features" className={darkMode ? "darkmode-text hover:text-yellow-400 transition-colors" : "text-gray-600 hover:text-blue-600 transition-colors"}>Features</a>
+              <a href="#benefits" className={darkMode ? "darkmode-text hover:text-yellow-400 transition-colors" : "text-gray-600 hover:text-blue-600 transition-colors"}>Benefits</a>
+              <a href="#testimonials" className={darkMode ? "darkmode-text hover:text-yellow-400 transition-colors" : "text-gray-600 hover:text-blue-600 transition-colors"}>Testimonials</a>
+              <a href="#pricing" className={darkMode ? "darkmode-text hover:text-yellow-400 transition-colors" : "text-gray-600 hover:text-blue-600 transition-colors"}>Pricing</a>
+              <a href="#contact" className={darkMode ? "darkmode-text hover:text-yellow-400 transition-colors" : "text-gray-600 hover:text-blue-600 transition-colors"}>Contact</a>
             </div>
 
             <div className="hidden md:flex items-center space-x-4">
@@ -49,6 +87,15 @@ const HomePage = () => {
               </a> */}
               <button onClick={handleLogout}
                 className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">Logout</button>
+              {themeText == "Light" ? (
+                <button onClick={handleDarkMode}
+                  className="bg-black text-white px-5 py-2 rounded-3xl hover:bg-gray-500 hover:text-yellow-400  h-[34px] transition-colors font-medium"><MdDarkMode />
+                </button>
+              ) : (
+                <button onClick={handleDarkMode}
+                  className="bg-yellow-600 text-white px-5 py-2 rounded-3xl hover:bg-yellow-300 hover:text-black transition-colors font-medium"><FaLightbulb />
+                </button>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -62,18 +109,26 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white pt-2 pb-4 px-4 border-t">
-            <a href="#features" className="block py-2 text-gray-600">Features</a>
-            <a href="#benefits" className="block py-2 text-gray-600">Benefits</a>
-            <a href="#testimonials" className="block py-2 text-gray-600">Testimonials</a>
-            <a href="#pricing" className="block py-2 text-gray-600">Pricing</a>
-            <a href="#contact" className="block py-2 text-gray-600">Contact</a>
+          <div className={darkMode ? "darkmode md:hidden hover:text-yellow-400 transition-colors" : "md:hidden bg-white pt-2 pb-4 px-4 border-t"}>
+            <a href="#features" className={darkMode ? "darkmode-text block py-2 " : "block py-2 text-gray-600"}
+            >Features</a>
+            <a href="#benefits" className={darkMode ? "darkmode-text block py-2 " : "block py-2 text-gray-600"}
+            >Benefits</a>
+            <a href="#testimonials" className={darkMode ? "darkmode-text block py-2 " : "block py-2 text-gray-600"}
+            >Testimonials</a>
+            <a href="#pricing" className={darkMode ? "darkmode-text block py-2 " : "block py-2 text-gray-600"}
+            >Pricing</a>
+            <a href="#contact" className={darkMode ? "darkmode-text block py-2 " : "block py-2 text-gray-600"}
+            >Contact</a>
             <div className="mt-4 pt-4 border-t flex flex-col space-y-4">
-              <a href="/login" className="text-blue-600 font-medium">Login</a>
-              <a href="#demo" className="bg-blue-600 text-white px-4 py-2 rounded-md text-center">
+
+              <a href="/login" className={darkMode ? "darkmode-text  font-medium " : "text-blue-600 font-medium"}
+              >Login</a>
+
+              <a href="#demo" className={darkMode ? "darkmode hover:bg-gray-800 font-bold bg-blue-600 text-white px-4 py-2 rounded-md text-center " : "bg-blue-600 text-white px-4 py-2 rounded-md text-center"}
+              >
                 Request Demo
               </a>
             </div>
@@ -82,15 +137,20 @@ const HomePage = () => {
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16 md:py-24">
+      <div className={darkMode ? "bg-[#2A2A2A] py-16 md:py-24 " : "bg-gradient-to-r from-blue-50 to-indigo-50 py-16 md:py-24"}
+      >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
           <div className="flex flex-col md:flex-row items-center">
             {/* Left Content */}
             <div className="md:w-1/2 md:pr-12 mb-10 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+
+              <h1 className={darkMode ? "darkmode-text text-4xl md:text-5xl font-extrabold leading-tight" : "text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight"}
+              >
                 Manage Your Fleet with <span className="text-blue-600">Precision</span> and Ease
               </h1>
-              <p className="mt-6 text-lg text-gray-700 max-w-2xl leading-relaxed">
+
+              <p className={darkMode ? "darkmode-text mt-6 text-lg  max-w-2xl leading-relaxed " : "mt-6 text-lg text-gray-700 max-w-2xl leading-relaxed"}
+              >
                 LorryWale gives you complete control over your truck fleet, optimizing routes,
                 reducing costs, and improving efficiency with our advanced management solution.
               </p>
@@ -115,7 +175,8 @@ const HomePage = () => {
 
             {/* Right Side Image */}
             <div className="md:w-1/2">
-              <div className="bg-white/80 backdrop-blur-xl p-5 rounded-lg shadow-2xl relative overflow-hidden group">
+              <div className={darkMode ? " bg-[#121212] backdrop-blur-xl p-5 rounded-lg shadow-2xl relative overflow-hidden group" : "bg-white/80 backdrop-blur-xl p-5 rounded-lg shadow-2xl relative overflow-hidden group"}
+              >
                 <img
                   src="/dashboard.png"
                   alt="LorryWale dashboard preview"
@@ -129,15 +190,18 @@ const HomePage = () => {
         </div>
       </div>
 
-
       {/* Features Section */}
-      <div id="features" className="py-16 md:py-24 bg-white">
+      <div id="features" className={darkMode ? " darkmode py-16 md:py-24 " : "py-16 md:py-24 bg-white"}
+      >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug">
+
+            <h2 className={darkMode ? " darkmode text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug" : "text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug"}
+            >
               Powerful Features for <span className="text-blue-600">Complete Fleet Management</span>
             </h2>
-            <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
+            <p className={darkMode ? " darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-700 max-w-3xl mx-auto"}
+            >
               Our comprehensive solution is designed to handle every aspect of your trucking operations.
             </p>
           </div>
@@ -156,12 +220,14 @@ const HomePage = () => {
                   </svg>, color: "bg-indigo-100 text-indigo-600", title: "Route Optimization", desc: "Plan the most efficient routes to save time, fuel, and operational costs."
               }
             ].map((feature, index) => (
-              <div key={index} className="relative bg-white p-6 rounded-lg shadow-lg border border-gray-200 transition-all transform hover:scale-105 hover:shadow-2xl">
+              < div key={index} className={darkMode ? " bg-gray-900 relative  p-6 rounded-lg shadow-lg border  transition-all transform hover:scale-105 hover:shadow-2xl" : "relative bg-white p-6 rounded-lg shadow-lg border border-gray-200 transition-all transform hover:scale-105 hover:shadow-2xl"}
+              >
                 <div className={`p-3 ${feature.color} rounded-md w-12 h-12 flex items-center justify-center mb-4`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-700">{feature.desc}</p>
+                <p className={darkMode ? " darkmode-text" : "text-gray-400"}
+                >{feature.desc}</p>
                 <div className="absolute -top-4 -right-4 w-10 h-10 bg-blue-500/10 rounded-full blur-xl opacity-0 hover:opacity-100 transition-all duration-500"></div>
               </div>
             ))}
@@ -171,14 +237,20 @@ const HomePage = () => {
 
 
       {/* Benefits Section */}
-      <div id="benefits" className="py-16 md:py-24 bg-gray-50">
+
+      <div id="benefits" className={darkMode ? " darkmode py-16 md:py-24 " : "py-16 md:py-24 bg-gray-50"}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="md:flex md:items-center md:justify-between">
             <div className="md:w-1/2 md:pr-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+
+              <h2 className={darkMode ? " darkmode-text text-3xl md:text-4xl font-bold " : "text-3xl md:text-4xl font-bold text-gray-900"}
+              >
                 Transform Your Trucking Operations
               </h2>
-              <p className="mt-4 text-lg text-gray-600">
+
+              <p className={darkMode ? " text-gray-400 mt-4 text-lg " : "mt-4 text-lg text-gray-600"}
+              >
                 Join hundreds of companies that have revolutionized their fleet management with LorryWale
               </p>
 
@@ -188,8 +260,10 @@ const HomePage = () => {
                     <Check className="h-6 w-6 text-green-500" />
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-lg font-medium text-gray-900">Reduce Operating Costs</h3>
-                    <p className="mt-1 text-gray-600">
+                    <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}
+                    >Reduce Operating Costs</h3>
+                    <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}
+                    >
                       Our customers report an average of 23% reduction in operational costs after implementing our system.
                     </p>
                   </div>
@@ -200,8 +274,8 @@ const HomePage = () => {
                     <Check className="h-6 w-6 text-green-500" />
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-lg font-medium text-gray-900">Increase Fleet Utilization</h3>
-                    <p className="mt-1 text-gray-600">
+                    <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}>Increase Fleet Utilization</h3>
+                    <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}>
                       Optimize your fleet usage with intelligent scheduling and assignment algorithms.
                     </p>
                   </div>
@@ -212,8 +286,8 @@ const HomePage = () => {
                     <Check className="h-6 w-6 text-green-500" />
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-lg font-medium text-gray-900">Improve Driver Satisfaction</h3>
-                    <p className="mt-1 text-gray-600">
+                    <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}>Improve Driver Satisfaction</h3>
+                    <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}>
                       Better routes and schedules lead to happier drivers and lower turnover rates.
                     </p>
                   </div>
@@ -224,8 +298,8 @@ const HomePage = () => {
                     <Check className="h-6 w-6 text-green-500" />
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-lg font-medium text-gray-900">Enhance Customer Service</h3>
-                    <p className="mt-1 text-gray-600">
+                    <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}>Enhance Customer Service</h3>
+                    <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}>
                       Provide accurate ETAs and real-time tracking information to your customers.
                     </p>
                   </div>
@@ -235,7 +309,7 @@ const HomePage = () => {
               <div className="mt-8">
                 <a
                   href="#case-studies"
-                  className="text-blue-600 font-medium inline-flex items-center"
+                  className={darkMode ? " darkmode-texttext-blue-600 font-medium inline-flex items-center" : "text-blue-600 font-medium inline-flex items-center"}
                 >
                   View case studies
                   <ChevronRight className="ml-2 h-4 w-4" />
@@ -244,7 +318,9 @@ const HomePage = () => {
             </div>
 
             <div className="mt-10 md:mt-0 md:w-1/2">
-              <div className="bg-white p-4 rounded-lg shadow-lg">
+
+              <div className={darkMode ? "bg-[#3A3A3A] p-4 rounded-lg shadow-lg" : "bg-white p-4 rounded-lg shadow-lg"}
+              >
                 <div className="relative aspect-w-16 aspect-h-9 overflow-hidden rounded-md">
                   <div className="absolute inset-0 bg-blue-600 opacity-10"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -256,24 +332,33 @@ const HomePage = () => {
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <div className="text-3xl font-bold text-blue-600">40%</div>
-                    <p className="text-sm text-gray-600">Maintenance Cost Reduction</p>
+
+
+                  <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}
+                  >
+
+                    <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}
+                    >40%</div>
+                    <p >Maintenance Cost Reduction</p>
                   </div>
 
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <div className="text-3xl font-bold text-blue-600">2.5x</div>
-                    <p className="text-sm text-gray-600">ROI Within 6 Months</p>
+                  <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}
+                  >
+                    <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}>2.5x</div>
+                    <p className={darkMode ? "text-white text-sm  " : "text-sm text-gray-600"}
+                    >ROI Within 6 Months</p>
                   </div>
 
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <div className="text-3xl font-bold text-blue-600">5 hrs</div>
-                    <p className="text-sm text-gray-600">Weekly Admin Time Saved</p>
+                  <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}>
+                    <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}>5 hrs</div>
+                    <p className={darkMode ? "text-white text-sm  " : "text-sm text-gray-600"}
+                    >Weekly Admin Time Saved</p>
                   </div>
 
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <div className="text-3xl font-bold text-blue-600">98%</div>
-                    <p className="text-sm text-gray-600">Customer Satisfaction</p>
+                  <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}>
+                    <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}>98%</div>
+                    <p className={darkMode ? "text-white text-sm  " : "text-sm text-gray-600"}
+                    >Customer Satisfaction</p>
                   </div>
                 </div>
               </div>
@@ -283,11 +368,16 @@ const HomePage = () => {
       </div>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-gray-50">
+
+      <section id="testimonials" className={darkMode ? "darkmode py-20  " : "py-20 bg-gray-50"}
+      >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-gray-900">Trusted by Industry Leaders</h2>
-            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+
+            <h2 className={darkMode ? "text-4xl font-extrabold darkmode-text" : "text-4xl font-extrabold text-gray-900"}
+            >Trusted by Industry Leaders</h2>
+            <p className={darkMode ? "darkmode-text mt-4 text-lg  max-w-2xl mx-auto " : "mt-4 text-lg text-gray-600 max-w-2xl mx-auto"}
+            >
               See what our customers have to say about LorryWale
             </p>
           </div>
@@ -306,7 +396,9 @@ const HomePage = () => {
               role: "CEO, Pacific Freight Solutions",
               review: "The implementation was seamless and the customer support has been outstanding. Our drivers actually enjoy using the system because it makes their jobs easier.",
             }].map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+
+              <div key={index} className={darkMode ? " bg-gray-900 p-6 rounded-lg shadow-lg border border-gray-400 " : "bg-white p-6 rounded-lg shadow-lg border border-gray-200"}
+              >
                 <div className="flex text-yellow-400 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -314,17 +406,25 @@ const HomePage = () => {
                     </svg>
                   ))}
                 </div>
-                <p className="text-gray-600 mb-4">{testimonial.review}</p>
+
+                <p className={darkMode ? "darkmode-text mb-4" : "text-gray-600 mb-4"}
+                >{testimonial.review}</p>
                 <div className="border-t pt-4">
-                  <p className="font-medium text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-gray-500">{testimonial.role}</p>
+
+                  <p className={darkMode ? "darkmode-text font-medium text-gray-900" : "font-medium text-gray-900"}
+                  >{testimonial.name}</p>
+
+                  <p className={darkMode ? "darkmode-text text-sm " : "text-sm text-gray-500"}
+                  >{testimonial.role}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Scrolling client logos */}
-          <div className="mt-16 overflow-hidden relative w-full py-6 bg-white">
+
+          <div className={darkMode ? "mt-16 overflow-hidden relative w-full py-6 bg-gray-400 rounded-3xl" : "mt-16 overflow-hidden relative w-full py-6 bg-white"}
+          >
             <div ref={marqueeRef} className="flex gap-14 animate-marquee whitespace-nowrap">
               {["/amv.png", "/ashokleyland.png", "/bharat.png", "/eicher.png", "/tata.png", "/force.png", "/mahindra.png"].map((src, index) => (
                 <img key={index} src={src} alt="Client logo" className="h-12 object-contain" />
@@ -418,7 +518,7 @@ const HomePage = () => {
         </div>
       </footer>
 
-    </div>
+    </div >
   );
 };
 

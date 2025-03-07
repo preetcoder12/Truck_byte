@@ -3,58 +3,69 @@
 @tailwind utilities;
 
 @keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
+   0% {
+      transform: translateX(0);
+   }
 
-    100% {
-        transform: translateX(-50%);
-    }
+   100% {
+      transform: translateX(-50%);
+   }
 }
 
 .animate-marquee {
-    display: flex;
-    white-space: nowrap;
-    animation: marquee 10s linear infinite;
+   display: flex;
+   white-space: nowrap;
+   animation: marquee 10s linear infinite;
 }
 
 .poppins {
-    font-family: "Poppins", sans-serif;
+   font-family: "Poppins", sans-serif;
 }
 
 .dots {
-    width: 13.4px;
-    height: 13.4px;
-    position: relative;
- }
- 
- .dots::before,
- .dots::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: #474bff;
- }
- 
- .dots::before {
-    box-shadow: -26.9px 0 #474bff;
-    animation: dots-dm1l1cmd 0.6s infinite linear;
- }
- 
- .dots::after {
-    transform: rotate(0deg) translateX(26.9px);
-    animation: dots-dh1qq5md 0.6s infinite linear;
- }
- 
- @keyframes dots-dm1l1cmd {
-    100% {
-       transform: translateX(26.9px);
-    }
- }
- 
- @keyframes dots-dh1qq5md {
-    100% {
-       transform: rotate(-180deg) translateX(26.9px);
-    }
- }
+   width: 13.4px;
+   height: 13.4px;
+   position: relative;
+}
+
+.dots::before,
+.dots::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   border-radius: 50%;
+   background: #474bff;
+}
+
+.dots::before {
+   box-shadow: -26.9px 0 #474bff;
+   animation: dots-dm1l1cmd 0.6s infinite linear;
+}
+
+.dots::after {
+   transform: rotate(0deg) translateX(26.9px);
+   animation: dots-dh1qq5md 0.6s infinite linear;
+}
+
+@keyframes dots-dm1l1cmd {
+   100% {
+      transform: translateX(26.9px);
+   }
+}
+
+@keyframes dots-dh1qq5md {
+   100% {
+      transform: rotate(-180deg) translateX(26.9px);
+   }
+}
+
+.darkmode {
+   background-color: #121212;
+   color: white;
+}
+
+.darkmode-text {
+   color: white;
+
+}
+

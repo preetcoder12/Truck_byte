@@ -2,6 +2,8 @@ const Admin = require("../models/Admin");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { Truck } = require("../models/trucks");
+const Driver = require("../models/driver");
 
 const AdminSignUp = async (req, res) => {
     const { username, email, secretCode, password } = req.body;
@@ -79,7 +81,48 @@ const AdminLogin = async (req, res) => {
     }
 }
 
+const ViewAllTrucks = async (req, res) => {
+    try {
+        const trucks = await Truck.find({});
+        if (!trucks || trucks.length === 0) {
+            return res.status(404).json({ error: "❌ No trucks found!" });
+        }
+        res.status(200).json(trucks);
 
 
+    } catch (error) {
+        console.error("❌ Truck fetching  error:", error);
+        res.status(500).json({ error: error.message || "Server error during fetching trucks details." });
+    }
+}
 
-module.exports = { AdminSignUp, AdminLogin };
+const ViewAllDrivers = async (req, res) => {
+    try {
+        const drivers = await Driver.find({});
+        if (!drivers || drivers.length == 0) {
+            return res.status(404).json({ error: "❌ No Driver found!" });
+        }
+        res.status(200).json(drivers);
+
+    } catch (error) {
+        console.error("❌ Truck fetching  error:", error);
+        res.status(500).json({ error: error.message || "Server error during fetching drievrs details." });
+    }
+}
+
+const RemoveDriver = async (req, res) => {
+    try {
+        const selectedDriver = await Driver.findById(req.params.id);
+        if (!selectedDriver) {
+            return res.status(404).json({ message: "Driver not found" });
+        }
+        await Driver.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({ message: "Driver removed successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+
+module.exports = { AdminSignUp, AdminLogin, ViewAllTrucks, ViewAllDrivers, RemoveDriver };

@@ -29,10 +29,9 @@ const DriverLogin = () => {
             localStorage.setItem("driverId", driverId);
             console.log("data: ",driverId)
             toast.success("Login Successful");
-            window.location.href = "/dashboard"; // Redirect to dashboard
+            window.location.href = "/driverprofile"; // Redirect to dashboard
         } catch (error) {
-            console.error("❌ Login failed:", error.response?.data || error.message);
-            toast.error(error.response?.data?.message || "Login Failed");
+            toast.error(error.response?.data?.message || "Login Failed");   
         } finally {
             setLoading(false);
         }
