@@ -94,6 +94,7 @@ const FillDriverDetails = async (req, res) => {
 
         await newDriver.save();
 
+        // Generate token **AFTER** saving driver
         const drivertoken = jwt.sign({ id: newDriver._id }, JWT_SECRET, { expiresIn: "1h" });
 
         res.status(201).json({ message: "Driver details filled successfully.", drivertoken, driverId: newDriver._id });

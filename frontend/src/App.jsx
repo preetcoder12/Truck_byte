@@ -3,7 +3,6 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import Dashboard from "./pages/DashBoard";
-import BecomeDriver from "./pages/BecomeDriver";
 import Protect from "./components/Protect";
 import DriverProfile from "./components/DriverProfile";
 import DriverLogin from "./components/SigninDriver";
@@ -18,6 +17,7 @@ import Admin_LoginPage from "./pages/Admin_LoginPage";
 import ProtectAdmin from "./components/Protect_admin";
 import AdminPage from "./pages/AdminPage";
 import PaymentPage from "./pages/PaymentPage";
+import BecomeDriver from "./pages/BecomeDriver";
 
 function App() {
   return (
