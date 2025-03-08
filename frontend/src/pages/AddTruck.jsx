@@ -12,7 +12,6 @@ const AddTruck = () => {
         insuranceExpiry: '',
         capacity: '',
         truckType: '',
-        status: 'Available',
         ownerType: 'Company',
         pricePerKm: '',
         contactInfo: {
@@ -27,7 +26,6 @@ const AddTruck = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    // Check for user's preference on initial load
     useEffect(() => {
         const savedMode = localStorage.getItem('darkMode');
         if (savedMode === 'true') {
@@ -36,7 +34,6 @@ const AddTruck = () => {
         }
     }, []);
 
-    // Toggle dark mode
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
         document.documentElement.classList.toggle('dark');
@@ -117,7 +114,7 @@ const AddTruck = () => {
             );
 
             console.log(response.data);
-            toast.success('Truck added successfully!');
+            toast.success('Truck request submitted! Awaiting admin approval.');
             setLoading(false);
             setFormData({
                 truckNumber: '',
@@ -127,7 +124,6 @@ const AddTruck = () => {
                 insuranceExpiry: '',
                 capacity: '',
                 truckType: '',
-                status: 'Available',
                 ownerType: 'Company',
                 pricePerKm: '',
                 contactInfo: { name: '', phone: '', email: '' }
@@ -138,12 +134,11 @@ const AddTruck = () => {
             }, 500);
 
         } catch (err) {
-            console.error("🚨 Error adding truck:", err.response?.data || err.message);
-            toast.error(err.response?.data?.error || "Failed to add truck");
+            console.error("🚨 Error submitting truck request:", err.response?.data || err.message);
+            toast.error(err.response?.data?.error || "Failed to submit truck request");
             setLoading(false);
         }
     };
-
 
     return (
         <div className="max-w-5xl mx-auto p-6 bg-gradient-to-b from-gray-900 to-gray-950 rounded-xl shadow-xl my-10">

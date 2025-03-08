@@ -18,11 +18,8 @@ const UserSchema = new Schema({
     phone: {
         type: String,
         required: true,
-    },
-    photo: {
-        type: String,
-        default: "https://res.cloudinary.com/dxkufsejm/image/upload/v1625944371/blank-profile-picture-973460_640_ew2z6g.png",
-    },
+    }
+  
     
 }, { timestamps: true });
 

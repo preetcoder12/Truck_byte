@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
-import { User } from "lucide-react"
+import { User, Truck, ShieldCheck, Home, CreditCard, Phone } from "lucide-react";
 
 const BecomeDriver = () => {
     const [formData, setFormData] = useState({
@@ -33,8 +33,96 @@ const BecomeDriver = () => {
         status: "",
     });
 
-    const [step, setStep] = useState(1);
-    const totalSteps = 6;
+    const validateDetails = async () => {
+        try {
+            if (!formData.drivername.trim()) {
+                toast.error("Please fill in your name");
+                return false;
+            }
+            if (!formData.age || formData.age < 18) {
+                toast.error("Age should be at least 18");
+                return false;
+            }
+            if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
+                toast.error("Please enter a valid email address");
+                return false;
+            }
+            if (!formData.phone || !/^\d{10}$/.test(formData.phone)) {
+                toast.error("Please enter a valid 10-digit phone number");
+                return false;
+            }
+            if (!formData.photo) {
+                toast.error("Please upload a photo");
+                return false;
+            }
+            if (!formData.gender) {
+                toast.error("Please select your gender");
+                return false;
+            }
+            if (!formData.licenseNumber.trim()) {
+                toast.error("Please enter your license number");
+                return false;
+            }
+            if (!formData.licenseType) {
+                toast.error("Please select a license type");
+                return false;
+            }
+            if (!formData.experience || formData.experience < 1) {
+                toast.error("Experience should be at least 1 year");
+                return false;
+            }
+            if (!formData.address.street.trim()) {
+                toast.error("Please enter your street address");
+                return false;
+            }
+            if (!formData.address.city.trim()) {
+                toast.error("Please enter your city");
+                return false;
+            }
+            if (!formData.address.state.trim()) {
+                toast.error("Please enter your state");
+                return false;
+            }
+            if (!formData.address.pincode || !/^\d{6}$/.test(formData.address.pincode)) {
+                toast.error("Please enter a valid 6-digit pincode");
+                return false;
+            }
+            if (!formData.emergencyContact.name.trim()) {
+                toast.error("Please enter an emergency contact name");
+                return false;
+            }
+            if (!formData.emergencyContact.phone || !/^\d{10}$/.test(formData.emergencyContact.phone)) {
+                toast.error("Please enter a valid emergency contact number");
+                return false;
+            }
+            if (!formData.emergencyContact.relation.trim()) {
+                toast.error("Please specify your relationship with the emergency contact");
+                return false;
+            }
+            if (!formData.bankDetails.accountNumber) {
+                toast.error("Please enter your bank account number");
+                return false;
+            }
+            if (!formData.bankDetails.ifscCode.trim()) {
+                toast.error("Please enter your bank IFSC code");
+                return false;
+            }
+            if (!formData.bankDetails.bankName.trim()) {
+                toast.error("Please enter your bank name");
+                return false;
+            }
+            if (!formData.status) {
+                toast.error("Please select a status");
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error("Error occurred while validating form:", error);
+            toast.error("Error occurred while validating details");
+            return false;
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -56,17 +144,14 @@ const BecomeDriver = () => {
         }
     };
 
-    const nextStep = () => {
-        setStep(prev => Math.min(prev + 1, totalSteps));
-    };
-
-    const prevStep = () => {
-        setStep(prev => Math.max(prev - 1, 1));
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Submitting form data:", formData);
+
+        const isValid = await validateDetails();
+        if (!isValid) {
+            return;
+        }
 
         try {
             const response = await axios.post("http://localhost:8000/driver/filldetails",
@@ -83,7 +168,7 @@ const BecomeDriver = () => {
             toast.success("Driver registration successful! Welcome aboard!");
 
             setTimeout(() => {
-                window.location.href = "/";
+                window.location.href = "/dashboard";
             }, 400);
         } catch (error) {
             console.error("Filling driver details error:", error.response ? error.response.data : error.message);
@@ -91,11 +176,9 @@ const BecomeDriver = () => {
         }
     };
 
-
     return (
         <>
-            <div className="bg-gray-600 flex justify-center " >
-
+            <div className="bg-gray-600 flex justify-center">
                 <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">LorryWale</span></a>
             </div>
             <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center py-12 px-4"
@@ -104,8 +187,7 @@ const BecomeDriver = () => {
                              url("https://source.unsplash.com/random/1920x1080/?road,driving") no-repeat center center/cover`
                 }}>
 
-
-                <div className="w-full max-w-4xl backdrop-blur-md bg-gray-800 shadow-2xl rounded-3xl overflow-hidden relative">
+                <div className="w-full max-w-6xl backdrop-blur-md bg-gray-800 shadow-2xl rounded-3xl overflow-hidden relative">
                     {/* Decorative elements */}
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
                     <div className="absolute top-2 right-8 h-16 w-16 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 -z-10 blur-xl opacity-70"></div>
@@ -114,487 +196,365 @@ const BecomeDriver = () => {
                     <div className="p-8 md:p-12">
                         <div className="mb-8 text-center">
                             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 tracking-tight">
-                                <span className="bg-clip-text text-white ">
-                                    <div className="flex justify-center gap-2 ">Become a Driver <User className="size-[3rem]" /></div>
+                                <span className="bg-clip-text text-white">
+                                    <div className="flex justify-center gap-2">Become a Driver <User className="size-10" /></div>
                                 </span>
                             </h1>
-                            <p className="text-gray-200 text-lg">Join our elite team and start earning today</p>
+                            <p className="text-gray-200 text-lg mb-6">Join our elite team and start earning today</p>
                         </div>
 
-                        {/* Progress Bar */}
-                        <div className="mb-8 max-w-2xl mx-auto">
-                            <div className="flex justify-between mb-2">
-                                {[1, 2, 3, 4, 5, 6].map((num) => (
-                                    <div
-                                        key={num}
-                                        className={`h-10 w-10 rounded-full flex items-center justify-center font-bold ${step >= num
-                                            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white'
-                                            : 'bg-gray-200 text-gray-700'
-                                            }`}
-                                    >
-                                        {num}
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="overflow-hidden h-2 rounded-full bg-gray-200">
-                                <div
-                                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-500 ease-out"
-                                    style={{ width: `${(step / totalSteps) * 100}%` }}
-                                ></div>
-                            </div>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-8">
-                            {/* Step 1: Personal Information */}
-                            {step === 1 && (
-                                <div className="bg-white/20 p-8 rounded-2xl backdrop-blur-sm">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                        <span className="bg-blue-600 text-white h-8 w-8 rounded-full inline-flex items-center justify-center mr-3">1</span>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                                {/* Personal Information */}
+                                <div className="bg-white/20 p-6 rounded-2xl backdrop-blur-sm md:col-span-3">
+                                    <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+                                        <User className="mr-2 text-blue-400" size={20} />
                                         Personal Information
                                     </h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Full Name</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    name="drivername"
-                                                    value={formData.drivername}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Enter your full name"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Full Name</label>
+                                            <input
+                                                type="text"
+                                                name="drivername"
+                                                value={formData.drivername}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="Enter your full name"
+                                            />
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1" >Age</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="number"
-                                                    name="age"
-                                                    value={formData.age}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Your age"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Age</label>
+                                            <input
+                                                type="number"
+                                                name="age"
+                                                value={formData.age}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="Your age"
+                                            />
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Email</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="email"
-                                                    name="email"
-                                                    value={formData.email}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="your.email@example.com"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Gender</label>
+                                            <select
+                                                name="gender"
+                                                value={formData.gender}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all appearance-none"
+                                            >
+                                                <option value="" className="text-gray-800">Select Gender</option>
+                                                <option value="Male" className="text-gray-800">Male</option>
+                                                <option value="Female" className="text-gray-800">Female</option>
+                                                <option value="Other" className="text-gray-800">Other</option>
+                                            </select>
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Phone Number</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="tel"
-                                                    name="phone"
-                                                    value={formData.phone}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="9876543210"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Email</label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="your.email@example.com"
+                                            />
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Gender</label>
-                                            <div className="relative">
-                                                <select
-                                                    name="gender"
-                                                    value={formData.gender}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all appearance-none"
-                                                >
-                                                    <option value="" className="text-gray-800">Select Gender</option>
-                                                    <option value="Male" className="text-gray-800">Male</option>
-                                                    <option value="Female" className="text-gray-800">Female</option>
-                                                    <option value="Other" className="text-gray-800">Other</option>
-
-                                                </select>
-                                                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                                    <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                                                    </svg>
-                                                </div>
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Phone Number</label>
+                                            <input
+                                                type="tel"
+                                                name="phone"
+                                                value={formData.phone}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="9876543210"
+                                            />
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Profile Photo URL</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="file"
-                                                    name="photo"
-                                                    onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })} // Store file object
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Profile Photo</label>
+                                            <input
+                                                type="file"
+                                                name="photo"
+                                                onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                            />
                                         </div>
                                     </div>
                                 </div>
-                            )}
 
-                            {/* Step 2: License Information */}
-                            {step === 2 && (
-                                <div className="bg-white/20 p-8 rounded-2xl backdrop-blur-sm">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                        <span className="bg-blue-600 text-white h-8 w-8 rounded-full inline-flex items-center justify-center mr-3">2</span>
+                                {/* License Information */}
+                                <div className="bg-white/20 p-6 rounded-2xl backdrop-blur-sm md:col-span-3 lg:col-span-1">
+                                    <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+                                        <ShieldCheck className="mr-2 text-blue-400" size={20} />
                                         License Information
                                     </h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-4">
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">License Number</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    name="licenseNumber"
-                                                    value={formData.licenseNumber}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="DL123456789"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">License Number</label>
+                                            <input
+                                                type="text"
+                                                name="licenseNumber"
+                                                value={formData.licenseNumber}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="DL123456789"
+                                            />
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">License Type</label>
-                                            <div className="relative">
-                                                <select
-                                                    name="licenseType"
-                                                    value={formData.licenseType}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all appearance-none"
-                                                >
-                                                    <option value="" className="text-gray-800">Select License Type</option>
-                                                    <option value="Commercial" className="text-gray-800">Commercial</option>
-                                                    <option value="Non-Commercial" className="text-gray-800">Non-Commercial</option>
-                                                    <option value="Heavy Vehicle" className="text-gray-800">Heavy Vehicle</option>
-                                                </select>
-                                                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                                    <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                                                    </svg>
-                                                </div>
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">License Type</label>
+                                            <select
+                                                name="licenseType"
+                                                value={formData.licenseType}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all appearance-none"
+                                            >
+                                                <option value="" className="text-gray-800">Select License Type</option>
+                                                <option value="Commercial" className="text-gray-800">Commercial</option>
+                                                <option value="Non-Commercial" className="text-gray-800">Non-Commercial</option>
+                                                <option value="Heavy Vehicle" className="text-gray-800">Heavy Vehicle</option>
+                                            </select>
                                         </div>
-                                        <div className="group md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Years of Experience</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="number"
-                                                    name="experience"
-                                                    value={formData.experience}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Number of years"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                        <div className="group">
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Years of Experience</label>
+                                            <input
+                                                type="number"
+                                                name="experience"
+                                                value={formData.experience}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="Number of years"
+                                            />
                                         </div>
                                     </div>
                                 </div>
-                            )}
 
-                            {/* Step 3: Address Information */}
-                            {step === 3 && (
-                                <div className="bg-white/20 p-8 rounded-2xl backdrop-blur-sm">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                        <span className="bg-blue-600 text-white h-8 w-8 rounded-full inline-flex items-center justify-center mr-3">3</span>
+                                {/* Address Information */}
+                                <div className="bg-white/20 p-6 rounded-2xl backdrop-blur-sm md:col-span-3 lg:col-span-1">
+                                    <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+                                        <Home className="mr-2 text-blue-400" size={20} />
                                         Address Information
                                     </h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="group md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Street Address</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    name="address.street"
-                                                    value={formData.address.street}
-                                                    onChange={handleChange}
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="123 Main Street"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
+                                    <div className="space-y-4">
+                                        <div className="group">
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Street Address</label>
+                                            <input
+                                                type="text"
+                                                name="address.street"
+                                                value={formData.address.street}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="123 Main Street"
+                                            />
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">City</label>
-                                            <div className="relative">
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">City & State</label>
+                                            <div className="grid grid-cols-2 gap-2">
                                                 <input
                                                     type="text"
                                                     name="address.city"
                                                     value={formData.address.city}
                                                     onChange={handleChange}
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Your City"
+                                                    required
+                                                    className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                    placeholder="City"
                                                 />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
-                                        </div>
-                                        <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">State</label>
-                                            <div className="relative">
                                                 <input
                                                     type="text"
                                                     name="address.state"
                                                     value={formData.address.state}
                                                     onChange={handleChange}
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Your State"
+                                                    required
+                                                    className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                    placeholder="State"
                                                 />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                                             </div>
                                         </div>
                                         <div className="group">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Pincode</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    name="address.pincode"
-                                                    value={formData.address.pincode}
-                                                    onChange={handleChange}
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="123456"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-
-                            {step === 4 && (
-                                <div className="bg-white/20 p-8 rounded-2xl backdrop-blur-sm">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                        <span className="bg-blue-600 text-white h-8 w-8 rounded-full inline-flex items-center justify-center mr-3">4</span>
-                                        Bank Details
-                                    </h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="group md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Account Number</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    name="bankDetails.accountNumber"
-                                                    value={formData.bankDetails.accountNumber}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Enter your account number"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
-                                            <div className="group">
-                                                <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">IFSC Code</label>
-                                                <div className="relative">
-                                                    <input
-                                                        type="text"
-                                                        name="bankDetails.ifscCode"
-                                                        value={formData.bankDetails.ifscCode}
-                                                        onChange={handleChange}
-                                                        required
-                                                        className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                        placeholder="Enter IFSC code"
-                                                    />
-                                                    <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="group">
-                                                <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Bank name</label>
-                                                <div className="relative">
-                                                    <input
-                                                        type="text"
-                                                        name="bankDetails.bankName"
-                                                        value={formData.bankDetails.bankName}
-                                                        onChange={handleChange}
-                                                        required
-                                                        className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                        placeholder="Enter Bank name"
-                                                    />
-                                                    <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            )}
-                            {/* emergency contacts */}
-                            {step === 5 && (
-                                <div className="bg-white/20 p-8 rounded-2xl backdrop-blur-sm">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                        <span className="bg-blue-600 text-white h-8 w-8 rounded-full inline-flex items-center justify-center mr-3">5</span>
-                                        Emergency Contact Information
-                                    </h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="group md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Full Name</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    name="emergencyContact.name"
-                                                    value={formData.emergencyContact.name}
-                                                    onChange={handleChange}
-                                                    required
-                                                    className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                    placeholder="Enter emergency contact's full name"
-                                                />
-                                                <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                            </div>
-                                            <div className="group">
-                                                <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Phone Number</label>
-                                                <div className="relative">
-                                                    <input
-                                                        type="number"
-                                                        name="emergencyContact.phone"
-                                                        value={formData.emergencyContact.phone}
-                                                        onChange={handleChange}
-                                                        required
-                                                        className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                        placeholder="Enter emergency contact's phone number"
-                                                    />
-                                                    <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="group">
-                                                <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Relation to Driver</label>
-                                                <div className="relative">
-                                                    <input
-                                                        type="text"
-                                                        name="emergencyContact.relation"
-                                                        value={formData.emergencyContact.relation}
-                                                        onChange={handleChange}
-                                                        required
-                                                        className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
-                                                        placeholder="e.g., Brother, Sister, Friend"
-                                                    />
-                                                    <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            )}
-                            {/* Step 6: Status */}
-                            {step === 6 && (
-                                <div className="bg-white/20 p-8 rounded-2xl backdrop-blur-sm">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                        <span className="bg-blue-600 text-white h-8 w-8 rounded-full inline-flex items-center justify-center mr-3">6    </span>
-                                        Application Status
-                                    </h2>
-                                    <div className="group">
-                                        <label className="block text-sm font-medium text-gray-200 mb-2 ml-1">Current Status</label>
-                                        <div className="relative">
-                                            <select
-                                                name="status"
-                                                value={formData.status}
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Pincode</label>
+                                            <input
+                                                type="text"
+                                                name="address.pincode"
+                                                value={formData.address.pincode}
                                                 onChange={handleChange}
                                                 required
-                                                className="w-full p-4 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all appearance-none"
-                                            >
-                                                <option value="" className="text-gray-800">Select Status</option>
-                                                <option value="Active" className="text-gray-800">Active</option>
-                                                <option value="Inactive" className="text-gray-800">Inactive</option>
-                                                <option value="On Leave" className="text-gray-800">On Leave</option>
-
-                                            </select>
-                                            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                                <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                                                </svg>
-                                            </div>
-                                            <div className="absolute inset-0 rounded-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-12 bg-gray-800 p-6 rounded-xl">
-                                        <h3 className="text-lg font-semibold text-white mb-4">Terms & Conditions</h3>
-                                        <div className="flex items-start mb-6">
-                                            <input
-                                                type="checkbox"
-                                                id="terms"
-                                                className="mr-3 mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                placeholder="123456"
                                             />
-                                            <label htmlFor="terms" className="text-sm text-gray-200">
-                                                I agree to the terms and conditions, if the world was ending i wanna be next to youuuu...  ❤️
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                            )}
 
-                            {/* Navigation Buttons */}
-                            < div className="flex justify-between pt-4">
-                                {step > 1 ? (
-                                    <button
-                                        type="button"
-                                        onClick={prevStep}
-                                        className="px-6 py-3 bg-gray-600 text-white rounded-xl font-semibold hover:bg-gray-700 transition-all"
-                                    >
-                                        Previous
-                                    </button>
-                                ) : (
-                                    <div></div>
-                                )}
+                                {/* Bank Details & Emergency Contact */}
+                                <div className="bg-white/20 p-6 rounded-2xl backdrop-blur-sm md:col-span-3 lg:col-span-1">
+                                    <div className="space-y-6">
+                                        {/* Bank Details */}
+                                        <div>
+                                            <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+                                                <CreditCard className="mr-2 text-blue-400" size={20} />
+                                                Bank Details
+                                            </h2>
+                                            <div className="space-y-4">
+                                                <div className="group">
+                                                    <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Account Number</label>
+                                                    <input
+                                                        type="text"
+                                                        name="bankDetails.accountNumber"
+                                                        value={formData.bankDetails.accountNumber}
+                                                        onChange={handleChange}
+                                                        required
+                                                        className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                        placeholder="Enter account number"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    <div className="group">
+                                                        <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">IFSC Code</label>
+                                                        <input
+                                                            type="text"
+                                                            name="bankDetails.ifscCode"
+                                                            value={formData.bankDetails.ifscCode}
+                                                            onChange={handleChange}
+                                                            required
+                                                            className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                            placeholder="IFSC Code"
+                                                        />
+                                                    </div>
+                                                    <div className="group">
+                                                        <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Bank Name</label>
+                                                        <input
+                                                            type="text"
+                                                            name="bankDetails.bankName"
+                                                            value={formData.bankDetails.bankName}
+                                                            onChange={handleChange}
+                                                            required
+                                                            className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                            placeholder="Bank Name"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                {step < totalSteps ? (
-                                    <button
-                                        type="button"
-                                        onClick={nextStep}
-                                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
-                                    >
-                                        Continue
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="submit"
-                                        className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-blue-500/30 transition-all"
-                                    >
-                                        Submit Application
-                                    </button>
-                                )}
+                                        {/* Emergency Contact */}
+                                        <div>
+                                            <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+                                                <Phone className="mr-2 text-blue-400" size={20} />
+                                                Emergency Contact
+                                            </h2>
+                                            <div className="space-y-4">
+                                                <div className="group">
+                                                    <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Contact Name</label>
+                                                    <input
+                                                        type="text"
+                                                        name="emergencyContact.name"
+                                                        value={formData.emergencyContact.name}
+                                                        onChange={handleChange}
+                                                        required
+                                                        className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                        placeholder="Emergency contact name"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    <div className="group">
+                                                        <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Phone</label>
+                                                        <input
+                                                            type="text"
+                                                            name="emergencyContact.phone"
+                                                            value={formData.emergencyContact.phone}
+                                                            onChange={handleChange}
+                                                            required
+                                                            className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                            placeholder="Phone number"
+                                                        />
+                                                    </div>
+                                                    <div className="group">
+                                                        <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Relation</label>
+                                                        <input
+                                                            type="text"
+                                                            name="emergencyContact.relation"
+                                                            value={formData.emergencyContact.relation}
+                                                            onChange={handleChange}
+                                                            required
+                                                            className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                                            placeholder="Relation"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Status Selection and Terms */}
+                                <div className="bg-white/20 p-6 rounded-2xl backdrop-blur-sm md:col-span-3">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+                                                <Truck className="mr-2 text-blue-400" size={20} />
+                                                Driver Status
+                                            </h2>
+                                            <div className="group">
+                                                <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Current Status</label>
+                                                <select
+                                                    name="status"
+                                                    value={formData.status}
+                                                    onChange={handleChange}
+                                                    required
+                                                    className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all appearance-none"
+                                                >
+                                                    <option value="" className="text-gray-800">Select Status</option>
+                                                    <option value="Active" className="text-gray-800">Active</option>
+                                                    <option value="Inactive" className="text-gray-800">Inactive</option>
+                                                    <option value="On Leave" className="text-gray-800">On Leave</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-gray-800 p-6 rounded-xl self-end">
+                                            <h3 className="text-lg font-semibold text-white mb-4">Terms & Conditions</h3>
+                                            <div className="flex items-start mb-1">
+                                                <input
+                                                    type="checkbox"
+                                                    id="terms"
+                                                    className="mr-3 mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                    required
+                                                />
+                                                <label htmlFor="terms" className="text-sm text-gray-200">
+                                                    I agree to the terms and conditions, if the world was ending i wanna be next to youuuu... ❤️
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p className="mt-4 text-[1rem] text-white text-sm">
+
+                            {/* Submit Button */}
+                            <div className="flex justify-center pt-4">
+                                <button
+                                    type="submit"
+                                    className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-blue-500/30 transition-all text-lg"
+                                >
+                                    Submit Application
+                                </button>
+                            </div>
+                            <div className="text-center">
+                                <p className="mt-4 text-white text-sm">
                                     Already have an account? <a href="/driverlogin" className="text-blue-400 hover:underline">Login</a>
                                 </p>
                             </div>
                         </form>
-                    </div >
-                </div >
+                    </div>
+                </div>
                 <Toaster
                     position="top-right"
                     reverseOrder={false}
@@ -621,7 +581,7 @@ const BecomeDriver = () => {
                         }
                     }}
                 />
-            </div >
+            </div>
         </>
     );
 };

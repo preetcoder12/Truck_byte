@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Truck } = require("../models/trucks");
 const Driver = require("../models/driver");
+const User = require("../models/user");
 
 const AdminSignUp = async (req, res) => {
     const { username, email, secretCode, password } = req.body;
@@ -124,5 +125,65 @@ const RemoveDriver = async (req, res) => {
     }
 };
 
+const RemoveUser = async (req, res) => {
+    try {
+        const selectedUser = await User.findById(req.params.id);
+        if (!selectedUser) {
+            return res.status(404).json({ msg: "No user found" });
+        }
+        await User.findByIdAndDelete(req.params.id);
 
-module.exports = { AdminSignUp, AdminLogin, ViewAllTrucks, ViewAllDrivers, RemoveDriver };
+        res.status(200).json({ message: "User removed successfully" });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+const RemoveTruck = async (req, res) => {
+    try {
+        const selectedTruck = await Truck.findById(req.params.id);
+        if (!selectedTruck) {
+            return res.status(404).json({ msg: "No truck found" });
+        }
+        await Truck.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({ message: "Truck removed successfully" });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+const RequestedAddTrucks = async (req, res) => {
+    try {
+
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+const EditTruckDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body; 
+
+        const updatedTruck = await Truck.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+
+        if (!updatedTruck) {
+            return res.status(404).json({ msg: "No truck found" });
+        }
+
+        res.status(200).json({ message: "Truck details updated successfully", truck: updatedTruck });
+
+    } catch (error) {
+        console.error("🚨 Error updating truck:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+
+module.exports = {
+    AdminSignUp, AdminLogin, ViewAllTrucks, ViewAllDrivers,
+    RemoveDriver, RemoveUser, RemoveTruck, RequestedAddTrucks, EditTruckDetails
+};

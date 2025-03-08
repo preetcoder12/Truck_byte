@@ -18,6 +18,8 @@ import ProtectAdmin from "./components/Protect_admin";
 import AdminPage from "./pages/AdminPage";
 import PaymentPage from "./pages/PaymentPage";
 import BecomeDriver from "./pages/BecomeDriver";
+import AdminSeeSelectedTruck from "./pages/AdminSeeSelectedTruck";
+import EditTruckDetails from "./pages/EditTruckDetails";
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
         <Route path="/adminsignup" element={<AdminSignup />} />
         <Route path="/adminlogin" element={<Admin_LoginPage />} />
         <Route path="/admin" element={<ProtectAdmin element={<AdminPage />} />} />
+        <Route path="/adminselected_truck/:truckId" element={<ProtectAdmin element={<AdminSeeSelectedTruck />} />} />
+        <Route path="/admin_editselected_truck/:truckId" element={<ProtectAdmin element={<EditTruckDetails />} />} />
       </Routes>
     </Router>
   );

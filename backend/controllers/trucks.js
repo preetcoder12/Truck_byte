@@ -24,7 +24,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-const Addtruck = async (req, res) => {
+
+const AddTruck = async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
             return res.status(401).json({ error: "Unauthorized. Invalid token." });
@@ -36,7 +37,7 @@ const Addtruck = async (req, res) => {
 
         const {
             truckNumber, model, manufacturer, registrationDate, insuranceExpiry,
-            capacity, truckType, status, ownerType, pricePerKm, contactInfo
+            capacity, truckType, ownerType, pricePerKm, contactInfo
         } = req.body;
 
         const images = req.files && req.files.length > 0
@@ -44,7 +45,7 @@ const Addtruck = async (req, res) => {
             : [];
 
         if (!truckNumber || !model || images.length === 0 || !manufacturer || !registrationDate ||
-            !insuranceExpiry || !capacity || !truckType || !status || !ownerType ||
+            !insuranceExpiry || !capacity || !truckType || !ownerType ||
             !pricePerKm || !contactInfo || !contactInfo.name || !contactInfo.phone || !contactInfo.email) {
             return res.status(400).json({ error: "All fields are required!" });
         }
@@ -66,26 +67,24 @@ const Addtruck = async (req, res) => {
             return res.status(400).json({ error: "Invalid email format." });
         }
 
-        // Create New Truck
         const newTruck = new Truck({
             truckNumber, model, manufacturer, registrationDate, insuranceExpiry, capacity,
-            truckType, status, ownerType, ownerId, pricePerKm, contactInfo, images
+            truckType, ownerType, ownerId, pricePerKm, contactInfo, images,
+            requestStatus: "pending", 
+            requestedBy: ownerId
         });
 
         await newTruck.save();
 
-        const trucktoken = jwt.sign({ id: newTruck._id }, JWT_SECRET, { expiresIn: "1h" });
-
         res.status(201).json({
-            message: "Truck added successfully!",
-            trucktoken,
+            message: "Truck request submitted successfully! Awaiting admin approval.",
             truckId: newTruck._id,
             truck: newTruck
         });
 
     } catch (error) {
-        console.error("❌ Truck fill error:", error);
-        res.status(500).json({ error: error.message || "Server error during truck details fill." });
+        console.error("❌ Truck submission error:", error);
+        res.status(500).json({ error: error.message || "Server error during truck submission." });
     }
 };
 
@@ -126,4 +125,4 @@ const GetTruckById = async (req, res) => {
 };
 
 
-module.exports = { Addtruck, upload, Alltrucks, GetTruckById };
+module.exports = { AddTruck, upload, Alltrucks, GetTruckById };

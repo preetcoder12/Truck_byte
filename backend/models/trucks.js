@@ -25,7 +25,7 @@ const truckSchema = new Schema({
     },
     capacity: {
         type: Number,
-        required: true 
+        required: true
     },
     truckType: {
         type: String,
@@ -51,7 +51,6 @@ const truckSchema = new Schema({
         type: [String],
         default: []
     },
-
     pricePerKm: {
         type: Number,
         required: true,
@@ -59,12 +58,21 @@ const truckSchema = new Schema({
     },
     contactInfo: {
         name: { type: String, required: true },
-        phone: { type: String, required: true,}, 
-        email: { type: String, required: true, }
-    }
+        phone: { type: String, required: true },
+        email: { type: String, required: true }
+    },
 
+    requestStatus: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "pending"
+    },
+    requestedBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    }
 }, { timestamps: true });
 
 const Truck = mongoose.model("Truck", truckSchema);
-
 module.exports = { Truck };

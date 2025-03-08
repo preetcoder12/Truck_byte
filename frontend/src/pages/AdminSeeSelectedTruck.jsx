@@ -2,42 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Settings } from "lucide-react";
 
-const BookTruckProfile = () => {
+
+const AdminSeeSelectedTruck = () => {
+
     const [truckDetails, setTruckDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const [fromDate, setFromDate] = useState("");
-    const [toDate, setToDate] = useState("");
-    const [days, setDays] = useState(null);
-    const [price, setprice] = useState("");
-    const [bookOn, setbookOn] = useState(false);
 
     const params = useParams();
     const truckId = params.truckId;
     const extractedId = truckId && typeof truckId === "object" ? truckId._id || truckId.id || String(truckId) : truckId;
 
     const navigate = useNavigate();
-
-    const calculateDays = () => {
-        if (fromDate && toDate) {
-            const start = new Date(fromDate);
-            const end = new Date(toDate);
-
-            const diffTime = end - start;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
-            if (diffDays >= 0) {
-                setDays(diffDays);
-                setbookOn(true);
-            } else {
-                setDays(null);
-                setbookOn(false);
-                toast.error("End date must be after start date!");
-            }
-        }
-    };
-
 
     useEffect(() => {
         if (!extractedId || extractedId === "[object Object]") {
@@ -61,6 +39,15 @@ const BookTruckProfile = () => {
         fetchTruckDetails();
     }, [extractedId]);
 
+    const HandleEditTruck = (extractedId) => {
+        try {
+            navigate(`/admin_editselected_truck/${extractedId}`)
+        } catch (error) {
+            console.error("❌ Error in Edit:", error);
+            setError("Failed to Editing truck details");
+        }
+    }
+
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
@@ -80,15 +67,22 @@ const BookTruckProfile = () => {
         </div>
     );
 
-    const handlePay = () => {
-        navigate("/payment");
+    const handleDeleteTruck = async (extractedId) => {
+        try {
+            await axios.delete(`http://localhost:8000/admin/removetruck/${extractedId}`)
+            window.location.href = "/admin"
+        } catch (error) {
+            console.error("Error deleting truck:", error);
+            setError("Failed to delete truck");
+        }
     }
 
     return (
-        <>
-            <div className="bg-gray-900">
+        <div>
 
-                <div className="max-w-4xl mx-auto p-4 bg-gray-800 rounded-[2rem]">
+            <div className="bg-gray-900 w-full h-full">
+
+                <div className="max-w-4xl mx-auto p-4 bg-gray-800 rounded-[2rem] pt-[5rem]">
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                         {/* Header with truck number and status */}
                         <div className="bg-gray-800 text-white p-6">
@@ -207,82 +201,48 @@ const BookTruckProfile = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-                                <h2 className="text-xl font-semibold text-gray-800 mb-4">Estimate Transport Duration</h2>
-
-                                {/* Total Days */}
-                                <div className="mb-4 flex gap-[12rem]">
-                                    <div>
-                                        <label className="block text-lg font-medium text-gray-700">Total Days</label>
-                                        <h1 className="text-xl font-bold text-blue-600">{days !== null ? `${days} Days` : ""}</h1>
-                                    </div>
-                                    <div>
-                                        <label className="block text-lg font-medium text-gray-700">Price</label>
-                                        <h1 className="text-xl font-bold text-blue-600">
-                                            {price !== truckDetails.pricePerKm ? `₹${days * 24 * truckDetails.pricePerKm}` : ""}
-                                        </h1>
-                                    </div>
-                                </div>
-
-                                {/* Date Inputs */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    {/* From Date */}
-                                    <div>
-                                        <label className="block text-lg font-medium text-gray-700">From</label>
-                                        <input
-                                            type="date"
-                                            value={fromDate}
-                                            onChange={(e) => setFromDate(e.target.value)}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-
-                                    {/* To Date */}
-                                    <div>
-                                        <label className="block text-lg font-medium text-gray-700">To</label>
-                                        <input
-                                            type="date"
-                                            value={toDate}
-                                            onChange={(e) => setToDate(e.target.value)}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Calculate Button */}
-                                <button
-                                    onClick={calculateDays}
-                                    className="mt-4 w-full bg-gray-800 text-white py-2.5 rounded-md hover:bg-gray-700 transition-colors"
-                                >
-                                    Calculate Duration
-                                </button>
-                            </div>
-
                             {/* Action buttons */}
-                            <div className="mt-8 flex gap-4">
-                                <a href="/booktrucks" className="bg-red-800 hover:bg-red-700 text-white font-semibold py-2 px-2 w-20 align-center justify-center  rounded-md flex">
+                            <div className="mt-8 flex flex-wrap items-center justify-center gap-10">
+                                {/* Back Button */}
+                                <a
+                                    href="/admin"
+                                    className="bg-red-700 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md flex items-center justify-center transition duration-300"
+                                >
                                     Back
                                 </a>
-                                {bookOn ? (
-                                    <button onClick={handlePay}  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md flex-1">
-                                        Book This Truck
-                                    </button>
-                                ) : (
-                                    <button onClick={handlePay} disabled className="bg-gray-400 text-white font-semibold py-2 px-6 rounded-md flex-1">
-                                        Book This Truck
-                                    </button>
-                                )}
-                                <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2 px-6 rounded-md">
+
+                                {/* Contact Owner */}
+                                <button
+                                    className="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2 px-6 rounded-md transition duration-300"
+                                >
                                     Contact Owner
                                 </button>
+
+                                {/* Edit Details */}
+                                <button
+                                    onClick={() => { HandleEditTruck(truckId) }}
+                                    className="border border-green-600 text-green-600 hover:bg-green-50 font-semibold py-2 px-6 rounded-md flex items-center gap-2 transition duration-300"
+                                >
+                                    <Settings className="w-5 h-5" /> Edit Details
+                                </button>
+
+                                {/* Remove Truck */}
+                                <button
+                                    onClick={() => handleDeleteTruck(truckId)}
+                                    className="bg-red-700 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md flex items-center justify-center transition duration-300"
+                                >
+                                    Remove Truck
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
 
             </div>
-        </>
-    );
-};
 
-export default BookTruckProfile;
+        </div>
+    )
+}
+
+export default AdminSeeSelectedTruck

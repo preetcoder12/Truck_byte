@@ -64,12 +64,12 @@ const userLogin = async (req, res) => {
         }
 
         const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
-        
+
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 24 * 60 * 60 * 1000, 
+            maxAge: 24 * 60 * 60 * 1000,
         })
         res.status(200).json({
             message: "User logged in successfully",
@@ -88,4 +88,17 @@ const userLogin = async (req, res) => {
     }
 };
 
-module.exports = { userSignup, userLogin };
+const ViewAllUsers = async (req, res) => {
+    try {
+        const allusers = await User.find({});
+        if (!allusers) {
+            return res.status(400).json({ msg: "No user found" });
+        }
+        res.status(200).json(allusers);
+    } catch (error) {
+        console.error("❌ users fetching  error:", error);
+        res.status(500).json({ error: error.message || "Server error during fetching users details." });
+    }
+}
+
+module.exports = { userSignup, userLogin, ViewAllUsers };

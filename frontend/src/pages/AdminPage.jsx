@@ -11,12 +11,14 @@ import {
   Settings, Search, Moon, Sun,
   AlertCircle, Filter, IndianRupee, Weight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('trucks');
   const [darkMode, setDarkMode] = useState(false);
   const [trucks, setTrucks] = useState([]);
   const [drivers, setdrivers] = useState([]);
+  const [users, setusers] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedTruck, setSelectedTruck] = useState(null);
@@ -66,6 +68,12 @@ const AdminPage = () => {
     }
   }, [activeTab]);
 
+  useEffect(() => {
+    if (activeTab === 'users') {
+      fetchAllUsers();
+    }
+  }, [activeTab]);
+
   const fetchAllTrucks = async () => {
     try {
       setLoading(true);
@@ -96,9 +104,33 @@ const AdminPage = () => {
     }
   };
 
+  const fetchAllUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:8000/user/allusers");
+      setusers(response.data);
+      setError("");
+    } catch (error) {
+      console.error("Error fetching drivers:", error);
+      setError("Failed to load available drivers");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteDriver = async (extractedid) => {
     try {
       await axios.delete(`http://localhost:8000/admin/removedriver/${extractedid}`);
+      setdrivers((prevDriver) => prevDriver.filter(drivers => drivers._id != extractedid));
+    } catch (error) {
+      console.error("Error deleting drivers:", error);
+      setError("Failed to delete driver");
+    }
+  }
+  const handleDeleteUser = async (extractedid) => {
+    try {
+      await axios.delete(`http://localhost:8000/admin/removeuser/${extractedid}`);
+      setusers((prevUser) => prevUser.filter(user => user._id != extractedid));
     } catch (error) {
       console.error("Error deleting drivers:", error);
       setError("Failed to delete driver");
@@ -113,12 +145,17 @@ const AdminPage = () => {
     setSelectedTruck(truck._id);
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (truckId) => {
     if (!truckId) {
       console.log("Please select a truck first.");
       return;
     }
     localStorage.setItem("selectedtruckid", truckId);
+    navigate(`/adminselected_truck/${truckId}`)
+
+
     // Instead of navigating, you could show truck details in a modal or in another section
     console.log("Selected truck ID:", truckId);
   };
@@ -142,6 +179,7 @@ const AdminPage = () => {
     { key: 'trucks', label: 'Trucks', icon: <Truck size={20} className="mr-3" /> },
     { key: 'drivers', label: 'Drivers', icon: <User size={20} className="mr-3" /> },
     { key: 'users', label: 'Users', icon: <Users size={20} className="mr-3" /> },
+    { key: 'addtrucks_request', label: 'Add Trucks Request', icon: <Truck size={20} className="mr-3" /> },
   ];
 
   const handleLogout = () => {
@@ -238,24 +276,17 @@ const AdminPage = () => {
                 </div>
               </div>
 
-              {truck.status === "Available" ? (
-                <button
-                  onClick={() => handleSubmit(truck._id)}
-                  className={`w-full py-2.5 rounded-md transition-colors duration-200 flex items-center justify-center ${darkMode
-                    ? 'bg-blue-700 hover:bg-blue-600 text-white'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
-                    }`}
-                >
-                  <Truck size={18} className="mr-2" />
-                  Book This Truck
-                </button>
-              ) : (
-                <button className={`w-full py-2.5 rounded-md cursor-not-allowed flex items-center justify-center ${darkMode ? 'bg-gray-600 text-gray-400' : 'bg-gray-200 text-gray-500'
-                  }`}>
-                  <AlertCircle size={18} className="mr-2" />
-                  Currently Unavailable
-                </button>
-              )}
+              <button
+                onClick={() => handleSubmit(truck._id)}
+                className={`w-full py-2.5 rounded-md transition-colors duration-200 flex items-center justify-center ${darkMode
+                  ? 'bg-green-700 hover:bg-green-600 text-white'
+                  : 'bg-green-600 hover:bg-green-700 text-white'
+                  }`}
+              >
+                <Truck size={18} className="mr-2" />
+                View More Details
+              </button>
+
             </div>
 
             {truck.images && truck.images.length > 1 && (
@@ -424,12 +455,57 @@ const AdminPage = () => {
 
       case 'users':
         return (
-          <div>
-            <h2 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Users Management</h2>
-            <p className={darkMode ? "text-gray-400 mt-2" : "text-gray-500 mt-2"}>
+          <div className={`p-6 max-w-6xl mx-auto ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                Users Management
+              </h2>
+            </div>
+
+            <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
               Manage and monitor all users from here.
             </p>
-            {/* User management content will go here */}
+
+            {users.length === 0 ? (
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-black'} border rounded-lg p-8 text-center`}>
+                <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-lg`}>No Users available</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {users.map((person) => (
+                  <div
+                    key={person._id}
+                    className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border rounded-xl shadow-lg overflow-hidden p-4 transition-all duration-300 hover:shadow-xl`}
+                  >
+                    {/* Users Details */}
+                    <div className="text-center mt-4">
+                      <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                        {person.username}
+                      </h3>
+                      <div className="space-y-1 mt-2">
+                        <p className={`${darkMode ? 'text-gray-400' : 'text-black'} flex items-center justify-center`}>
+                          <span className="mr-1"><FaPhoneAlt /></span> {person.phone}
+                        </p>
+                        <p className={`${darkMode ? 'text-gray-400' : 'text-black'} flex items-center justify-center`}>
+                          <span className="mr-1"><IoMdMail /></span> {person.email}
+                        </p>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="mt-4 flex justify-around">
+                        <button className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+                          Contact
+                        </button>
+
+                        <button onClick={() => handleDeleteUser(person._id)} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         );
       default:
