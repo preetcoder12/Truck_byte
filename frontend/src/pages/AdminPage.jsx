@@ -218,7 +218,7 @@ const AdminPage = () => {
 
   const handleToUser = (id) => {
     localStorage.setItem("driverid", id);
-    window.location.href=`/admin_todriverprofile/${id}`
+    window.location.href = `/admin_todriverprofile/${id}`
   }
 
 
@@ -480,13 +480,11 @@ const AdminPage = () => {
 
                     {/* Action Buttons */}
                     <div className="mt-4 flex justify-around">
-                      <button className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
-                        Contact
-                      </button>
-                      <button onClick={() => { handleToUser(person._id) }} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+
+                      <button onClick={() => { handleToUser(person._id) }} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-blue-600 hover:bg-blue-800 text-white'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
                         View Details
                       </button>
-                      <button onClick={() => handleDeleteDriver(person._id)} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+                      <button onClick={() => handleDeleteDriver(person._id)} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-red-400 hover:bg-red-500 text-black'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
                         Remove
                       </button>
                     </div>
@@ -541,7 +539,7 @@ const AdminPage = () => {
                           Contact
                         </button>
 
-                        <button onClick={() => handleDeleteUser(person._id)} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+                        <button onClick={() => handleDeleteUser(person._id)} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-red-300 hover:bg-red-400 text-black'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
                           Remove
                         </button>
                       </div>
