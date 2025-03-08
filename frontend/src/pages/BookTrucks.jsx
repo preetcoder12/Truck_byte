@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Truck, AlertCircle, Filter, IndianRupee, Weight, StepBack, Moon, Sun } from "lucide-react";
-import Loader from "../components/Loader"
+import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 
 const BookTrucks = () => {
@@ -67,11 +67,11 @@ const BookTrucks = () => {
 
     const handleSubmit = (truckId) => {
         if (!truckId) {
-            console.log("Please select a truck first."); // Debugging
+            console.log("Please select a truck first.");
             return;
         }
         localStorage.setItem("selectedtruckid", truckId);
-        console.log("Navigating to:", `/booktrucksdetails/${truckId}`); // Debugging
+        console.log("Navigating to:", `/booktrucksdetails/${truckId}`);
         navigate(`/booktrucksdetails/${truckId}`);
     };
 
@@ -81,6 +81,8 @@ const BookTrucks = () => {
 
     const getFilteredTrucks = () => {
         return trucks.filter(truck => {
+            if (truck.requestStatus !== "approved") return false;
+
             if (filters.truckType !== "all" && truck.truckType !== filters.truckType) return false;
             if (filters.minCapacity && truck.capacity < parseInt(filters.minCapacity)) return false;
             if (filters.maxPrice && truck.pricePerKm > parseInt(filters.maxPrice)) return false;
@@ -208,10 +210,10 @@ const BookTrucks = () => {
                                             </div>
                                         )}
                                         <span className={`absolute top-4 right-4 px-3 py-1.5 text-xs font-semibold rounded-full ${truck.status === "Available"
-                                                ? darkMode ? "bg-green-900/60 text-green-300" : "bg-green-100 text-green-800"
-                                                : truck.status === "In Transit"
-                                                    ? darkMode ? "bg-yellow-900/60 text-yellow-300" : "bg-yellow-100 text-yellow-800"
-                                                    : darkMode ? "bg-red-900/60 text-red-300" : "bg-red-100 text-red-800"
+                                            ? darkMode ? "bg-green-900/60 text-green-300" : "bg-green-100 text-green-800"
+                                            : truck.status === "In Transit"
+                                                ? darkMode ? "bg-yellow-900/60 text-yellow-300" : "bg-yellow-100 text-yellow-800"
+                                                : darkMode ? "bg-red-900/60 text-red-300" : "bg-red-100 text-red-800"
                                             }`}>
                                             {truck.status}
                                         </span>
@@ -248,8 +250,8 @@ const BookTrucks = () => {
                                             <button
                                                 onClick={() => handleSubmit(truck._id)}
                                                 className={`w-full py-2.5 rounded-md transition-colors duration-200 flex items-center justify-center ${darkMode
-                                                        ? 'bg-blue-700 hover:bg-blue-600 text-white'
-                                                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                                    ? 'bg-blue-700 hover:bg-blue-600 text-white'
+                                                    : 'bg-blue-600 hover:bg-blue-700 text-white'
                                                     }`}
                                             >
                                                 <Truck size={18} className="mr-2" />

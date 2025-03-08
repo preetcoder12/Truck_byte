@@ -66,6 +66,7 @@ const driverSchema = new Schema({
         enum: ["Active", "Inactive", "On Leave"],
         default: "Active",
     },
+    
 }, { timestamps: true });
 
 const Driver = mongoose.model("Driver", driverSchema);

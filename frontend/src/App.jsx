@@ -20,6 +20,8 @@ import PaymentPage from "./pages/PaymentPage";
 import BecomeDriver from "./pages/BecomeDriver";
 import AdminSeeSelectedTruck from "./pages/AdminSeeSelectedTruck";
 import EditTruckDetails from "./pages/EditTruckDetails";
+import Admin_ToDriver_Profile from "./pages/Admin_ToDriver_Profile";
+import Admin_edit_driverDetails from "./pages/Admin_Edit_driver";
 
 function App() {
   return (
@@ -29,7 +31,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected routes for Normal Users */}
+        {/* Users and Drivers Routes */}
         <Route path="/" element={<Protect element={<HomePage />} />} />
         <Route path="/learnmore" element={<Protect element={<LearnMore />} />} />
         <Route path="/dashboard" element={<Protect element={<Dashboard />} />} />
@@ -48,6 +50,8 @@ function App() {
         <Route path="/admin" element={<ProtectAdmin element={<AdminPage />} />} />
         <Route path="/adminselected_truck/:truckId" element={<ProtectAdmin element={<AdminSeeSelectedTruck />} />} />
         <Route path="/admin_editselected_truck/:truckId" element={<ProtectAdmin element={<EditTruckDetails />} />} />
+        <Route path="/admin_todriverprofile/:id" element={<ProtectAdmin element={<Admin_ToDriver_Profile />} />} />
+        <Route path="/admin_editdriverprofile/:id" element={<ProtectAdmin element={<Admin_edit_driverDetails />} />} />
       </Routes>
     </Router>
   );

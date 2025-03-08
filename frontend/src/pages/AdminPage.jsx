@@ -4,6 +4,8 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { FaCar } from "react-icons/fa6";
 import { FaMedal } from "react-icons/fa6";
+import { FcOk } from "react-icons/fc";
+import { ImCross } from "react-icons/im";
 
 
 import {
@@ -137,6 +139,26 @@ const AdminPage = () => {
     }
   }
 
+  const handleRequestStatus = async (truckId, status) => {
+    try {
+      const response = await axios.put(`http://localhost:8000/admin/updatetruck/${truckId}`, {
+        requestStatus: status,
+      });
+
+      if (response.status === 200) {
+        setTrucks((prevTrucks) =>
+          prevTrucks.map((truck) =>
+            truck._id === truckId ? { ...truck, requestStatus: status } : truck
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating truck request status:", error);
+    }
+  };
+
+
+
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -172,8 +194,15 @@ const AdminPage = () => {
       return true;
     });
   };
+  const getNot_approvedTrucks = () => {
+    return trucks.filter(truck => {
+      if (truck.requestStatus === "pending") return true;
+      return false;
+    });
+  };
 
   const filteredTrucks = getFilteredTrucks();
+  const NotApprovedTrucks = getNot_approvedTrucks();
 
   const tabs = [
     { key: 'trucks', label: 'Trucks', icon: <Truck size={20} className="mr-3" /> },
@@ -186,6 +215,12 @@ const AdminPage = () => {
     localStorage.clear();
     window.location.href = "/selectroles";
   };
+
+  const handleToUser = (id) => {
+    localStorage.setItem("driverid", id);
+    window.location.href=`/admin_todriverprofile/${id}`
+  }
+
 
   const renderTrucksContent = () => {
     if (loading) {
@@ -212,6 +247,15 @@ const AdminPage = () => {
         <div className={`text-center py-12 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
           <Truck size={48} className={`mx-auto mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
           <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>No trucks available at the moment</p>
+          <p className={`mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Please check back later or contact support</p>
+        </div>
+      );
+    }
+    if (NotApprovedTrucks.length === 0) {
+      return (
+        <div className={`text-center py-12 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+          <Truck size={48} className={`mx-auto mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+          <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>No trucks Request available at the moment</p>
           <p className={`mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Please check back later or contact support</p>
         </div>
       );
@@ -439,7 +483,7 @@ const AdminPage = () => {
                       <button className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
                         Contact
                       </button>
-                      <button className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+                      <button onClick={() => { handleToUser(person._id) }} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
                         View Details
                       </button>
                       <button onClick={() => handleDeleteDriver(person._id)} className={`${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
@@ -507,6 +551,124 @@ const AdminPage = () => {
               </div>
             )}
           </div>
+        );
+      case 'addtrucks_request':
+        return (
+          <div className={`p-6 max-w-6xl mx-auto ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                Request Management
+              </h2>
+            </div>
+
+            <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
+              Manage and monitor all requests from here.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              {NotApprovedTrucks.map((truck) => (
+                <div
+                  key={truck._id}
+                  className={`border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 ${selectedTruck === truck._id ? "ring-2 ring-blue-500 transform scale-[1.02]" : ""} 
+            ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'}`}
+                  onClick={() => handleSelectTruck(truck)}
+                >
+                  <div className="h-56 overflow-hidden bg-gray-200 relative">
+                    {truck.images && truck.images.length > 0 ? (
+                      <img
+                        src={`http://localhost:8000${truck.images[0]}`}
+                        alt={`${truck.manufacturer} ${truck.model}`}
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      />
+                    ) : (
+                      <div className={`flex items-center justify-center h-full ${darkMode ? 'bg-gray-600' : 'bg-gray-100'}`}>
+                        <Truck size={64} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
+                        <p className={darkMode ? 'text-gray-400 ml-2' : 'text-gray-500 ml-2'}>No image available</p>
+                      </div>
+                    )}
+                    <span className={`absolute top-4 right-4 px-3 py-1.5 text-xs font-semibold rounded-full ${truck.status === "Available"
+                      ? darkMode ? "bg-green-900/60 text-green-300" : "bg-green-100 text-green-800"
+                      : truck.status === "In Transit"
+                        ? darkMode ? "bg-yellow-900/60 text-yellow-300" : "bg-yellow-100 text-yellow-800"
+                        : darkMode ? "bg-red-900/60 text-red-300" : "bg-red-100 text-red-800"
+                      }`}>
+                      {truck.status}
+                    </span>
+                  </div>
+
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-2">
+                      <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{truck.truckNumber}</h2>
+                      <div className={`px-2 py-1 rounded text-sm font-medium ${darkMode ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-50 text-blue-700'}`}>
+                        {truck.manufacturer}
+                      </div>
+                    </div>
+
+                    <p className={`font-medium mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{truck.model}</p>
+
+                    <div className={`border-t border-b py-3 mb-3 ${darkMode ? 'border-gray-600' : 'border-gray-100'}`}>
+                      <div className="grid grid-cols-2 gap-y-3">
+                        <div className="flex items-center">
+                          <Truck size={16} className={`mr-2 ${darkMode ? 'text-gray-400' : 'text-gray-400'}`} />
+                          <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{truck.truckType}</p>
+                        </div>
+                        <div className="flex items-center">
+                          <Weight size={16} className={`mr-2 ${darkMode ? 'text-gray-400' : 'text-gray-400'}`} />
+                          <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{truck.capacity} Tons</p>
+                        </div>
+                        <div className="flex items-center">
+                          <IndianRupee size={16} className={`mr-2 ${darkMode ? 'text-gray-400' : 'text-gray-400'}`} />
+                          <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>₹{truck.pricePerKm}/km</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='flex gap-[63px] justify-center items-center'>
+                      <button
+                        onClick={() => handleRequestStatus(truck._id, "approved")}
+                        className={`w-full py-2.5 px-2 rounded-md transition-colors duration-200 flex items-center justify-center ${darkMode
+                          ? 'bg-green-700 hover:bg-green-600 text-white'
+                          : 'bg-green-600 hover:bg-green-700 text-white'
+                          }`}
+                      >
+                        <FcOk size={18} className="mr-2" />
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleRequestStatus(truck._id, "rejected")}
+                        className={`w-full py-2.5 px-2 rounded-md transition-colors duration-200 flex items-center justify-center ${darkMode
+                          ? 'bg-red-700 hover:bg-red-600 text-white'
+                          : 'bg-red-600 hover:bg-red-700 text-white'
+                          }`}
+                      >
+                        <ImCross size={18} className="mr-2" />
+                        Reject
+                      </button>
+                    </div>
+
+
+                  </div>
+
+                  {truck.images && truck.images.length > 1 && (
+                    <div className="px-5 pb-4">
+                      <p className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>More Images</p>
+                      <div className="flex space-x-2 overflow-x-auto pb-2">
+                        {truck.images.slice(1).map((img, index) => (
+                          <img
+                            key={index}
+                            src={`http://localhost:8000${img}`}
+                            alt={`Truck view ${index + 2}`}
+                            className={`w-16 h-12 object-cover rounded border hover:border-blue-400 transition-colors ${darkMode ? 'border-gray-600' : 'border-gray-200'
+                              }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+            </div></div>
         );
       default:
         return (
