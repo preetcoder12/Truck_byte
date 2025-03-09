@@ -70,7 +70,7 @@ const AddTruck = async (req, res) => {
         const newTruck = new Truck({
             truckNumber, model, manufacturer, registrationDate, insuranceExpiry, capacity,
             truckType, ownerType, ownerId, pricePerKm, contactInfo, images,
-            requestStatus: "pending", 
+            requestStatus: "pending",
             requestedBy: ownerId
         });
 
@@ -92,6 +92,20 @@ const AddTruck = async (req, res) => {
 const Alltrucks = async (req, res) => {
     try {
         const trucks = await Truck.find({});
+        if (!trucks || trucks.length === 0) {
+            return res.status(404).json({ error: "❌ No trucks found!" });
+        }
+        res.status(200).json(trucks);
+
+
+    } catch (error) {
+        console.error("❌ Truck fetching  error:", error);
+        res.status(500).json({ error: error.message || "Server error during fetching trucks details." });
+    }
+}
+const pendingtrucks = async (req, res) => {
+    try {
+        const trucks = await Truck.find({requestStatus:"pending"});
         if (!trucks || trucks.length === 0) {
             return res.status(404).json({ error: "❌ No trucks found!" });
         }
@@ -125,4 +139,41 @@ const GetTruckById = async (req, res) => {
 };
 
 
-module.exports = { AddTruck, upload, Alltrucks, GetTruckById };
+const TotalTrucks = async (req, res) => {
+    try {
+        const TotalTrucks = await Truck.countDocuments({});
+        res.status(200).json({ TotalTrucks });
+    } catch (error) {
+        console.error("❌ Error fetching truck by ID:", error);
+        res.status(500).json({ error: error.message || "Server error while fetching truck details." });
+    }
+}
+const OntripTrucks = async (req, res) => {
+    try {
+        const Ontrip_Trucks = await Truck.countDocuments({ status: "On Trip" });
+        res.status(200).json({ Ontrip_Trucks });
+    } catch (error) {
+        console.error("❌ Error fetching truck by ID:", error);
+        res.status(500).json({ error: error.message || "Server error while fetching truck details." });
+    }
+}
+const IdleTrucks = async (req, res) => {
+    try {
+        const Idle_Trucks = await Truck.countDocuments({ status: "Available" });
+        res.status(200).json({ Idle_Trucks });
+    } catch (error) {
+        console.error("❌ Error fetching truck by ID:", error);
+        res.status(500).json({ error: error.message || "Server error while fetching truck details." });
+    }
+}
+const UnderMaintenanceTrucks = async (req, res) => {
+    try {
+        const undermaintainance_Trucks = await Truck.countDocuments({ status: "Under Maintenance" });
+        res.status(200).json({ undermaintainance_Trucks });
+    } catch (error) {
+        console.error("❌ Error fetching truck by ID:", error);
+        res.status(500).json({ error: error.message || "Server error while fetching truck details." });
+    }
+}
+
+module.exports = { AddTruck, upload, Alltrucks, GetTruckById, TotalTrucks, OntripTrucks, IdleTrucks,UnderMaintenanceTrucks ,pendingtrucks};

@@ -34,7 +34,10 @@ const truckSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ["Available", "On Trip", "Under Maintenance", "Inactive"],
+        enum: ["Available", "On Trip", "Under Maintenance"],
+        //available = sari gadiya
+        //on trip  = gadiya jo kam pr hai
+        //undermaintainance = kharab gdiya
         default: "Available"
     },
     ownerType: {

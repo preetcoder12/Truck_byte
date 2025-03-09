@@ -39,6 +39,19 @@ const AdminSeeSelectedTruck = () => {
         fetchTruckDetails();
     }, [extractedId]);
 
+    const HandleEmail = (email) => {
+        try {
+            if (!email) {
+                console.error("❌ No email provided.");
+                return;
+            }
+            window.location.href = `mailto:${email}?subject=Inquiry%20About%20Your%20Truck&body=Hello,%20I%20am%20interested%20in%20your%20truck.`;
+        } catch (error) {
+            console.error("❌ Error redirecting Email:", error);
+            setError("Failed to redirect to email");
+        }
+    }
+
     const HandleEditTruck = (extractedId) => {
         try {
             navigate(`/admin_editselected_truck/${extractedId}`)
@@ -213,6 +226,7 @@ const AdminSeeSelectedTruck = () => {
 
                                 {/* Contact Owner */}
                                 <button
+                                    onClick={() => { HandleEmail(truckDetails.contactInfo.email) }}
                                     className="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2 px-6 rounded-md transition duration-300"
                                 >
                                     Contact Owner

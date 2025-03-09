@@ -19,6 +19,7 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('trucks');
   const [darkMode, setDarkMode] = useState(false);
   const [trucks, setTrucks] = useState([]);
+  const [reqtrucks, setreqTrucks] = useState([]);
   const [drivers, setdrivers] = useState([]);
   const [users, setusers] = useState([]);
   const [error, setError] = useState("");
@@ -57,12 +58,7 @@ const AdminPage = () => {
     }
   }, [darkMode]);
 
-  // Fetch trucks when the component mounts or when activeTab changes to 'trucks'
-  useEffect(() => {
-    if (activeTab === 'trucks') {
-      fetchAllTrucks();
-    }
-  }, [activeTab]);
+
 
   useEffect(() => {
     if (activeTab === 'drivers') {
@@ -76,10 +72,24 @@ const AdminPage = () => {
     }
   }, [activeTab]);
 
+  useEffect(() => {
+    if (activeTab === 'trucks') {
+      fetchAllTrucks();  // Fetch all trucks when the tab is 'trucks'
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'addtrucks_request') {
+      fetchPendingTrucks();  // Fetch only pending trucks when this tab is active
+    }
+  }, [activeTab]);
+
+
   const fetchAllTrucks = async () => {
     try {
       setLoading(true);
       const response = await axios.get("http://localhost:8000/trucks/alltrucks");
+      console.log("API Response:", response.data); // Add this line to check the response
       setTrucks(response.data);
       setError("");
     } catch (error) {
@@ -88,7 +98,21 @@ const AdminPage = () => {
     } finally {
       setLoading(false);
     }
-    console.log("Drivers state:", drivers);
+
+  };
+  const fetchPendingTrucks = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:8000/trucks/pending_trucks");
+      console.log("API Response:", response.data); // Add this line to check the response
+      setreqTrucks(response.data);
+      setError("");
+    } catch (error) {
+      console.error("No Pending trucks:", error);
+      setError("Failed to load available trucks");
+    } finally {
+      setLoading(false);
+    }
 
   };
 
@@ -146,7 +170,7 @@ const AdminPage = () => {
       });
 
       if (response.status === 200) {
-        setTrucks((prevTrucks) =>
+        setreqTrucks((prevTrucks) =>
           prevTrucks.map((truck) =>
             truck._id === truckId ? { ...truck, requestStatus: status } : truck
           )
@@ -191,15 +215,16 @@ const AdminPage = () => {
       if (filters.truckType !== "all" && truck.truckType !== filters.truckType) return false;
       if (filters.minCapacity && truck.capacity < parseInt(filters.minCapacity)) return false;
       if (filters.maxPrice && truck.pricePerKm > parseInt(filters.maxPrice)) return false;
+      if (trucks.requestStatus !== "approved") return true;
+
       return true;
     });
   };
+
   const getNot_approvedTrucks = () => {
-    return trucks.filter(truck => {
-      if (truck.requestStatus === "pending") return true;
-      return false;
-    });
+    return reqtrucks.filter(truck => truck.requestStatus !== "approved");
   };
+
 
   const filteredTrucks = getFilteredTrucks();
   const NotApprovedTrucks = getNot_approvedTrucks();
@@ -242,7 +267,7 @@ const AdminPage = () => {
       );
     }
 
-    if (filteredTrucks.length === 0) {
+    if (activeTab === 'trucks' && filteredTrucks.length === 0) {
       return (
         <div className={`text-center py-12 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
           <Truck size={48} className={`mx-auto mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
@@ -251,15 +276,17 @@ const AdminPage = () => {
         </div>
       );
     }
-    if (NotApprovedTrucks.length === 0) {
+
+    if (activeTab === 'addtrucks_request' && NotApprovedTrucks.length === 0) {
       return (
         <div className={`text-center py-12 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
           <Truck size={48} className={`mx-auto mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-          <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>No trucks Request available at the moment</p>
+          <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>No pending truck requests at the moment</p>
           <p className={`mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Please check back later or contact support</p>
         </div>
       );
     }
+
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -723,15 +750,15 @@ const AdminPage = () => {
       <div className="flex-1 p-10 overflow-auto">
         <div className="flex justify-between items-center mb-6">
           <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className={`pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-shadow ${darkMode
-                ? 'bg-gray-800 border-gray-700 text-white focus:ring-blue-700'
-                : 'bg-white border-gray-300 focus:ring-blue-500'
+            <h1
+              className={` flex item-center justify-center gap-4 pl-6 pr-6 py-3 text-2xl font-semibold rounded-lg shadow-md transition-all duration-300 ${darkMode
+                ? 'bg-gray-900 border-gray-700 text-white shadow-gray-700/50 hover:shadow-lg'
+                : 'bg-white border-gray-300 text-gray-900 shadow-gray-300/50 hover:shadow-xl'
                 }`}
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            >
+              <User className='size-[2rem]' /> Admin Page
+            </h1>
+
           </div>
           <div className="flex items-center space-x-4">
             <button
@@ -745,10 +772,8 @@ const AdminPage = () => {
             <button className={`hover:scale-105 transition ${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800'}`}>
               <Settings size={24} />
             </button>
-            <div className="flex items-center space-x-2">
-              <User className={darkMode ? "text-gray-300" : "text-gray-600"} size={20} />
-              <span className="font-medium">Admin</span>
-            </div>
+
+
           </div>
         </div>
 

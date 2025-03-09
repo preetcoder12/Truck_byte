@@ -305,7 +305,6 @@ const AddTruck = () => {
                                     className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 hover:border-blue-600 text-gray-100"
                                 >
                                     <option value="Available">Available</option>
-                                    <option value="On Trip">On Trip</option>
                                     <option value="Under Maintenance">Under Maintenance</option>
                                     <option value="Inactive">Inactive</option>
                                 </select>

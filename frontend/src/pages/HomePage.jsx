@@ -81,7 +81,7 @@ const HomePage = () => {
               <a href="#contact" className={darkMode ? "darkmode-text hover:text-yellow-400 transition-colors" : "text-gray-600 hover:text-blue-600 transition-colors"}>Contact</a>
             </div>
 
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-6">
               {/* <a href="/login" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                 Login
               </a> */}
@@ -96,6 +96,7 @@ const HomePage = () => {
                   className="bg-yellow-600 text-white px-5 py-2 rounded-3xl hover:bg-yellow-300 hover:text-black transition-colors font-medium"><FaLightbulb />
                 </button>
               )}
+
             </div>
 
             {/* Mobile menu button */}

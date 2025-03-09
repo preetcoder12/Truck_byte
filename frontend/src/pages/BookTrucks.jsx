@@ -82,7 +82,7 @@ const BookTrucks = () => {
     const getFilteredTrucks = () => {
         return trucks.filter(truck => {
             if (truck.requestStatus !== "approved") return false;
-
+            if (truck.status !== "Available") return false;
             if (filters.truckType !== "all" && truck.truckType !== filters.truckType) return false;
             if (filters.minCapacity && truck.capacity < parseInt(filters.minCapacity)) return false;
             if (filters.maxPrice && truck.pricePerKm > parseInt(filters.maxPrice)) return false;
