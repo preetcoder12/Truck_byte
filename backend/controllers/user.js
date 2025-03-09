@@ -101,4 +101,32 @@ const ViewAllUsers = async (req, res) => {
     }
 }
 
-module.exports = { userSignup, userLogin, ViewAllUsers };
+
+const GoogleAuth = async (req, res) => {
+    try {
+        const { email, username, googleId } = req.body;
+
+        let user = await User.findOne({ googleId });
+
+        if (!user) {
+            user = await User.create({ email, username, googleId });
+        }
+
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+        res.status(200).json({
+            message: "Google authentication successful",
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+            },
+        });
+    } catch (error) {
+        console.error("❌ Google Signup error:", error);
+        res.status(500).json({ error: error.message || "Server error during Google signup." });
+    }
+};
+
+module.exports = { userSignup, userLogin, ViewAllUsers, GoogleAuth };

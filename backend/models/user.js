@@ -13,15 +13,21 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: function () {
+            return !this.googleId; // Only required if not using Google auth
+        },
     },
     phone: {
         type: String,
-        required: true,
+        required: function () {
+            return !this.googleId; // Only required if not using Google auth
+        },
+    },
+    googleId: {
+        type: String,
+        default: null
     }
-  
-    
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);
-module.exports = User; 
+module.exports = User;

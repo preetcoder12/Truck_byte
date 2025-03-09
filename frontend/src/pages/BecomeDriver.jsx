@@ -539,13 +539,21 @@ const BecomeDriver = () => {
                             </div>
 
                             {/* Submit Button */}
-                            <div className="flex justify-center pt-4">
+                            <div className="flex gap-[3rem] justify-center pt-4">
+                                <a
+                                    href="/dashboard"
+                                    type="submit"
+                                    className="px-10 py-4 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl font-semibold hover:from-red-700 hover:to-red-700 shadow-lg hover:shadow-red-500/30 transition-all text-lg"
+                                >
+                                    Back
+                                </a>
                                 <button
                                     type="submit"
                                     className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-blue-500/30 transition-all text-lg"
                                 >
                                     Submit Application
                                 </button>
+
                             </div>
                             <div className="text-center">
                                 <p className="mt-4 text-white text-sm">

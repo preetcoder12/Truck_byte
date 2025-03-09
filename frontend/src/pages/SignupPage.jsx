@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import {
-    EyeIcon, EyeOffIcon,
-    Truck, User, MapPin,
-    Phone, Mail, Lock,
-    ArrowRight
-} from "lucide-react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { EyeIcon, EyeOffIcon, Truck, User, MapPin, Phone, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 
+
+
+// Access environment variables with fallback values
+const GOOGLE_CLIENT_ID = "313900260470-o5o46ki1ebao2qo12rn8ed22asg1v997.apps.googleusercontent.com";
+const API_BASE_URL = "http://localhost:8000";
+
+const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+        const decoded = jwtDecode(credentialResponse.credential);
+        const userData = {
+            email: decoded.email,
+            username: decoded.name,
+            googleId: decoded.sub,
+        };
+
+        const response = await axios.post(`${API_BASE_URL}/user/google-auth`, userData);
+
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", response.data.token);
+
+        toast.success("Google authentication successful!");
+        window.location.href = "/";
+    } catch (error) {
+        toast.error("Google authentication failed!");
+        console.error("Google Auth Error:", error.response ? error.response.data : error.message);
+    }
+};
 const SignupPage = () => {
     const [formData, setFormData] = useState({
         username: "",
@@ -17,22 +41,50 @@ const SignupPage = () => {
     });
     const [viewPassword, setViewPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
+    const validatePhone = (phone) => {
+        const regex = /^[0-9]{10}$/;
+        return regex.test(phone);
+    };
+
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateEmail(formData.email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+        if (!validatePhone(formData.phone)) {
+            toast.error("Please enter a valid 10-digit phone number.");
+            return;
+        }
+        if (!validatePassword(formData.password)) {
+            toast.error("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            return;
+        }
         setIsLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:8000/user/signup", formData, {
+            const response = await axios.post(`${API_BASE_URL}/user/signup`, formData, {
                 headers: { "Content-Type": "application/json" },
             });
 
-            localStorage.setItem("user", JSON.stringify(response.data.user))
-            localStorage.setItem("token", response.data.token)
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("token", response.data.token);
             toast.success("Signup successful!");
             setTimeout(() => {
                 window.location.href = "/login";
@@ -45,7 +97,7 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="min-h-screen  bg-gradient-to-br from-blue-500 to-red-500 flex items-center justify-center p-4 font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-blue-500 to-red-500 flex items-center justify-center p-4 font-sans">
             <div className="w-full max-w-5xl bg-white shadow-2xl rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
                 {/* Left Side - Branding & Information */}
                 <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-12 flex flex-col justify-center text-white">
@@ -153,6 +205,7 @@ const SignupPage = () => {
                                 type="button"
                                 onClick={() => setViewPassword(!viewPassword)}
                                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-600"
+                                aria-label={viewPassword ? "Hide password" : "Show password"}
                             >
                                 {viewPassword ? <EyeOffIcon size={22} /> : <EyeIcon size={22} />}
                             </button>
@@ -180,6 +233,19 @@ const SignupPage = () => {
                                 </div>
                             )}
                         </button>
+
+                        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                            <div className="flex justify-center mt-4">
+                                <GoogleLogin
+                                    onSuccess={handleGoogleSuccess}
+                                    onError={() => {
+                                        toast.error("Google Login Failed");
+                                        console.error("Google Login Error");
+                                    }}
+                                    disabled={isGoogleLoading}
+                                />
+                            </div>
+                        </GoogleOAuthProvider>
                     </form>
 
                     <div className="text-center mt-6">
