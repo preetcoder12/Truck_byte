@@ -112,7 +112,7 @@ const GoogleAuth = async (req, res) => {
             user = await User.create({ email, username, googleId });
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
 
         res.status(200).json({
             message: "Google authentication successful",
@@ -129,4 +129,19 @@ const GoogleAuth = async (req, res) => {
     }
 };
 
-module.exports = { userSignup, userLogin, ViewAllUsers, GoogleAuth };
+const ViewSpecificUsers = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });  // Use 404 instead of 400
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ error: "Internal Server Error" }); // Handle errors properly
+    }
+};
+
+
+module.exports = { userSignup, userLogin, ViewAllUsers, GoogleAuth, ViewSpecificUsers };

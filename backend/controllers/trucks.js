@@ -105,7 +105,7 @@ const Alltrucks = async (req, res) => {
 }
 const pendingtrucks = async (req, res) => {
     try {
-        const trucks = await Truck.find({requestStatus:"pending"});
+        const trucks = await Truck.find({ requestStatus: "pending" });
         if (!trucks || trucks.length === 0) {
             return res.status(404).json({ error: "❌ No trucks found!" });
         }
@@ -176,4 +176,5 @@ const UnderMaintenanceTrucks = async (req, res) => {
     }
 }
 
-module.exports = { AddTruck, upload, Alltrucks, GetTruckById, TotalTrucks, OntripTrucks, IdleTrucks,UnderMaintenanceTrucks ,pendingtrucks};
+
+module.exports = { AddTruck, upload, Alltrucks, GetTruckById, TotalTrucks, OntripTrucks, IdleTrucks, UnderMaintenanceTrucks, pendingtrucks };

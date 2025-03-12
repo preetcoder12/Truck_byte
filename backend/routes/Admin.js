@@ -1,7 +1,7 @@
 const { Router } = require("express");
 
 const { AdminSignUp, AdminLogin, ViewAllTrucks, ViewAllDrivers,
-    RemoveDriver, RemoveUser, RemoveTruck, EditTruckDetails } = require("../controllers/Admin");
+    RemoveDriver, RemoveUser, DeleteTruck } = require("../controllers/Admin");
 
 const routes = Router();
 
@@ -11,7 +11,6 @@ routes.get("/alltrucks", ViewAllTrucks);
 routes.get("/alldrivers", ViewAllDrivers);
 routes.delete("/removedriver/:id", RemoveDriver);
 routes.delete("/removeuser/:id", RemoveUser);
-routes.delete("/removetruck/:id", RemoveTruck);
-routes.put("/updatetruck/:id", EditTruckDetails);
+routes.delete("/deletetruck/:id", DeleteTruck);
 
 module.exports = routes;

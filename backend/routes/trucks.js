@@ -1,5 +1,6 @@
 const { Router } = require("express");
-const { AddTruck, Alltrucks, GetTruckById, TotalTrucks, OntripTrucks, IdleTrucks, UnderMaintenanceTrucks, pendingtrucks } = require("../controllers/trucks");
+const { AddTruck, Alltrucks, GetTruckById, TotalTrucks, OntripTrucks,
+    IdleTrucks, UnderMaintenanceTrucks, pendingtrucks } = require("../controllers/trucks");
 const authenticateUser = require("../middleware/authenticateuser");
 const { upload } = require("../controllers/trucks");
 

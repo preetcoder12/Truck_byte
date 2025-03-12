@@ -140,20 +140,7 @@ const RemoveUser = async (req, res) => {
     }
 };
 
-const RemoveTruck = async (req, res) => {
-    try {
-        const selectedTruck = await Truck.findById(req.params.id);
-        if (!selectedTruck) {
-            return res.status(404).json({ msg: "No truck found" });
-        }
-        await Truck.findByIdAndDelete(req.params.id);
 
-        res.status(200).json({ message: "Truck removed successfully" });
-
-    } catch (error) {
-        res.status(500).json({ message: "Server Error", error: error.message });
-    }
-};
 
 const RequestedAddTrucks = async (req, res) => {
     try {
@@ -166,7 +153,7 @@ const RequestedAddTrucks = async (req, res) => {
 const EditTruckDetails = async (req, res) => {
     try {
         const { id } = req.params;
-        const updates = req.body; 
+        const updates = req.body;
 
         const updatedTruck = await Truck.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
 
@@ -181,9 +168,27 @@ const EditTruckDetails = async (req, res) => {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
+const DeleteTruck = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedTruck = await Truck.findByIdAndDelete(id);
+
+        if (!deletedTruck) {
+            return res.status(404).json({ msg: "Truck not found" });
+        }
+
+        const updatedTrucks = await Truck.find({ requestStatus: "pending" });
+
+        res.status(200).json({ msg: "Deleted successfully", updatedTrucks });
+
+    } catch (error) {
+        console.error("🚨 Error deleting truck:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
 
 
 module.exports = {
     AdminSignUp, AdminLogin, ViewAllTrucks, ViewAllDrivers,
-    RemoveDriver, RemoveUser, RemoveTruck, RequestedAddTrucks, EditTruckDetails
+    RemoveDriver, RemoveUser, RequestedAddTrucks, EditTruckDetails, DeleteTruck
 };

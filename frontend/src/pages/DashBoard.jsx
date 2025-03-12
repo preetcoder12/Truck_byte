@@ -182,6 +182,10 @@ const Dashboard = () => {
         })
         : "N/A";
 
+    // const handletoTrucksPage = () => {
+
+    //     window.location.href = "/Dash_to_trucks";
+    // }
 
 
     return (
@@ -350,7 +354,7 @@ const Dashboard = () => {
                     <div className="flex-1 overflow-y-auto p-4 md:p-8">
                         {/* Summary Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                            <div className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>On Road</p>
@@ -373,11 +377,13 @@ const Dashboard = () => {
                                     <div
                                         className={`${darkMode ? 'bg-gradient-to-r from-blue-500 to-indigo-600' : 'bg-gradient-to-r from-blue-500 to-indigo-600'} h-1.5 rounded-full transition-all duration-500`}
                                         style={{ width: loading ? '0%' : `${Math.round((fleetStats.OnRoad / fleetStats.totalVehicles) * 100) || 0}%` }}
-                                    ></div>
-                                </div>
-                            </div>
+                                    >
 
-                            <div className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>In Maintenance</p>
@@ -402,9 +408,9 @@ const Dashboard = () => {
                                         style={{ width: loading ? '0%' : `${Math.round((fleetStats.inMaintenance / fleetStats.totalVehicles) * 100) || 0}%` }}
                                     ></div>
                                 </div>
-                            </div>
+                            </button>
 
-                            <div className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>Idle Vehicles</p>
@@ -429,9 +435,9 @@ const Dashboard = () => {
                                         style={{ width: loading ? '0%' : `${Math.round((fleetStats.idle / fleetStats.totalVehicles) * 100) || 0}%` }}
                                     ></div>
                                 </div>
-                            </div>
+                            </button>
 
-                            <div className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>Total Fleet</p>
@@ -454,7 +460,7 @@ const Dashboard = () => {
                                 <div className={`w-full ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-full h-1.5 mt-4`}>
                                     <div className={`${darkMode ? 'bg-indigo-400' : 'bg-indigo-500'} h-1.5 rounded-full`} style={{ width: "100%" }}></div>
                                 </div>
-                            </div>
+                            </button>
                         </div>
 
                         {/* Quick Action Buttons */}

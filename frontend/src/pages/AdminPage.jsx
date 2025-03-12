@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { FaCar } from "react-icons/fa6";
 import { FaMedal } from "react-icons/fa6";
 import { FcOk } from "react-icons/fc";
-import { ImCross } from "react-icons/im";
 
+import { GiCrossMark } from "react-icons/gi";
 
 import {
   Truck, Users, User, LogOut,
-  Settings, Search, Moon, Sun,
-  AlertCircle, Filter, IndianRupee, Weight
+  Settings, Moon, Sun,
+  AlertCircle, Filter, IndianRupee, Weight,
+
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,6 +26,11 @@ const AdminPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedTruck, setSelectedTruck] = useState(null);
+  const [dropdown, setdropdown] = useState(false);
+
+  const handleDropdown = () => {
+    setdropdown(prev => !prev);
+  };
 
   const [filters, setFilters] = useState({
     truckType: "all",
@@ -83,6 +89,7 @@ const AdminPage = () => {
       fetchPendingTrucks();  // Fetch only pending trucks when this tab is active
     }
   }, [activeTab]);
+
 
 
   const fetchAllTrucks = async () => {
@@ -155,8 +162,8 @@ const AdminPage = () => {
   }
   const handleDeleteUser = async (extractedid) => {
     try {
-      await axios.delete(`http://localhost:8000/admin/removeuser/${extractedid}`);
-      setusers((prevUser) => prevUser.filter(user => user._id != extractedid));
+      await axios.delete(`http://localhost:8000/admin/deletetruck/${extractedid}`);
+      setTrucks((prevTrucks) => prevTrucks.filter(truck => truck._id !== extractedid));
     } catch (error) {
       console.error("Error deleting drivers:", error);
       setError("Failed to delete driver");
@@ -181,6 +188,18 @@ const AdminPage = () => {
     }
   };
 
+  const handleRequestreject = async (truckId) => {
+    try {
+      // Delete truck from database
+      await axios.delete(`http://localhost:8000/admin/deletetruck/${truckId}`);
+
+      // Update state to remove rejected truck
+      setreqTrucks((prevTrucks) => prevTrucks.filter(truck => truck._id !== truckId));
+
+    } catch (error) {
+      console.error("🚨 Error rejecting truck request:", error);
+    }
+  };
 
 
   const toggleDarkMode = () => {
@@ -215,8 +234,7 @@ const AdminPage = () => {
       if (filters.truckType !== "all" && truck.truckType !== filters.truckType) return false;
       if (filters.minCapacity && truck.capacity < parseInt(filters.minCapacity)) return false;
       if (filters.maxPrice && truck.pricePerKm > parseInt(filters.maxPrice)) return false;
-      if (trucks.requestStatus !== "approved") return true;
-
+      if (truck.requestStatus === "rejected") return false;
       return true;
     });
   };
@@ -286,6 +304,7 @@ const AdminPage = () => {
         </div>
       );
     }
+
 
 
     return (
@@ -660,13 +679,13 @@ const AdminPage = () => {
                         Approve
                       </button>
                       <button
-                        onClick={() => handleRequestStatus(truck._id, "rejected")}
+                        onClick={() => handleRequestreject(truck._id)}
                         className={`w-full py-2.5 px-2 rounded-md transition-colors duration-200 flex items-center justify-center ${darkMode
                           ? 'bg-red-700 hover:bg-red-600 text-white'
                           : 'bg-red-600 hover:bg-red-700 text-white'
                           }`}
                       >
-                        <ImCross size={18} className="mr-2" />
+                        <GiCrossMark size={18} className="mr-2" />
                         Reject
                       </button>
                     </div>
@@ -693,8 +712,11 @@ const AdminPage = () => {
                 </div>
               ))}
 
-            </div></div>
+            </div>
+          </div>
         );
+
+
       default:
         return (
           <div>
@@ -769,9 +791,30 @@ const AdminPage = () => {
             >
               {darkMode ? <Sun size={24} /> : <Moon size={24} />}
             </button>
-            <button className={`hover:scale-105 transition ${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800'}`}>
-              <Settings size={24} />
-            </button>
+
+            <div className="relative">
+              <button
+                onClick={handleDropdown}
+                className={`hover:scale-105 transition flex items-center gap-2 ${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800'}`}
+              >
+                <Settings size={24} />
+                <span>User's Control</span>
+              </button>
+
+              {dropdown && ( // Correct JSX conditional rendering
+                <div className="absolute mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 w-40">
+                  <a href="/admin_to_allusers" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                    Controls
+                  </a>
+
+                  <button onClick={handleLogout} className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+
+
 
 
           </div>
