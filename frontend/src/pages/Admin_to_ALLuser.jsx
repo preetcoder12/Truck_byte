@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FaPhoneAlt, FaUserCircle, FaMoon, FaSun, FaSearch, FaUserCog } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
+import { IoArrowBackCircle } from "react-icons/io5";
 
 const Admin_to_ALLuser = () => {
     const [users, setUsers] = useState([]);
@@ -85,7 +86,6 @@ const Admin_to_ALLuser = () => {
         }
     }, [searchTerm, users]);
 
-    const navigate = useNavigate();
 
     const handleuser = (extractedid) => {
         localStorage.setItem('selected_user_view', extractedid)
@@ -109,7 +109,11 @@ const Admin_to_ALLuser = () => {
                         >
                             {darkMode ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
                         </button>
-                        <button onClick={handle_back}>back</button>
+                        <button onClick={handle_back} className={` font-bold text-xl ${darkMode ? ' text-red-400' : ' text-gray-700'}`}>
+                            <div className='flex gap-1 '>
+                                <IoArrowBackCircle className='size-[30px]'/> Back
+                            </div>
+                        </button>
 
                     </div>
                 </div>
@@ -214,7 +218,7 @@ const Admin_to_ALLuser = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

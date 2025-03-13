@@ -162,11 +162,11 @@ const AdminPage = () => {
   }
   const handleDeleteUser = async (extractedid) => {
     try {
-      await axios.delete(`http://localhost:8000/admin/deletetruck/${extractedid}`);
-      setTrucks((prevTrucks) => prevTrucks.filter(truck => truck._id !== extractedid));
+      await axios.delete(`http://localhost:8000/admin/removeuser/${extractedid}`);
+      setusers((prevusers) => prevusers.filter(users => users._id !== extractedid));
     } catch (error) {
-      console.error("Error deleting drivers:", error);
-      setError("Failed to delete driver");
+      console.error("Error deleting user:", error);
+      setError("Failed to delete user");
     }
   }
 
@@ -734,10 +734,13 @@ const AdminPage = () => {
   return (
     <div className={`min-h-screen flex ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
       {/* Sidebar */}
-      <div className={`w-64 transition-all ${darkMode ? 'bg-gray-800 shadow-gray-900' : 'bg-white shadow-lg'}`}>
-        <div className={`p-6 flex items-center space-x-3 ${darkMode ? 'border-gray-700' : 'border-b'}`}>
-          <img className='size-16' src="/logo.png" alt="logo" />
-          <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>LorryWale</h1>
+      <div className={`w-64 transition-all bg-gray-800 shadow-gray-900 text-white`}>
+        <div className={`p-6 flex items-center space-x-3 border-gray-700 `}>
+          <div className="flex items-center border-b border-gray-800 p-0">
+            <a href="/" className="flex items-center">
+              <img className="w-[12rem] h-[8rem]" src="/logo.png" alt="logo" />
+            </a>
+          </div>
         </div>
         <nav className="p-4">
           <ul className="space-y-2">
@@ -751,7 +754,7 @@ const AdminPage = () => {
                       : "bg-blue-100 text-blue-800 font-semibold scale-105 shadow-md"
                     : darkMode
                       ? "text-gray-300 hover:bg-gray-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-white hover:bg-gray-400"
                     }`}
                 >
                   {tab.icon} {tab.label}
@@ -760,7 +763,7 @@ const AdminPage = () => {
             ))}
 
             <li className={`mt-4 pt-4 ${darkMode ? 'border-t border-gray-700' : 'border-t'}`}>
-              <button onClick={handleLogout} className={`w-full flex items-center p-3 rounded-lg ${darkMode ? 'text-red-400 hover:bg-gray-700' : 'text-red-600 hover:bg-gray-100'}`}>
+              <button onClick={handleLogout} className={`w-full flex items-center p-3 rounded-lg ${darkMode ? 'text-red-400 hover:bg-gray-700' : 'text-red-400 hover:bg-gray-100'}`}>
                 <LogOut className="mr-3" size={20} /> Logout
               </button>
             </li>

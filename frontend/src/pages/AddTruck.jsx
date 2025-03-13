@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AddTruck = () => {
     const [darkMode, setDarkMode] = useState(false);
@@ -14,6 +14,7 @@ const AddTruck = () => {
         truckType: '',
         ownerType: 'Company',
         pricePerKm: '',
+        status: 'Available',
         contactInfo: {
             name: '',
             phone: '',
@@ -70,20 +71,76 @@ const AddTruck = () => {
         setImages(images.filter((_, i) => i !== index));
     };
 
+    const validateForm = () => {
+        let isValid = true;
+        let errorMessage = '';
+
+        // Check required fields
+        if (!formData.truckNumber) {
+            errorMessage = 'Truck Number is required';
+            toast.error('Truck Number is required');
+            isValid = false;
+        } else if (!formData.model) {
+            errorMessage = 'Model is required';
+            toast.error('Model is required');
+            isValid = false;
+        } else if (!formData.manufacturer) {
+            errorMessage = 'Manufacturer is required';
+            toast.error('Manufacturer is required');
+            isValid = false;
+        } else if (!formData.registrationDate) {
+            errorMessage = 'Registration Date is required';
+            toast.error('Registration Date is required');
+            isValid = false;
+        } else if (!formData.insuranceExpiry) {
+            errorMessage = 'Insurance Expiry is required';
+            toast.error('Insurance Expiry is required');
+            isValid = false;
+        } else if (!formData.capacity) {
+            errorMessage = 'Capacity is required';
+            toast.error('Capacity is required');
+            isValid = false;
+        } else if (!formData.truckType) {
+            errorMessage = 'Truck Type is required';
+            toast.error('Truck Type is required');
+            isValid = false;
+        } else if (!formData.pricePerKm) {
+            errorMessage = 'Price Per KM is required';
+            toast.error('Price Per KM is required');
+            isValid = false;
+        } else if (!formData.contactInfo.name) {
+            errorMessage = 'Owner Name is required';
+            toast.error('Owner Name is required');
+            isValid = false;
+        } else if (!formData.contactInfo.phone) {
+            errorMessage = 'Owner Phone is required';
+            toast.error('Owner Phone is required');
+            isValid = false;
+        } else if (!formData.contactInfo.email) {
+            errorMessage = 'Owner Email is required';
+            toast.error('Owner Email is required');
+            isValid = false;
+        } else if (images.length === 0) {
+            errorMessage = 'At least one truck image is required';
+            toast.error('At least one truck image is required');
+            isValid = false;
+        }
+
+        setError(errorMessage);
+        return isValid;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate form before proceeding
+        if (!validateForm()) {
+            return;
+        }
+
         setLoading(true);
         setError('');
         setSuccess('');
-
-        if (!formData.truckNumber || !formData.model || !formData.manufacturer ||
-            !formData.registrationDate || !formData.insuranceExpiry ||
-            !formData.capacity || !formData.truckType || images.length === 0 ||
-            !formData.pricePerKm || !formData.contactInfo.name || !formData.contactInfo.phone || !formData.contactInfo.email) {
-            setError('All fields are required!');
-            setLoading(false);
-            return;
-        }
 
         const formDataToSend = new FormData();
         Object.keys(formData).forEach(key => {
@@ -95,12 +152,20 @@ const AddTruck = () => {
                 formDataToSend.append(key, formData[key]);
             }
         });
+
         images.forEach(image => {
             formDataToSend.append('images', image);
         });
 
         try {
             const token = localStorage.getItem("token");
+
+            if (!token) {
+                toast.error('Authentication token not found. Please login again.');
+                setError('Authentication token not found. Please login again.');
+                setLoading(false);
+                return;
+            }
 
             const response = await axios.post(
                 "http://localhost:8000/trucks/addtruck",
@@ -115,6 +180,7 @@ const AddTruck = () => {
 
             console.log(response.data);
             toast.success('Truck request submitted! Awaiting admin approval.');
+            setSuccess('Truck request submitted! Awaiting admin approval.');
             setLoading(false);
             setFormData({
                 truckNumber: '',
@@ -126,6 +192,7 @@ const AddTruck = () => {
                 truckType: '',
                 ownerType: 'Company',
                 pricePerKm: '',
+                status: 'Available',
                 contactInfo: { name: '', phone: '', email: '' }
             });
             setImages([]);
@@ -135,7 +202,9 @@ const AddTruck = () => {
 
         } catch (err) {
             console.error("🚨 Error submitting truck request:", err.response?.data || err.message);
-            toast.error(err.response?.data?.error || "Failed to submit truck request");
+            const errorMsg = err.response?.data?.error || "Failed to submit truck request";
+            toast.error(errorMsg);
+            setError(errorMsg);
             setLoading(false);
         }
     };
@@ -586,6 +655,16 @@ const AddTruck = () => {
                     </div>
                 </form>
             </div>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+                toastOptions={{
+                    style: {
+                        background: '#333',
+                        color: '#fff',
+                    },
+                }}
+            />
         </div>
 
     );

@@ -104,10 +104,10 @@ const BookTrucks = () => {
         <div className={`min-h-screen pb-12 transition-colors duration-300 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
             <div className={`${darkMode ? 'bg-gradient-to-r from-blue-900 to-indigo-900' : 'bg-gradient-to-r from-blue-600 to-blue-800'} text-white py-8 px-4 shadow-md`}>
                 <div className="max-w-6xl mx-auto">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between ">
                         <div className="flex items-center">
-                            <img className='size-[5rem]' src="/logo.png" alt="logo" />
-                            <h1 className="text-3xl font-bold">Find Your Perfect Truck</h1>
+                        <img className='w-[10rem]' src="/logo.png" alt="logo" />
+                        <h1 className="text-3xl font-bold">Find Your Perfect Truck</h1>
                         </div>
                         <button
                             onClick={toggleDarkMode}

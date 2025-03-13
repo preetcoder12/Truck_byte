@@ -19,6 +19,40 @@ const Dashboard = () => {
     const [UnderMaintenance, setUnderMaintenance] = useState(null);
     const [Ontrip, setOntrip] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [allusers, setAllUsers] = useState([]);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+
+    console.log(user.id)
+    useEffect(() => {
+        const fetchAllUsers = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/user/usercontrols/${user.id}`);
+                setAllUsers(response.data ? [response.data] : []);
+            } catch (error) {
+                console.error("Error while fetching:", error);
+            }
+        };
+        if (user.id) fetchAllUsers();
+    }, [user.id]);
+
+    const [activeDashboardItems, setActiveDashboardItems] = useState({
+        dashboard: false,
+        Account: false,
+        settings: false,
+        addTrucks: false,
+        becomeDriver: false,
+        bookTruck: false
+    });
+
+    useEffect(() => {
+        if (allusers.length > 0 && allusers[0].dashboardVisibility) {
+            setActiveDashboardItems(allusers[0].dashboardVisibility);
+        }
+    }, [allusers]);
+
+
 
     const [fleetStats, setFleetStats] = useState({
         OnRoad: 0,
@@ -182,15 +216,9 @@ const Dashboard = () => {
         })
         : "N/A";
 
-    // const handletoTrucksPage = () => {
-
-    //     window.location.href = "/Dash_to_trucks";
-    // }
-
-
     return (
         <div className={`min-h-screen font-sans ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
-            <div className="flex h-screen overflow-hidden">
+            {activeDashboardItems.dashboard ? (<div className="flex h-screen overflow-hidden">
                 {/* Mobile Sidebar Toggle */}
                 <button
                     onClick={toggleSidebar}
@@ -212,68 +240,43 @@ const Dashboard = () => {
                     className={`${darkMode ? 'bg-gray-950 text-white' : 'bg-slate-900 text-white'} fixed inset-y-0 left-0 z-40 w-72 transition-transform duration-300 ease-in-out transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:relative`}
                 >
                     <div className="flex flex-col h-full p-6">
-                        <div className="flex items-center pb-6 border-b border-gray-800">
-                            <div className="flex items-center gap-2">
-                                <img className='w-12 h-12' src="/logo.png" alt="logo" />
-                                <a href='/' className="flex flex-col">
-                                    <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">LorryWale</h1>
-                                    <span className="text-xs text-gray-400">Fleet Management</span>
-                                </a>
-                            </div>
+                        <div className="flex items-center border-b border-gray-800 p-0">
+                            <a href="/" className="flex items-center">
+                                <img className="w-[12rem] h-[8rem]" src="/logo.png" alt="logo" />
+                            </a>
                         </div>
 
                         <nav className="mt-6 flex-1 overflow-y-auto">
                             <div className="mb-8">
-                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-3">Dashboard</p>
-                                <a href="/dashboard" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md group">
-                                    <BarChart3 className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span className="font-medium">Overview</span>
-                                </a>
-                                <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
-                                    <Truck className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span>Fleet Management</span>
-                                </a>
-                                <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
-                                    <Users className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span>Drivers</span>
-                                </a>
-                                <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
-                                    <Activity className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span>Analytics</span>
-                                </a>
-                                <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
-                                    <Map className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span>Live Tracking</span>
-                                </a>
-                            </div>
-
-                            <div className="mb-8">
                                 <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-3">Actions</p>
-                                <a href="/booktrucks" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
+                                {activeDashboardItems.bookTruck ? (<a href="/booktrucks" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
                                     <Truck className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                                     <span>Book Truck</span>
-                                </a>
-                                <a href="/becomedriver" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
+                                </a>) : (<div></div>)}
+                                {activeDashboardItems.becomeDriver ? (<a href="/becomedriver" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
                                     <User className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                                     <span>Become Driver</span>
-                                </a>
-                                <a href="/addtruck" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
+                                </a>) : (<div></div>)}
+
+                                {activeDashboardItems.addTrucks ? (<a href="/addtruck" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
                                     <CirclePlus className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                                     <span>Add Truck</span>
-                                </a>
-                            </div>
+                                </a>) : (<div></div>)}
 
-                            <div>
-                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-3">System</p>
-                                <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
-                                    <Settings className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span>Settings</span>
-                                </a>
-                                <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
-                                    <HelpCircle className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    <span>Help & Support</span>
-                                </a>
                             </div>
+                            <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-3">System</p>
+                            {activeDashboardItems.settings ? (
+                                <div>
+                                    <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
+                                        <Settings className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                                        <span>Settings</span>
+                                    </a>
+
+                                </div>) : (<div></div>)}
+                            <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
+                                <HelpCircle className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                                <span>Help & Support</span>
+                            </a>
                         </nav>
 
                         <div className="pt-6 border-t border-slate-800">
@@ -354,7 +357,7 @@ const Dashboard = () => {
                     <div className="flex-1 overflow-y-auto p-4 md:p-8">
                         {/* Summary Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>On Road</p>
@@ -383,7 +386,7 @@ const Dashboard = () => {
                                 </div>
                             </button>
 
-                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>In Maintenance</p>
@@ -410,7 +413,7 @@ const Dashboard = () => {
                                 </div>
                             </button>
 
-                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>Idle Vehicles</p>
@@ -437,7 +440,7 @@ const Dashboard = () => {
                                 </div>
                             </button>
 
-                            <button  className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+                            <button className={`${darkMode ? 'bg-gray-800 hover:bg-gray-750 border-none' : 'bg-white hover:bg-gray-50 border border-gray-100'} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm font-medium`}>Total Fleet</p>
@@ -465,10 +468,11 @@ const Dashboard = () => {
 
                         {/* Quick Action Buttons */}
                         <div className="flex mb-8 space-x-4">
-                            <a href='/addtruck' className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                            {activeDashboardItems.addTrucks ? (<a href='/addtruck' className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
                                 <CirclePlus className="w-4 h-4 mr-2" />
                                 <span>Add Vehicle</span>
-                            </a>
+                            </a>) : (<div></div>)}
+
                             <button className={`flex items-center px-4 py-2 ${darkMode ? 'bg-gray-800 text-gray-200 border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'} rounded-lg transition-colors shadow-sm border`}>
                                 <Filter className="w-4 h-4 mr-2" />
                                 <span>Filter View</span>
@@ -533,7 +537,40 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>) : (<div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 relative overflow-hidden">
+                {/* Blurred background elements */}
+                <div className="absolute inset-0 overflow-hidden opacity-20">
+                    <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500 rounded-full filter blur-3xl"></div>
+                    <div className="absolute bottom-20 right-20 w-80 h-80 bg-indigo-600 rounded-full filter blur-3xl"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-700 rounded-full filter blur-3xl"></div>
+                </div>
+
+                {/* Card content */}
+                <div className="relative z-10 max-w-md w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl shadow-2xl border border-white border-opacity-20 p-8 mx-4">
+                    <div className="flex flex-col items-center text-center">
+                        <div className="bg-red-500 bg-opacity-20 p-4 rounded-full mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-red-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H9m4-3H9m2-3h2M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5c0-1.1.9-2 2-2z" />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-white mb-2">Dashboard Not Available</h2>
+                        <p className="text-gray-300 mb-6">You don't have access to this dashboard. Please contact your administrator for access rights.</p>
+
+                        <div className="w-full bg-white bg-opacity-5 rounded-lg p-4 mb-6 border border-white border-opacity-10">
+                            <p className="text-gray-400 text-sm">If you believe this is an error, please verify your account permissions or check with your system administrator.</p>
+                        </div>
+
+                        <div className="flex space-x-4">
+                            <a href="/" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-md">
+                                Go Home
+                            </a>
+                            <a href="/help" className="px-6 py-2 bg-transparent border border-gray-400 hover:border-white text-gray-300 hover:text-white rounded-lg transition-colors">
+                                Get Help
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>)}
         </div>
     );
 };

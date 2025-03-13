@@ -26,6 +26,17 @@ const UserSchema = new Schema({
     googleId: {
         type: String,
         default: null
+    },
+    dashboardVisibility: {
+        type: Object,
+        default: {
+            dashboard: true,
+            Account: true,
+            settings: true,
+            addTrucks: true,
+            becomeDriver: true,
+            bookTruck: true
+        }
     }
 }, { timestamps: true });
 

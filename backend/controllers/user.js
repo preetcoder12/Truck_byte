@@ -142,6 +142,27 @@ const ViewSpecificUsers = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" }); // Handle errors properly
     }
 };
+const Usersupdate = async (req, res) => {
+    try {
+        const UserId = req.params.id;
+        const updateData = req.body;
 
+        const updateuser = await User.findByIdAndUpdate(
+            UserId,
+            updateData,
+            { new: true, runValidators: true } // Ensures validation
+        );
 
-module.exports = { userSignup, userLogin, ViewAllUsers, GoogleAuth, ViewSpecificUsers };
+        if (!updateuser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json(updateuser);
+
+    } catch (error) {
+        console.error("User update error:", error);
+        res.status(500).json({ error: "Server error during updating user information!" });
+    }
+};
+
+module.exports = { userSignup, userLogin, ViewAllUsers, GoogleAuth, ViewSpecificUsers, Usersupdate };

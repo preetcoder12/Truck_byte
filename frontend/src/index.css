@@ -69,3 +69,83 @@
 
 }
 
+.user-visibility {
+   text-align: center;
+   font-family: Arial, sans-serif;
+}
+
+.lock-container {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   justify-content: center;
+   margin-top: 10px;
+}
+
+h1,
+h2 {
+   color: #fff;
+}
+
+/* Hide default checkbox */
+#lock {
+   display: none;
+}
+
+/* Lock Label - Button */
+.lock-label {
+   width: 50px;
+   height: 50px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: rgb(60, 60, 60);
+   border-radius: 15px;
+   cursor: pointer;
+   transition: all 0.3s ease-in-out;
+   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Lock Icon Wrapper */
+.lock-wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   transform: rotate(-10deg);
+}
+
+/* Shackle (Top Part of Lock) */
+.shackle {
+   background-color: transparent;
+   height: 10px;
+   width: 16px;
+   border-top-right-radius: 10px;
+   border-top-left-radius: 10px;
+   border-top: 3px solid white;
+   border-left: 3px solid white;
+   border-right: 3px solid white;
+   transition: all 0.3s;
+}
+
+/* Lock Body */
+.lock-body {
+   width: 18px;
+}
+
+/* Interaction - Open Lock */
+#lock:checked+.lock-label .lock-wrapper .shackle {
+   transform: rotateY(150deg) translateX(3px);
+   transform-origin: right;
+}
+
+/* Active Lock Color Change */
+#lock:checked+.lock-label {
+   background-color: rgb(100, 50, 220);
+   box-shadow: 0 3px 15px rgba(100, 50, 220, 0.5);
+}
+
+/* Click Animation */
+.lock-label:active {
+   transform: scale(0.9);
+}

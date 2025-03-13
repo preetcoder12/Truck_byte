@@ -187,8 +187,34 @@ const DeleteTruck = async (req, res) => {
     }
 };
 
+const UpdateTruck = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const truck = await Truck.findById(id);
+        if (!truck) {
+            return res.status(404).json({ msg: "Truck not found" });
+        }
+
+        const updatedTruck = await Truck.findByIdAndUpdate(
+            id,
+            { $set: { requestStatus: "approved" } },
+            { new: true } 
+        );
+
+        res.status(200).json({ msg: "Updated successfully", updatedTruck });
+
+    } catch (error) {
+        console.error("🚨 Error updating truck:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+
+
+
 
 module.exports = {
     AdminSignUp, AdminLogin, ViewAllTrucks, ViewAllDrivers,
-    RemoveDriver, RemoveUser, RequestedAddTrucks, EditTruckDetails, DeleteTruck
+    RemoveDriver, RemoveUser, RequestedAddTrucks, EditTruckDetails, DeleteTruck, UpdateTruck
 };
