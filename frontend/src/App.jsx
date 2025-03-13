@@ -24,6 +24,7 @@
   import Admin_edit_driverDetails from "./pages/Admin_Edit_driver";
   import Admin_Control_user from "./pages/Admin_Control_user";
   import Admin_to_ALLuser from "./pages/Admin_to_ALLuser";
+import Subscription from "./pages/Subscription";
 
   function App() {
     return (
@@ -45,6 +46,7 @@
           <Route path="/booktrucks" element={<Protect element={<BookTrucks />} />} />
           <Route path="/booktrucksdetails/:truckId" element={<Protect element={<BookTruckProfile />} />} />
           <Route path="/payment" element={<Protect element={<PaymentPage />} />} />
+          <Route path="/subscription" element={<Protect element={<Subscription />} />} />
 
 
           {/* Admin Routes */}

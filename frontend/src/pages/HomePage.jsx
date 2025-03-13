@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Truck, BarChart3, Shield, Clock, Zap, Check, LayoutDashboard, ChevronRight, Menu, X } from 'lucide-react';
+import { Truck, BarChart3, Shield, Clock, Zap, Check, LayoutDashboard, ChevronRight, Menu } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { MdDarkMode } from "react-icons/md";
 import { FaLightbulb } from "react-icons/fa";
 import axios from 'axios';
+import { BiPurchaseTag } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [themeText, setThemeText] = useState("Dark Mode");
   const marqueeRef = useRef(null);
+  const navigate = useNavigate();
 
   const [allusers, setAllUsers] = useState([]);
 
@@ -70,6 +74,12 @@ const HomePage = () => {
     });
   };
 
+  const handledashboard = () => {
+    navigate("/dashboard");
+  }
+  const buysubs = () => {
+    navigate("/subscription")
+  }
   const handleLogout = () => {
     localStorage.clear();
     toast.success("Logout Successful!");
@@ -85,6 +95,8 @@ const HomePage = () => {
       marquee.innerHTML += clone;
     }
   }, []);
+
+
 
   // Rest of your HomePage component code...
   return (
@@ -361,6 +373,160 @@ const HomePage = () => {
           </div>
         </div>
 
+        {/* Price section */}
+        <div className="w-full py-16 px-4 bg-white dark:bg-gray-900 transition-colors duration-300">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Simple, Transparent Pricing</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Choose the plan that fits your business needs, from small operations to enterprise fleets
+              </p>
+            </div>
+
+            {/* Phase 2 Plans */}
+            <div className="mb-20">
+              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-10 text-center">
+                <div className='flex text-3xl items-center justify-center gap-4'>Tiered Subscriptions <BiPurchaseTag /></div>
+              </h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Starter Plan */}
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
+                  <div className="p-6">
+                    <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Starter Plan</h4>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white mb-6">₹999<span className="text-lg text-gray-500 dark:text-gray-400 font-normal">/month</span></p>
+
+                    <ul className="space-y-3 mb-8">
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">5 truck listings</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Basic tracking</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Email support</span>
+                      </li>
+                    </ul>
+
+                    <button onClick={buysubs} className="w-full py-3 px-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg font-medium transition-colors">
+                      Choose Starter
+                    </button>
+                  </div>
+                </div>
+
+                {/* Pro Plan */}
+                <div className="bg-blue-50 dark:bg-blue-900 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105 border-2 border-blue-500 transform scale-105">
+                  <div className="absolute top-0 right-0 bg-blue-500 text-white px-4 py-1 rounded-bl-lg text-sm font-bold">
+                    MOST POPULAR
+                  </div>
+                  <div className="p-6">
+                    <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Pro Plan</h4>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white mb-6">₹2,999<span className="text-lg text-gray-500 dark:text-gray-300 font-normal">/month</span></p>
+
+                    <ul className="space-y-3 mb-8">
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">20 truck listings</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Real-time GPS tracking</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Advanced analytics</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Driver ratings</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Chat support</span>
+                      </li>
+                    </ul>
+
+                    <button onClick={buysubs} className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
+                      Choose Pro
+                    </button>
+                  </div>
+                </div>
+
+                {/* free Plan */}
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
+                  <div className="p-6">
+                    <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Free plan</h4>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white mb-6">₹0/month </p>
+
+                    <ul className="space-y-3 mb-8">
+
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Limited truck listings (2-3)</span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">Basic dashboard
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">No analytics or advanced tracking
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <svg className="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span className="text-gray-700 dark:text-gray-300">No priority support
+                        </span>
+                      </li>
+
+                    </ul>
+
+                    <button onClick={handledashboard} className="w-full py-3 px-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg font-medium transition-colors">
+                      Get started Free
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* CTA */}
+            <div className="mt-16 text-center">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ready to optimize your fleet operations?</h3>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">Join thousands of fleet owners who trust our platform</p>
+              <button  onClick={buysubs} className="py-4 px-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium text-lg transition-colors">
+                Start Your Free Trial
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Testimonials Section */}
 
         <section id="testimonials" className={darkMode ? "darkmode py-20  " : "py-20 bg-gray-50"}
@@ -502,7 +668,7 @@ const HomePage = () => {
             <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm">
               <p className="text-gray-400">© 2025 LorryWale. All rights reserved.</p>
               <div className="mt-4 md:mt-0 flex space-x-6">
-                <a href="https://www.instagram.com/preet_gusain200_/?utm_source=qr&igsh=MXhmenR4ZXgwc2xvbA%3D%3D#" target='_blank'><img className='size-[3rem]' src="/instalogo.png" alt=""  /></a>
+                <a href="https://www.instagram.com/preet_gusain200_/?utm_source=qr&igsh=MXhmenR4ZXgwc2xvbA%3D%3D#" target='_blank'><img className='size-[3rem]' src="/instalogo.png" alt="" /></a>
                 <a href="https://github.com/preetcoder12" target='_blank'><img className='size-[3rem]' src="/githublogo.png" alt="" /></a>
                 <a href="https://www.linkedin.com/in/preet-gusain-986b022a5/" target='_blank'><img className='size-[3rem]' src="/linkedinlogo.png" alt="" /></a>
                 <a href="https://www.youtube.com/@preetgusain" target='_blank'><img className='size-[3rem]' src="/ytlogo.png" alt="" /></a>
