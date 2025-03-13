@@ -29,12 +29,7 @@ const HomePage = () => {
 
   // Initialize dashboard state when allusers is updated
   const [activeDashboardItems, setActiveDashboardItems] = useState({
-    dashboard: false,
-    Account: false,
-    settings: false,
-    addTrucks: false,
-    becomeDriver: false,
-    bookTruck: false
+    Account: true,
   });
 
   useEffect(() => {
@@ -113,7 +108,7 @@ const HomePage = () => {
               </div>
 
               <div className="hidden md:flex items-center space-x-6">
-                <button className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">Logout</button>
+                <button onClick={handleLogout} className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">Logout</button>
 
                 {/* Toggle Theme Button (Only for Body) */}
                 <button onClick={handleDarkMode}
@@ -507,10 +502,10 @@ const HomePage = () => {
             <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm">
               <p className="text-gray-400">© 2025 LorryWale. All rights reserved.</p>
               <div className="mt-4 md:mt-0 flex space-x-6">
-                <a href="https://www.instagram.com/preet_gusain200_/?utm_source=qr&igsh=MXhmenR4ZXgwc2xvbA%3D%3D#"><img className='size-[3rem]' src="/instalogo.png" alt="" /></a>
-                <a href="https://github.com/preetcoder12"><img className='size-[3rem]' src="/githublogo.png" alt="" /></a>
-                <a href="https://www.linkedin.com/in/preet-gusain-986b022a5/"><img className='size-[3rem]' src="/linkedinlogo.png" alt="" /></a>
-                <a href="https://www.youtube.com/@preetgusain"><img className='size-[3rem]' src="/ytlogo.png" alt="" /></a>
+                <a href="https://www.instagram.com/preet_gusain200_/?utm_source=qr&igsh=MXhmenR4ZXgwc2xvbA%3D%3D#" target='_blank'><img className='size-[3rem]' src="/instalogo.png" alt=""  /></a>
+                <a href="https://github.com/preetcoder12" target='_blank'><img className='size-[3rem]' src="/githublogo.png" alt="" /></a>
+                <a href="https://www.linkedin.com/in/preet-gusain-986b022a5/" target='_blank'><img className='size-[3rem]' src="/linkedinlogo.png" alt="" /></a>
+                <a href="https://www.youtube.com/@preetgusain" target='_blank'><img className='size-[3rem]' src="/ytlogo.png" alt="" /></a>
 
               </div>
             </div>

@@ -38,12 +38,12 @@ const Dashboard = () => {
     }, [user.id]);
 
     const [activeDashboardItems, setActiveDashboardItems] = useState({
-        dashboard: false,
-        Account: false,
-        settings: false,
-        addTrucks: false,
-        becomeDriver: false,
-        bookTruck: false
+        dashboard: true,
+        settings: true,
+        addTrucks: true,
+        becomeDriver: true,
+        bookTruck: true,
+        Account: true,
     });
 
     useEffect(() => {
@@ -218,7 +218,7 @@ const Dashboard = () => {
 
     return (
         <div className={`min-h-screen font-sans ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
-            {activeDashboardItems.dashboard ? (<div className="flex h-screen overflow-hidden">
+            {activeDashboardItems.dashboard && activeDashboardItems.Account ? (<div className="flex h-screen overflow-hidden">
                 {/* Mobile Sidebar Toggle */}
                 <button
                     onClick={toggleSidebar}
@@ -571,6 +571,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>)}
+
         </div>
     );
 };
