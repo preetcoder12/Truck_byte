@@ -59,7 +59,15 @@ const Admin_ToDriver_Profile = () => {
         month: 'long',
         day: 'numeric'
     });
+    const handleEmail_driver = (email) => {
+        const adminMessage = prompt("Enter your message for Driver:");
+        if (adminMessage) {
+            const subject = encodeURIComponent(`From Admin of TruckByte to ${email}`);
+            const body = encodeURIComponent(`Hello, this is Admin ${adminMessage} .`);
 
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        }
+    };
     return (
         <div>
             <div className="min-h-screen bg-gray-300 text-white py-8">
@@ -150,6 +158,11 @@ const Admin_ToDriver_Profile = () => {
                             <div className="flex  gap-4">
                                 <button className="bg-blue-500 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 transition-transform duration-300">
                                     Go to Admin
+                                </button>
+                                <button
+                                    onClick={() => { handleEmail_driver(driver.email) }}
+                                    className={`bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-yellow-600 hover:scale-105 transition-transform duration-300`}>
+                                    Contact
                                 </button>
                                 <a href={`/admin_editdriverprofile/${driver._id}`} className="bg-green-500 flex gap-2 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 transition-transform duration-300">
                                     <FaGears className="size-6" />Edit

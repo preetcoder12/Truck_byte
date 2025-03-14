@@ -8,6 +8,7 @@ import {
 import { IoMdMail } from 'react-icons/io';
 import { IoArrowBackCircle } from 'react-icons/io5';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FcGoogle } from "react-icons/fc";
 
 const Admin_Control_user = () => {
 
@@ -217,6 +218,7 @@ const Admin_Control_user = () => {
     };
 
 
+
     return (
         <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} transition-colors duration-300`}>
             {/* Top navbar */}
@@ -326,9 +328,11 @@ const Admin_Control_user = () => {
                                     </div>
                                     <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                                         <div className={`p-2 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-green-100'} mr-3`}>
-                                            <FaPhoneAlt className={`${darkMode ? 'text-green-400' : 'text-green-600'}`} />
+                                            {user.phone ? (<FaPhoneAlt className={`${darkMode ? 'text-green-400' : 'text-green-600'}`} />) : (
+                                                <FcGoogle className={`${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                                            )}
                                         </div>
-                                        <span>{user.phone || "Not provided"}</span>
+                                        <span>{user.phone || user.googleId}</span>
                                     </div>
                                 </div>
 

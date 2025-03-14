@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FaRupeeSign } from "react-icons/fa";
 
 const PaymentPage = () => {
     const [paymentMethod, setPaymentMethod] = useState("credit");
@@ -12,6 +13,7 @@ const PaymentPage = () => {
 
     const selectedTruckId = localStorage.getItem("selectedtruckid");
     console.log("Selected Truck ID:", selectedTruckId);
+    const paymentprice = localStorage.getItem("price");
 
     useEffect(() => {
 
@@ -97,7 +99,12 @@ const PaymentPage = () => {
                 </div>
                 <div className="border-t border-gray-200 my-2 pt-2 flex justify-between">
                     <span className="font-bold">Total Amount:</span>
-                    <span className="font-bold text-blue-800">{bookingDetails.estimatedCost}</span>
+                    <span className="font-bold text-blue-800">
+                        <div className="flex justify-center items-center">
+                            <FaRupeeSign />
+                            {paymentprice}
+                        </div>
+                    </span>
                 </div>
             </div>
         </div>

@@ -37,7 +37,13 @@ const BookTruckProfile = () => {
             }
         }
     };
-
+    useEffect(() => {
+        if (truckDetails && days > 0) {
+            const totalPrice = days * 24 * truckDetails.pricePerKm;
+            setprice(totalPrice);
+            localStorage.setItem("price", totalPrice);
+        }
+    }, [days, truckDetails]);
 
     useEffect(() => {
         if (!extractedId || extractedId === "[object Object]") {

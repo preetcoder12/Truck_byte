@@ -5,6 +5,7 @@ import { IoMdMail } from "react-icons/io";
 import { FaCar } from "react-icons/fa6";
 import { FaMedal } from "react-icons/fa6";
 import { FcOk } from "react-icons/fc";
+import { FaGoogle } from "react-icons/fa";
 
 import { GiCrossMark } from "react-icons/gi";
 
@@ -39,6 +40,19 @@ const AdminPage = () => {
   });
 
   const [showFilters, setShowFilters] = useState(false);
+
+  const handleEmail = (email) => {
+    const adminMessage = prompt("Enter your message for the user:");
+
+    if (adminMessage) {
+      const subject = encodeURIComponent(`From Admin of TruckByte to ${email}`);
+      const body = encodeURIComponent(`Hello, this is Admin ${adminMessage} .`);
+
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+  };
+
+
 
   // Initialize dark mode based on user preference or system preference
   useEffect(() => {
@@ -570,18 +584,30 @@ const AdminPage = () => {
                       <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                         {person.username}
                       </h3>
+
                       <div className="space-y-1 mt-2">
-                        <p className={`${darkMode ? 'text-gray-400' : 'text-black'} flex items-center justify-center`}>
-                          <span className="mr-1"><FaPhoneAlt /></span> {person.phone}
-                        </p>
                         <p className={`${darkMode ? 'text-gray-400' : 'text-black'} flex items-center justify-center`}>
                           <span className="mr-1"><IoMdMail /></span> {person.email}
                         </p>
+
+                        {person.googleId ?
+                          (<p className={`${darkMode ? 'text-gray-400' : 'text-black'} flex items-center justify-center`}>
+                            <span className="mr-1"><FaGoogle /></span> {person.googleId}
+                          </p>)
+                          :
+                          (<p className={`${darkMode ? 'text-gray-400' : 'text-black'} flex items-center justify-center`}>
+                            <span className="mr-1"><FaPhoneAlt /></span> {person.phone}
+                          </p>)
+                        }
+
                       </div>
 
                       {/* Action Buttons */}
                       <div className="mt-4 flex justify-around">
-                        <button className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
+                        <button
+                          onClick={() => { handleEmail(person.email) }}
+
+                          className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200`}>
                           Contact
                         </button>
 
@@ -737,7 +763,7 @@ const AdminPage = () => {
       <div className={`w-64 transition-all bg-gray-800 shadow-gray-900 text-white`}>
         <div className={`p-6 flex items-center space-x-3 border-gray-700 `}>
           <div className="flex items-center border-b border-gray-800 p-0">
-            <a href="/" className="flex items-center">
+            <a href="/admin" className="flex items-center">
               <img className="w-[12rem] h-[8rem]" src="/logo.png" alt="logo" />
             </a>
           </div>

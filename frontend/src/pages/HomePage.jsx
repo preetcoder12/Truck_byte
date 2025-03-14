@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Truck, BarChart3, Shield, Clock, Zap, Check, LayoutDashboard, ChevronRight, Menu } from 'lucide-react';
+import { Truck, BarChart3, Shield, Clock, Zap, Check,X, LayoutDashboard, ChevronRight, Menu } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { MdDarkMode } from "react-icons/md";
 import { FaLightbulb } from "react-icons/fa";
@@ -18,7 +18,6 @@ const HomePage = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  console.log(user.id)
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
@@ -64,10 +63,8 @@ const HomePage = () => {
 
       if (newMode) {
         document.documentElement.classList.add("dark");
-        console.log("Theme set to dark mode");
       } else {
         document.documentElement.classList.remove("dark");
-        console.log("Theme set to light mode");
       }
 
       return newMode;
@@ -96,18 +93,29 @@ const HomePage = () => {
     }
   }, []);
 
+  const AdminEmail = "truckbyte@gmail.com";
 
+  const handleEmail = (email) => {
+    const adminMessage = prompt("Enter your message for the Admin:");
+
+    if (adminMessage) {
+      const subject = encodeURIComponent(`From ${email} of TruckByte to Admin `);
+      const body = encodeURIComponent(`Hello, this is User with user id : ${user.id} : ${adminMessage} .`);
+
+      window.location.href = `mailto:${AdminEmail}?subject=${subject}&body=${body}`;
+    }
+  };
 
   // Rest of your HomePage component code...
   return (
     <div>
       {activeDashboardItems.Account ? (<div className="min-h-screen bg-white">
         {/* Navigation */}
-        <nav className="bg-gray-950 text-white shadow-md"> {/* Navbar always in dark mode */}
+        <nav className="bg-gray-950 text-white shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-20">
               <div className="flex items-center">
-                <img className="w-[12rem]" src="/logo.png" alt="logo" />
+                <img className="w-[12rem] mt-4" src="/logo.png" alt="logo" />
               </div>
 
               {/* Desktop Navigation */}
@@ -119,14 +127,14 @@ const HomePage = () => {
                 <a href="#contact" className="text-gray-300 hover:text-yellow-400">Contact</a>
               </div>
 
+              {/* Right Side (Logout + Theme Toggle) */}
               <div className="hidden md:flex items-center space-x-6">
-                <button onClick={handleLogout} className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">Logout</button>
+                <button onClick={handleLogout} className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                  Logout
+                </button>
 
-                {/* Toggle Theme Button (Only for Body) */}
                 <button onClick={handleDarkMode}
-                  className={darkMode ?
-                    "bg-black text-white px-5 py-2 rounded-3xl hover:bg-gray-500 hover:text-yellow-400 transition-colors font-medium"
-                    : "bg-yellow-600 text-white px-5 py-2 rounded-3xl hover:bg-yellow-300 hover:text-black transition-colors font-medium"}
+                  className={`${darkMode ? "bg-black text-white hover:bg-gray-500 hover:text-yellow-400" : "bg-yellow-600 text-white hover:bg-yellow-300 hover:text-black"} px-5 py-2 rounded-3xl transition-colors font-medium`}
                 >
                   {darkMode ? <MdDarkMode size={20} /> : <FaLightbulb size={20} />}
                 </button>
@@ -134,11 +142,25 @@ const HomePage = () => {
 
               {/* Mobile menu button */}
               <div className="md:hidden flex">
-                <button className="text-gray-300 hover:text-yellow-400">
-                  <Menu className="h-6 w-6" />
+                <button onClick={toggleMenu} className="text-gray-300 hover:text-yellow-400">
+                  {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
               </div>
             </div>
+
+            {/* Mobile Menu Dropdown */}
+            {isMenuOpen && (
+              <div className="md:hidden flex flex-col bg-black text-white py-4 px-6 space-y-4">
+                <a href="#features" className="hover:text-yellow-400">Features</a>
+                <a href="#benefits" className="hover:text-yellow-400">Benefits</a>
+                <a href="#testimonials" className="hover:text-yellow-400">Testimonials</a>
+                <a href="#pricing" className="hover:text-yellow-400">Pricing</a>
+                <a href="#contact" className="hover:text-yellow-400">Contact</a>
+                <button onClick={handleLogout} className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </nav>
 
@@ -520,7 +542,7 @@ const HomePage = () => {
             <div className="mt-16 text-center">
               <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ready to optimize your fleet operations?</h3>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">Join thousands of fleet owners who trust our platform</p>
-              <button  onClick={buysubs} className="py-4 px-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium text-lg transition-colors">
+              <button onClick={buysubs} className="py-4 px-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium text-lg transition-colors">
                 Start Your Free Trial
               </button>
             </div>
@@ -712,12 +734,14 @@ const HomePage = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full">
-                <a href="/contact" className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-md flex-1 flex items-center justify-center">
+                <button
+                  onClick={() => { handleEmail(user.email) }}
+                  className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-md flex-1 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   Contact Support
-                </a>
+                </button>
                 <a href="/faq" className="px-6 py-3 bg-transparent border border-gray-400 hover:border-white text-gray-300 hover:text-white rounded-lg transition-colors flex-1 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />

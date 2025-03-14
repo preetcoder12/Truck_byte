@@ -120,7 +120,7 @@ const Subscription = () => {
         <div className={`max-w-4xl mx-auto rounded-3xl shadow-xl overflow-hidden pt-4 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
             <div className={`p-4 md:p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-gradient-to-r from-blue-800 to-indigo-900'}`}>
 
-                <h1 className="text-2xl md:text-3xl font-bold text-center">LorryWala Subscription Plans</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-center">TruckByte Subscription Plans</h1>
                 <p className={`text-center mt-2 ${isDarkMode ? 'text-gray-300' : 'text-blue-100'}`}>Choose the perfect plan for your truck management needs</p>
             </div>
 
@@ -354,8 +354,8 @@ const Subscription = () => {
                                             <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>3. Your subscription will be activated once payment is verified</p>
 
                                             <div className={`mt-4 p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'}`}>
-                                                <p className="text-sm"><span className="font-medium">Bank:</span> LorryWala Financial Services</p>
-                                                <p className="text-sm"><span className="font-medium">Account Name:</span> LorryWala Subscriptions Ltd</p>
+                                                <p className="text-sm"><span className="font-medium">Bank:</span> TruckByte Financial Services</p>
+                                                <p className="text-sm"><span className="font-medium">Account Name:</span> TruckByte Subscriptions Ltd</p>
                                                 <p className="text-sm"><span className="font-medium">Account Number:</span> 9876543210</p>
                                                 <p className="text-sm"><span className="font-medium">Routing Number:</span> 123456789</p>
                                                 <p className="text-sm"><span className="font-medium">Reference:</span> SUB-{Math.floor(Math.random() * 10000).toString().padStart(4, '0')}</p>
@@ -407,7 +407,7 @@ const Subscription = () => {
                             <span className="text-green-600 text-2xl">✓</span>
                         </div>
                         <h2 className="text-2xl font-bold text-gray-800 mb-2">Subscription Activated!</h2>
-                        <p className="text-gray-600 mb-6">Your LorryWala account has been successfully upgraded.</p>
+                        <p className="text-gray-600 mb-6">Your TruckByte account has been successfully upgraded.</p>
 
                         <div className="max-w-md mx-auto bg-gray-50 p-4 rounded-lg text-left mb-6">
                             <h3 className="font-bold mb-3">Subscription Details</h3>
@@ -430,7 +430,7 @@ const Subscription = () => {
             <div className="bg-gray-50 p-4 border-t">
                 <div className="flex justify-between items-center">
                     <div className="text-sm text-gray-500">
-                        © 2025 LorryWala. All rights reserved.
+                        © 2025 TruckByte. All rights reserved.
                     </div>
                     <div className="flex space-x-4">
                         <span className="text-sm text-gray-500">Need help? Call 1-800-LORRY-NOW</span>

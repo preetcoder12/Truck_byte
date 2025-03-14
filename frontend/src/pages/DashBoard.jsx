@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
-    Truck, BarChart3, Calendar, Users, AlertTriangle, Clock, MapPin, Settings, Search,
-    User, CirclePlus, Bell, ChevronRight, Filter, Moon, Sun, Activity, Sliders, PieChart,
-    TrendingUp, Map, Menu, X, LogOut, HelpCircle, Home
+    Truck, BarChart3, AlertTriangle, Clock, MapPin, Settings, Search,
+    User, CirclePlus, Bell, ChevronRight, Filter, Moon, Sun,
+    Menu, X, HelpCircle,
+
 } from 'lucide-react';
 import axios from 'axios';
 import { FaUser } from 'react-icons/fa';
@@ -24,7 +25,6 @@ const Dashboard = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
 
-    console.log(user.id)
     useEffect(() => {
         const fetchAllUsers = async () => {
             try {
@@ -242,7 +242,7 @@ const Dashboard = () => {
                     <div className="flex flex-col h-full p-6">
                         <div className="flex items-center border-b border-gray-800 p-0">
                             <a href="/" className="flex items-center">
-                                <img className="w-[12rem] h-[8rem]" src="/logo.png" alt="logo" />
+                                <img className="w-[12rem] h-[9rem]" src="/logo.png" alt="logo" />
                             </a>
                         </div>
 

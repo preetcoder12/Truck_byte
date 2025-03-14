@@ -4,6 +4,7 @@ import { FaPhoneAlt, FaUserCircle, FaMoon, FaSun, FaSearch, FaUserCog } from 're
 import { IoMdMail } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { IoArrowBackCircle } from "react-icons/io5";
+import { FcGoogle } from "react-icons/fc";
 
 const Admin_to_ALLuser = () => {
     const [users, setUsers] = useState([]);
@@ -111,7 +112,7 @@ const Admin_to_ALLuser = () => {
                         </button>
                         <button onClick={handle_back} className={` font-bold text-xl ${darkMode ? ' text-red-400' : ' text-gray-700'}`}>
                             <div className='flex gap-1 '>
-                                <IoArrowBackCircle className='size-[30px]'/> Back
+                                <IoArrowBackCircle className='size-[30px]' /> Back
                             </div>
                         </button>
 
@@ -189,8 +190,22 @@ const Admin_to_ALLuser = () => {
 
                                     <div className="space-y-3">
                                         <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            <FaPhoneAlt className="mr-3 text-blue-500" />
-                                            <span>{person.phone}</span>
+
+                                            {person.phone ? (
+                                                <span className="flex items-center">
+                                                    <FaPhoneAlt className="mr-3 text-blue-500" />
+                                                    {person.phone}
+                                                </span>
+                                            ) : (
+                                                <span className="flex items-center">
+                                                    <FcGoogle className={`${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                                                    {person.googleId}
+                                                </span>
+                                            )}
+
+
+
+
                                         </div>
 
                                         <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
