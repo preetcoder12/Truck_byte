@@ -11,7 +11,6 @@ const AdminRoutes = require("./routes/Admin")
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const { Server } = require("socket.io");
 
 app.use(cookieParser());
 

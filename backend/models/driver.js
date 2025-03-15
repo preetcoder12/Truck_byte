@@ -25,6 +25,10 @@ const driverSchema = new Schema({
         type: String,
         required: true,
     },
+    adhaarImage: {
+        type: String,
+        required: true,
+    },
     gender: {
         type: String,
         required: true,

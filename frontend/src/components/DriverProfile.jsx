@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FaTruck, FaPhone, FaEnvelope, FaMapMarkerAlt, FaIdCard, FaUser } from "react-icons/fa";
+import { FaTruck, FaPhone, FaEnvelope, FaMapMarkerAlt, FaIdCard, FaUser, FaAddressCard } from "react-icons/fa";
 import { RingLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { FaGears } from "react-icons/fa6";
+
 
 const DriverProfile = () => {
     const [driver, setDriver] = useState(null);
@@ -87,6 +88,7 @@ const DriverProfile = () => {
                         ) : (
                             <FaUser className="text-gray-400 text-5xl" />
                         )}
+
                     </div>
                     <div className="ml-6">
                         <h1 className="text-3xl font-bold flex items-center gap-2 text-blue-400">
@@ -153,6 +155,23 @@ const DriverProfile = () => {
                         <p><strong>Relation:</strong> {driver.emergencyContact?.relation || "N/A"}</p>
                         <p><strong>Phone:</strong> {driver.emergencyContact?.phone || "N/A"}</p>
                     </div>
+
+                    <div className="bg-gray-900 p-5 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition duration-300 ">
+                        <h2 className="text-lg font-semibold border-b border-gray-600 pb-2 mb-3 flex items-center gap-2 text-white-400 ">
+                            <FaAddressCard />
+                            Adhaar Card
+                        </h2>
+                        {driver.adhaarImage ? (
+                            <img
+                                src={`http://localhost:8000/uploads/${driver.adhaarImage}`}
+                                alt={driver.adhaarImage}
+                                className=" w-[14rem] object-cover text-white"
+                            />
+                        ) : (
+                            <FaAddressCard className="text-gray-400 text-5xl" />
+                        )}
+                    </div>
+
                 </div>
 
                 {/* Dashboard Button */}
@@ -168,6 +187,7 @@ const DriverProfile = () => {
                             <a href="/editdriverprofile" className="bg-green-500 flex gap-2 text-black font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 transition-transform duration-300">
                                 <FaGears className="size-6" />Edit
                             </a>
+
                         </div>
                     </a>
                 </div>

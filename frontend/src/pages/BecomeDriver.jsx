@@ -10,6 +10,7 @@ const BecomeDriver = () => {
         email: "",
         phone: "",
         photo: "",
+        adhaarImage:"",
         gender: "",
         licenseNumber: "",
         licenseType: "",
@@ -53,6 +54,10 @@ const BecomeDriver = () => {
             }
             if (!formData.photo) {
                 toast.error("Please upload a photo");
+                return false;
+            }
+            if (!formData.adhaarImage) {
+                toast.error("Please upload a adhaar Image");
                 return false;
             }
             if (!formData.gender) {
@@ -281,6 +286,16 @@ const BecomeDriver = () => {
                                                 type="file"
                                                 name="photo"
                                                 onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
+                                                required
+                                                className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="group">
+                                            <label className="block text-sm font-medium text-gray-200 mb-1 ml-1">Adhaar card</label>
+                                            <input
+                                                type="file"
+                                                name="adhaarImage"
+                                                onChange={(e) => setFormData({ ...formData, adhaarImage: e.target.files[0] })}
                                                 required
                                                 className="w-full p-3 bg-gray-800 border border-gray-300/30 text-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white/20 transition-all"
                                             />
