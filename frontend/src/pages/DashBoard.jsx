@@ -21,10 +21,14 @@ const Dashboard = () => {
     const [Ontrip, setOntrip] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [allusers, setAllUsers] = useState([]);
-
+    const [notiOpen, setNotiOpen] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"));
 
 
+
+    const openNotification = () => {
+        setNotiOpen(!notiOpen);
+    };
     useEffect(() => {
         const fetchAllUsers = async () => {
             try {
@@ -273,7 +277,7 @@ const Dashboard = () => {
                                     </a>
 
                                 </div>) : (<div></div>)}
-                            <a href="#" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
+                            <a href="/helpsupport" className="flex items-center p-3 mb-2 rounded-xl transition-all duration-200 text-slate-300 hover:bg-slate-800 hover:text-white group">
                                 <HelpCircle className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                                 <span>Help & Support</span>
                             </a>
@@ -335,8 +339,40 @@ const Dashboard = () => {
                             <button
                                 className={`p-2 rounded-full ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} relative transition-colors duration-200`}
                             >
-                                <Bell className={`w-5 h-5 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} />
-                                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                                <div className="relative inline-block">
+                                    <button
+                                        onClick={openNotification}
+                                        className="relative focus:outline-none"
+                                        aria-label="Notifications"
+                                    >
+                                        <Bell className={`w-5 h-5 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+                                        <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                                    </button>
+
+                                    {notiOpen && (
+                                        <div className={`absolute right-0 mt-2 w-64 rounded-md shadow-lg overflow-hidden z-20 border border-gray-200 ${darkMode ? "bg-gray-900 " : "bg-white"}`}>
+                                            <div className="py-2">
+                                                <div className="px-4 py-3 border-b border-gray-200">
+                                                    <p className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-800"}`} >Notifications</p>
+                                                </div>
+                                                <ul className="max-h-64 overflow-y-auto">
+                                                    <li className={`px-4 py-3 border-b border-gray-200 ${darkMode ? " hover:bg-gray-800" : " hover:bg-gray-50"}`}>
+                                                        <p className={`text-md text-gray-800 ${darkMode ? "text-white" : "text-gray-800"}`}>New message from {user?.username || 'User'}</p>
+                                                        <p className={`text-sm text-gray-500 ${darkMode ? "text-green-500" : "text-gray-800"}`}>5 minutes ago</p>
+                                                    </li>
+                                                    <li className={`px-4 py-3 border-b border-gray-200 ${darkMode ? " hover:bg-gray-800" : " hover:bg-gray-50"}`}>
+                                                        <p className={`text-md text-gray-800 ${darkMode ? "text-white" : "text-gray-800"}`}>Your truck was ordered</p>
+                                                        <p className={`text-sm text-gray-500 ${darkMode ? "text-green-500" : "text-gray-800"}`}>1 hour ago</p>
+                                                    </li>
+                                                    <li className={`px-4 py-3 border-b border-gray-200 ${darkMode ? " hover:bg-gray-800" : " hover:bg-gray-50"}`}>
+                                                        <p className={`text-md text-gray-800 ${darkMode ? "text-white" : "text-gray-800"}`}>Account updated successfully</p>
+                                                        <p className={`text-sm text-gray-500 ${darkMode ? "text-green-500" : "text-gray-800"}`}>Yesterday</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </button>
                             {/* Dark Mode Toggle Button */}
                             <button
@@ -564,7 +600,7 @@ const Dashboard = () => {
                             <a href="/" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-md">
                                 Go Home
                             </a>
-                            <a href="/help" className="px-6 py-2 bg-transparent border border-gray-400 hover:border-white text-gray-300 hover:text-white rounded-lg transition-colors">
+                            <a href="/helpsupport" className="px-6 py-2 bg-transparent border border-gray-400 hover:border-white text-gray-300 hover:text-white rounded-lg transition-colors">
                                 Get Help
                             </a>
                         </div>

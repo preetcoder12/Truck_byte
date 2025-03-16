@@ -48,7 +48,7 @@ const AdminSignup = () => {
                             <UserPlus className="w-8 h-8 text-white" />
                         </div>
                         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                            LorryWale Admin
+                            TruckByte Admin
                         </h1>
                     </div>
 

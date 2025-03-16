@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Truck, BarChart3, Shield, Clock, Zap, Check,X, LayoutDashboard, ChevronRight, Menu } from 'lucide-react';
+import { Truck, BarChart3, Shield, Clock, Zap, Check, X, LayoutDashboard, ChevronRight, Menu, User } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { MdDarkMode } from "react-icons/md";
-import { FaLightbulb } from "react-icons/fa";
+import { MdComputer, MdDarkMode } from "react-icons/md";
+import { FaEnvelope, FaLightbulb, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import axios from 'axios';
 import { BiPurchaseTag } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -74,9 +74,11 @@ const HomePage = () => {
   const handledashboard = () => {
     navigate("/dashboard");
   }
+
   const buysubs = () => {
     navigate("/subscription")
   }
+
   const handleLogout = () => {
     localStorage.clear();
     toast.success("Logout Successful!");
@@ -93,671 +95,497 @@ const HomePage = () => {
     }
   }, []);
 
-  const AdminEmail = "truckbyte@gmail.com";
+  const AdminEmail = "preetgusain84@gmail.com";
 
   const handleEmail = (email) => {
     const adminMessage = prompt("Enter your message for the Admin:");
 
     if (adminMessage) {
       const subject = encodeURIComponent(`From ${email} of TruckByte to Admin `);
-      const body = encodeURIComponent(`Hello, this is User with user id : ${user.id} : ${adminMessage} .`);
+      const body = encodeURIComponent(`Hello, this is User with user id : ${user.id} : ${adminMessage} from ${email}.`);
 
       window.location.href = `mailto:${AdminEmail}?subject=${subject}&body=${body}`;
     }
   };
 
-  // Rest of your HomePage component code...
   return (
     <div>
-      {activeDashboardItems.Account ? (<div className="min-h-screen bg-white">
-        {/* Navigation */}
-        <nav className="bg-gray-950 text-white shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-20">
-              <div className="flex items-center">
-                <img className="w-[12rem] mt-4" src="/logo.png" alt="logo" />
-              </div>
+      {activeDashboardItems.Account ? (
+        <div className="min-h-screen bg-white">
+          {/* Navigation - Redesigned */}
+          <nav className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white shadow-lg">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between h-20">
+                <div className="flex items-center">
+                  <img className="w-40 h-auto" src="/logo.png" alt="logo" />
+                </div>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-8">
-                <a href="#features" className="text-gray-300 hover:text-yellow-400">Features</a>
-                <a href="#benefits" className="text-gray-300 hover:text-yellow-400">Benefits</a>
-                <a href="#testimonials" className="text-gray-300 hover:text-yellow-400">Testimonials</a>
-                <a href="#pricing" className="text-gray-300 hover:text-yellow-400">Pricing</a>
-                <a href="#contact" className="text-gray-300 hover:text-yellow-400">Contact</a>
-              </div>
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center space-x-8">
+                  <a href="#features" className="text-white hover:text-yellow-300 font-medium transition-colors">Features</a>
+                  <a href="#benefits" className="text-white hover:text-yellow-300 font-medium transition-colors">Benefits</a>
+                  <a href="#testimonials" className="text-white hover:text-yellow-300 font-medium transition-colors">Testimonials</a>
+                  <a href="#pricing" className="text-white hover:text-yellow-300 font-medium transition-colors">Pricing</a>
+                  <a href="#contact" className="text-white hover:text-yellow-300 font-medium transition-colors">Contact</a>
+                </div>
 
-              {/* Right Side (Logout + Theme Toggle) */}
-              <div className="hidden md:flex items-center space-x-6">
-                <button onClick={handleLogout} className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
-                  Logout
-                </button>
+                {/* Right Side (Logout + Theme Toggle) */}
+                <div className="hidden md:flex items-center space-x-4">
+                  <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors font-medium">
+                    Logout
+                  </button>
 
-                <button onClick={handleDarkMode}
-                  className={`${darkMode ? "bg-black text-white hover:bg-gray-500 hover:text-yellow-400" : "bg-yellow-600 text-white hover:bg-yellow-300 hover:text-black"} px-5 py-2 rounded-3xl transition-colors font-medium`}
-                >
-                  {darkMode ? <MdDarkMode size={20} /> : <FaLightbulb size={20} />}
-                </button>
-              </div>
+                  <button onClick={handleDarkMode} className={`p-2 rounded-full transition-colors ${darkMode ? "bg-yellow-400 text-gray-900" : "bg-gray-800 text-yellow-400"}`}>
+                    {darkMode ? <FaLightbulb size={20} /> : <MdDarkMode size={20} />}
+                  </button>
+                </div>
 
-              {/* Mobile menu button */}
-              <div className="md:hidden flex">
-                <button onClick={toggleMenu} className="text-gray-300 hover:text-yellow-400">
-                  {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Menu Dropdown */}
-            {isMenuOpen && (
-              <div className="md:hidden flex flex-col bg-black text-white py-4 px-6 space-y-4">
-                <a href="#features" className="hover:text-yellow-400">Features</a>
-                <a href="#benefits" className="hover:text-yellow-400">Benefits</a>
-                <a href="#testimonials" className="hover:text-yellow-400">Testimonials</a>
-                <a href="#pricing" className="hover:text-yellow-400">Pricing</a>
-                <a href="#contact" className="hover:text-yellow-400">Contact</a>
-                <button onClick={handleLogout} className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium">
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-
-        {/* Hero Section */}
-        <div className={darkMode ? "bg-[#2A2A2A] py-16 md:py-24 " : "bg-gradient-to-r from-blue-50 to-indigo-50 py-16 md:py-24"}
-        >
-          <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
-            <div className="flex flex-col md:flex-row items-center">
-              {/* Left Content */}
-              <div className="md:w-1/2 md:pr-12 mb-10 md:mb-0">
-
-                <h1 className={darkMode ? "darkmode-text text-4xl md:text-5xl font-extrabold leading-tight" : "text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight"}
-                >
-                  Manage Your Fleet with <span className="text-blue-600">Precision</span> and Ease
-                </h1>
-
-                <p className={darkMode ? "darkmode-text mt-6 text-lg  max-w-2xl leading-relaxed " : "mt-6 text-lg text-gray-700 max-w-2xl leading-relaxed"}
-                >
-                  LorryWale gives you complete control over your truck fleet, optimizing routes,
-                  reducing costs, and improving efficiency with our advanced management solution.
-                </p>
-
-                {/* CTA Buttons */}
-                <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
-                  <a
-                    href="/dashboard"
-                    className="bg-blue-600 text-white px-8 py-4 rounded-lg text-center text-lg font-semibold flex items-center gap-2 hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md"
-                  >
-                    <LayoutDashboard className="h-6 w-6" />
-                    Dashboard
-                  </a>
-                  <a
-                    href="/learnmore"
-                    className="bg-white text-blue-600 border border-blue-600 px-8 py-4 rounded-lg text-center text-lg font-semibold hover:bg-blue-100 transition-all transform hover:scale-105 shadow-md"
-                  >
-                    Learn More
-                  </a>
+                {/* Mobile menu button */}
+                <div className="md:hidden flex items-center">
+                  <button onClick={toggleMenu} className="text-white hover:text-yellow-300 p-2">
+                    {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                  </button>
                 </div>
               </div>
 
-              {/* Right Side Image */}
-              <div className="md:w-1/2">
-                <div className={darkMode ? " bg-[#121212] backdrop-blur-xl p-5 rounded-lg shadow-2xl relative overflow-hidden group" : "bg-white/80 backdrop-blur-xl p-5 rounded-lg shadow-2xl relative overflow-hidden group"}
-                >
-                  <img
-                    src="/dashboard.png"
-                    alt="LorryWale dashboard preview"
-                    className="rounded-md w-full transition-transform duration-500 transform group-hover:scale-105"
-                  />
-                  {/* Floating Element for 3D Effect */}
-                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+              {/* Mobile Menu Dropdown */}
+              {isMenuOpen && (
+                <div className="md:hidden flex flex-col bg-indigo-900 bg-opacity-95 backdrop-blur-md text-white py-4 px-4 space-y-3 rounded-md shadow-xl absolute left-0 right-0 z-50">
+                  <a href="#features" className="hover:text-yellow-300 py-2 px-4 rounded-md hover:bg-indigo-800">Features</a>
+                  <a href="#benefits" className="hover:text-yellow-300 py-2 px-4 rounded-md hover:bg-indigo-800">Benefits</a>
+                  <a href="#testimonials" className="hover:text-yellow-300 py-2 px-4 rounded-md hover:bg-indigo-800">Testimonials</a>
+                  <a href="#pricing" className="hover:text-yellow-300 py-2 px-4 rounded-md hover:bg-indigo-800">Pricing</a>
+                  <a href="#contact" className="hover:text-yellow-300 py-2 px-4 rounded-md hover:bg-indigo-800">Contact</a>
+                  <button onClick={handleLogout} className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors font-medium w-full text-left">
+                    Logout
+                  </button>
                 </div>
-              </div>
+              )}
             </div>
-          </div>
-        </div>
+          </nav>
 
-        {/* Features Section */}
-        <div id="features" className={darkMode ? " darkmode py-16 md:py-24 " : "py-16 md:py-24 bg-white"}
-        >
-          <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
-            <div className="text-center mb-16">
-
-              <h2 className={darkMode ? " darkmode text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug" : "text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug"}
-              >
-                Powerful Features for <span className="text-blue-600">Complete Fleet Management</span>
-              </h2>
-              <p className={darkMode ? " darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-700 max-w-3xl mx-auto"}
-              >
-                Our comprehensive solution is designed to handle every aspect of your trucking operations.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { icon: <Truck className="h-6 w-6" />, color: "bg-blue-100 text-blue-600", title: "Real-time Fleet Tracking", desc: "Monitor your entire fleet in real-time with GPS tracking and instant status updates." },
-                { icon: <BarChart3 className="h-6 w-6" />, color: "bg-green-100 text-green-600", title: "Advanced Analytics", desc: "Gain actionable insights with comprehensive reporting and performance metrics." },
-                { icon: <Shield className="h-6 w-6" />, color: "bg-purple-100 text-purple-600", title: "Maintenance Management", desc: "Automate maintenance scheduling and receive alerts for preventive service needs." },
-                { icon: <Clock className="h-6 w-6" />, color: "bg-yellow-100 text-yellow-600", title: "Scheduling & Dispatch", desc: "Efficiently assign drivers and vehicles while optimizing delivery schedules." },
-                { icon: <Zap className="h-6 w-6" />, color: "bg-red-100 text-red-600", title: "Fuel Management", desc: "Track fuel consumption, identify efficiency opportunities, and reduce costs." },
-                {
-                  icon:
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                    </svg>, color: "bg-indigo-100 text-indigo-600", title: "Route Optimization", desc: "Plan the most efficient routes to save time, fuel, and operational costs."
-                }
-              ].map((feature, index) => (
-                < div key={index} className={darkMode ? " bg-gray-900 relative  p-6 rounded-lg shadow-lg border  transition-all transform hover:scale-105 hover:shadow-2xl" : "relative bg-white p-6 rounded-lg shadow-lg border border-gray-200 transition-all transform hover:scale-105 hover:shadow-2xl"}
-                >
-                  <div className={`p-3 ${feature.color} rounded-md w-12 h-12 flex items-center justify-center mb-4`}>
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className={darkMode ? " darkmode-text" : "text-gray-400"}
-                  >{feature.desc}</p>
-                  <div className="absolute -top-4 -right-4 w-10 h-10 bg-blue-500/10 rounded-full blur-xl opacity-0 hover:opacity-100 transition-all duration-500"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-
-        {/* Benefits Section */}
-
-        <div id="benefits" className={darkMode ? " darkmode py-16 md:py-24 " : "py-16 md:py-24 bg-gray-50"}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="md:flex md:items-center md:justify-between">
-              <div className="md:w-1/2 md:pr-12">
-
-                <h2 className={darkMode ? " darkmode-text text-3xl md:text-4xl font-bold " : "text-3xl md:text-4xl font-bold text-gray-900"}
-                >
-                  Transform Your Trucking Operations
-                </h2>
-
-                <p className={darkMode ? " text-gray-400 mt-4 text-lg " : "mt-4 text-lg text-gray-600"}
-                >
-                  Join hundreds of companies that have revolutionized their fleet management with LorryWale
-                </p>
-
-                <div className="mt-8 space-y-4">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <Check className="h-6 w-6 text-green-500" />
-                    </div>
-                    <div className="ml-3">
-                      <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}
-                      >Reduce Operating Costs</h3>
-                      <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}
-                      >
-                        Our customers report an average of 23% reduction in operational costs after implementing our system.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <Check className="h-6 w-6 text-green-500" />
-                    </div>
-                    <div className="ml-3">
-                      <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}>Increase Fleet Utilization</h3>
-                      <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}>
-                        Optimize your fleet usage with intelligent scheduling and assignment algorithms.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <Check className="h-6 w-6 text-green-500" />
-                    </div>
-                    <div className="ml-3">
-                      <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}>Improve Driver Satisfaction</h3>
-                      <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}>
-                        Better routes and schedules lead to happier drivers and lower turnover rates.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <Check className="h-6 w-6 text-green-500" />
-                    </div>
-                    <div className="ml-3">
-                      <h3 className={darkMode ? " text-white text-lg font-medium " : "text-lg font-medium text-gray-900"}>Enhance Customer Service</h3>
-                      <p className={darkMode ? " text-gray-400 mt-1" : "mt-1 text-gray-600"}>
-                        Provide accurate ETAs and real-time tracking information to your customers.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <a
-                    href="#case-studies"
-                    className={darkMode ? " darkmode-texttext-blue-600 font-medium inline-flex items-center" : "text-blue-600 font-medium inline-flex items-center"}
-                  >
-                    View case studies
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-
-              <div className="mt-10 md:mt-0 md:w-1/2">
-
-                <div className={darkMode ? "bg-[#3A3A3A] p-4 rounded-lg shadow-lg" : "bg-white p-4 rounded-lg shadow-lg"}
-                >
-                  <div className="relative aspect-w-16 aspect-h-9 overflow-hidden rounded-md">
-                    <div className="absolute inset-0 bg-blue-600 opacity-10"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="text-5xl font-bold text-blue-600 mb-3">30%</div>
-                        <p className="text-lg font-medium">Average Fuel Savings</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-2 gap-4">
-
-
-                    <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}
-                    >
-
-                      <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}
-                      >40%</div>
-                      <p >Maintenance Cost Reduction</p>
-                    </div>
-
-                    <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}
-                    >
-                      <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}>2.5x</div>
-                      <p className={darkMode ? "text-white text-sm  " : "text-sm text-gray-600"}
-                      >ROI Within 6 Months</p>
-                    </div>
-
-                    <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}>
-                      <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}>5 hrs</div>
-                      <p className={darkMode ? "text-white text-sm  " : "text-sm text-gray-600"}
-                      >Weekly Admin Time Saved</p>
-                    </div>
-
-                    <div className={darkMode ? "bg-[#121212] 50 p-4 rounded-md" : "bg-gray-50 p-4 rounded-md"}>
-                      <div className={darkMode ? "text-white text-3xl font-bold " : "text-3xl font-bold text-blue-600"}>98%</div>
-                      <p className={darkMode ? "text-white text-sm  " : "text-sm text-gray-600"}
-                      >Customer Satisfaction</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Price section */}
-        <div className="w-full py-16 px-4 bg-white dark:bg-gray-900 transition-colors duration-300">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Simple, Transparent Pricing</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                Choose the plan that fits your business needs, from small operations to enterprise fleets
-              </p>
-            </div>
-
-            {/* Phase 2 Plans */}
-            <div className="mb-20">
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-10 text-center">
-                <div className='flex text-3xl items-center justify-center gap-4'>Tiered Subscriptions <BiPurchaseTag /></div>
-              </h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* Starter Plan */}
-                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
-                  <div className="p-6">
-                    <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Starter Plan</h4>
-                    <p className="text-3xl font-bold text-gray-900 dark:text-white mb-6">₹999<span className="text-lg text-gray-500 dark:text-gray-400 font-normal">/month</span></p>
-
-                    <ul className="space-y-3 mb-8">
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">5 truck listings</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Basic tracking</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Email support</span>
-                      </li>
-                    </ul>
-
-                    <button onClick={buysubs} className="w-full py-3 px-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg font-medium transition-colors">
-                      Choose Starter
-                    </button>
-                  </div>
-                </div>
-
-                {/* Pro Plan */}
-                <div className="bg-blue-50 dark:bg-blue-900 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105 border-2 border-blue-500 transform scale-105">
-                  <div className="absolute top-0 right-0 bg-blue-500 text-white px-4 py-1 rounded-bl-lg text-sm font-bold">
-                    MOST POPULAR
-                  </div>
-                  <div className="p-6">
-                    <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Pro Plan</h4>
-                    <p className="text-3xl font-bold text-gray-900 dark:text-white mb-6">₹2,999<span className="text-lg text-gray-500 dark:text-gray-300 font-normal">/month</span></p>
-
-                    <ul className="space-y-3 mb-8">
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">20 truck listings</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Real-time GPS tracking</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Advanced analytics</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Driver ratings</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Chat support</span>
-                      </li>
-                    </ul>
-
-                    <button onClick={buysubs} className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
-                      Choose Pro
-                    </button>
-                  </div>
-                </div>
-
-                {/* free Plan */}
-                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105">
-                  <div className="p-6">
-                    <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Free plan</h4>
-                    <p className="text-3xl font-bold text-gray-900 dark:text-white mb-6">₹0/month </p>
-
-                    <ul className="space-y-3 mb-8">
-
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Limited truck listings (2-3)</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Basic dashboard
-                        </span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">No analytics or advanced tracking
-                        </span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <span className="text-gray-700 dark:text-gray-300">No priority support
-                        </span>
-                      </li>
-
-                    </ul>
-
-                    <button onClick={handledashboard} className="w-full py-3 px-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg font-medium transition-colors">
-                      Get started Free
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* CTA */}
-            <div className="mt-16 text-center">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ready to optimize your fleet operations?</h3>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">Join thousands of fleet owners who trust our platform</p>
-              <button onClick={buysubs} className="py-4 px-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium text-lg transition-colors">
-                Start Your Free Trial
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Testimonials Section */}
-
-        <section id="testimonials" className={darkMode ? "darkmode py-20  " : "py-20 bg-gray-50"}
-        >
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-
-              <h2 className={darkMode ? "text-4xl font-extrabold darkmode-text" : "text-4xl font-extrabold text-gray-900"}
-              >Trusted by Industry Leaders</h2>
-              <p className={darkMode ? "darkmode-text mt-4 text-lg  max-w-2xl mx-auto " : "mt-4 text-lg text-gray-600 max-w-2xl mx-auto"}
-              >
-                See what our customers have to say about LorryWale
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {[{
-                name: "Michael Rodriguez",
-                role: "Fleet Manager, Express Logistics",
-                review: "LorryWale has completely transformed how we manage our fleet. The real-time tracking and maintenance alerts have reduced our downtime by 35%.",
-              }, {
-                name: "Sarah Johnson",
-                role: "Operations Director, Midwest Transport",
-                review: "The ROI on this system has been incredible. We've saved over $120,000 in operational costs in the first year alone through better route planning and fuel management.",
-              }, {
-                name: "David Chang",
-                role: "CEO, Pacific Freight Solutions",
-                review: "The implementation was seamless and the customer support has been outstanding. Our drivers actually enjoy using the system because it makes their jobs easier.",
-              }].map((testimonial, index) => (
-
-                <div key={index} className={darkMode ? " bg-gray-900 p-6 rounded-lg shadow-lg border border-gray-400 " : "bg-white p-6 rounded-lg shadow-lg border border-gray-200"}
-                >
-                  <div className="flex text-yellow-400 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          {/* Hero Section - Redesigned */}
+          <div className={darkMode ? "bg-[#2A2A2A]" : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"}>
+            <div className="max-w-7xl mx-auto px-6 py-24 sm:px-10 lg:px-14">
+              <div className="flex flex-col md:flex-row items-center">
+                {/* Left Content */}
+                <div className="md:w-1/2 md:pr-12 mb-10 md:mb-0">
+                  <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">Fleet Management Solution</span>
+                  <h1 className={darkMode ? "darkmode-text text-4xl md:text-5xl font-bold leading-tight mb-4" : "text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4"}>
+                    Manage Your Fleet with <span className="text-blue-600 relative">Precision
+                      <svg className="absolute bottom-0 left-0 w-full h-2 text-blue-300" viewBox="0 0 100 10" preserveAspectRatio="none">
+                        <path d="M0 5 Q 25 0, 50 5 Q 75 10, 100 5" fill="none" stroke="currentColor" strokeWidth="2" />
                       </svg>
-                    ))}
-                  </div>
+                    </span>
+                  </h1>
 
-                  <p className={darkMode ? "darkmode-text mb-4" : "text-gray-600 mb-4"}
-                  >{testimonial.review}</p>
-                  <div className="border-t pt-4">
+                  <p className={darkMode ? "darkmode-text mt-6 text-lg max-w-2xl leading-relaxed" : "mt-6 text-lg text-gray-700 max-w-2xl leading-relaxed"}>
+                    TruckByte gives you complete control over your truck fleet, optimizing routes,
+                    reducing costs, and improving efficiency with our advanced management solution.
+                  </p>
 
-                    <p className={darkMode ? "darkmode-text font-medium text-gray-900" : "font-medium text-gray-900"}
-                    >{testimonial.name}</p>
-
-                    <p className={darkMode ? "darkmode-text text-sm " : "text-sm text-gray-500"}
-                    >{testimonial.role}</p>
+                  {/* CTA Buttons */}
+                  <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                    <a
+                      href="/dashboard"
+                      className="bg-blue-600 text-white px-8 py-4 rounded-full text-center text-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md"
+                    >
+                      <LayoutDashboard className="h-5 w-5" />
+                      Dashboard
+                    </a>
+                    <a
+                      href="/learnmore"
+                      className="bg-transparent text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full text-center text-lg font-medium hover:bg-blue-50 transition-all transform hover:scale-105"
+                    >
+                      Learn More
+                    </a>
                   </div>
                 </div>
-              ))}
+
+                {/* Right Side Image */}
+                <div className="md:w-1/2">
+                  <div className={darkMode ? "bg-[#121212] p-5 rounded-xl shadow-2xl relative overflow-hidden group" : "bg-white p-5 rounded-xl shadow-2xl relative overflow-hidden group"}>
+                    <div className="absolute -top-16 -right-16 w-32 h-32 bg-blue-500 rounded-full opacity-20 blur-3xl"></div>
+                    <div className="absolute -bottom-16 -left-16 w-32 h-32 bg-purple-500 rounded-full opacity-20 blur-3xl"></div>
+                    <img
+                      src="/dashboard.png"
+                      alt="TruckByte dashboard preview"
+                      className="rounded-lg w-full transition-transform duration-500 transform group-hover:scale-105"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
 
-            {/* Scrolling client logos */}
+          {/* Features Section - Redesigned */}
+          <div id="features" className={darkMode ? "darkmode py-20" : "py-20 bg-white"}>
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+              <div className="text-center mb-16">
+                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">FEATURES</span>
+                <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
+                  Powerful Features for <span className="text-blue-600">Complete Fleet Management</span>
+                </h2>
+                <p className={darkMode ? "darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-600 max-w-3xl mx-auto"}>
+                  Our comprehensive solution is designed to handle every aspect of your trucking operations.
+                </p>
+              </div>
 
-            <div className={darkMode ? "mt-16 overflow-hidden relative w-full py-6 bg-gray-400 rounded-3xl" : "mt-16 overflow-hidden relative w-full py-6 bg-white"}
-            >
-              <div ref={marqueeRef} className="flex gap-14 animate-marquee whitespace-nowrap">
-                {["/amv.png", "/ashokleyland.png", "/bharat.png", "/eicher.png", "/tata.png", "/force.png", "/mahindra.png"].map((src, index) => (
-                  <img key={index} src={src} alt="Client logo" className="h-12 object-contain" />
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  { icon: <Truck className="h-7 w-7" />, color: "bg-blue-50 text-blue-600", title: "Real-time Fleet Tracking", desc: "Monitor your entire fleet in real-time with GPS tracking and instant status updates." },
+                  { icon: <BarChart3 className="h-7 w-7" />, color: "bg-green-50 text-green-600", title: "Advanced Analytics", desc: "Gain actionable insights with comprehensive reporting and performance metrics." },
+                  { icon: <Shield className="h-7 w-7" />, color: "bg-purple-50 text-purple-600", title: "Maintenance Management", desc: "Automate maintenance scheduling and receive alerts for preventive service needs." },
+                  { icon: <Clock className="h-7 w-7" />, color: "bg-yellow-50 text-yellow-600", title: "Scheduling & Dispatch", desc: "Efficiently assign drivers and vehicles while optimizing delivery schedules." },
+                  { icon: <Zap className="h-7 w-7" />, color: "bg-red-50 text-red-600", title: "Fuel Management", desc: "Track fuel consumption, identify efficiency opportunities, and reduce costs." },
+                  {
+                    icon:
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                      </svg>, color: "bg-indigo-50 text-indigo-600", title: "Route Optimization", desc: "Plan the most efficient routes to save time, fuel, and operational costs."
+                  }].map((feature, index) => (
+                    <div
+                      key={index}
+                      className={`p-8 rounded-xl shadow-lg transition-all transform hover:scale-105 ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-50"
+                        }`}
+                    >
+                      <div
+                        className={`${feature.color} w-12 h-12 rounded-full flex items-center justify-center mb-6`}
+                      >
+                        {feature.icon}
+                      </div>
+                      <h3 className={darkMode ? "darkmode-text text-xl font-semibold mb-4" : "text-xl font-semibold text-gray-900 mb-4"}>
+                        {feature.title}
+                      </h3>
+                      <p className={darkMode ? "darkmode-text text-gray-300" : "text-gray-600"}>
+                        {feature.desc}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Benefits Section - Redesigned */}
+          <div id="benefits" className={darkMode ? "darkmode py-20" : "py-20 bg-gray-50"}>
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+              <div className="text-center mb-16">
+                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">BENEFITS</span>
+                <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
+                  Why Choose <span className="text-blue-600">TruckByte?</span>
+                </h2>
+                <p className={darkMode ? "darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-600 max-w-3xl mx-auto"}>
+                  Discover the advantages of using TruckByte for your fleet management needs.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  {
+                    icon: <Check className="h-7 w-7" />,
+                    color: "bg-blue-50 text-blue-600",
+                    title: "Cost Efficiency",
+                    desc: "Reduce operational costs with optimized routes and resource allocation.",
+                  },
+                  {
+                    icon: <Check className="h-7 w-7" />,
+                    color: "bg-green-50 text-green-600",
+                    title: "Time Savings",
+                    desc: "Save time with automated scheduling and real-time tracking.",
+                  },
+                  {
+                    icon: <Check className="h-7 w-7" />,
+                    color: "bg-purple-50 text-purple-600",
+                    title: "Enhanced Security",
+                    desc: "Ensure the safety of your cargo with advanced security features.",
+                  },
+                  {
+                    icon: <Check className="h-7 w-7" />,
+                    color: "bg-yellow-50 text-yellow-600",
+                    title: "Data-Driven Decisions",
+                    desc: "Make informed decisions with comprehensive analytics and insights.",
+                  },
+                  {
+                    icon: <Check className="h-7 w-7" />,
+                    color: "bg-red-50 text-red-600",
+                    title: "Improved Collaboration",
+                    desc: "Enhance collaboration between drivers, companies, and customers.",
+                  },
+                  {
+                    icon: <Check className="h-7 w-7" />,
+                    color: "bg-indigo-50 text-indigo-600",
+                    title: "Global Connectivity",
+                    desc: "Expand your reach with access to a global logistics network.",
+                  },
+                ].map((benefit, index) => (
+                  <div
+                    key={index}
+                    className={`p-8 rounded-xl shadow-lg transition-all transform hover:scale-105 ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-50"
+                      }`}
+                  >
+                    <div
+                      className={`${benefit.color} w-12 h-12 rounded-full flex items-center justify-center mb-6`}
+                    >
+                      {benefit.icon}
+                    </div>
+                    <h3 className={darkMode ? "darkmode-text text-xl font-semibold mb-4" : "text-xl font-semibold text-gray-900 mb-4"}>
+                      {benefit.title}
+                    </h3>
+                    <p className={darkMode ? "darkmode-text text-gray-300" : "text-gray-600"}>
+                      {benefit.desc}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-        </section>
-        {/* Call to Action Section */}
-        <div className="bg-blue-600 py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">
-              Ready to Transform Your Fleet Management?
-            </h2>
-            <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of companies who have optimized their operations with LorryWale.
-              Get started with a free demo today.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <a
-                href="/dashboard"
-                className="bg-white text-blue-600 px-8 py-4 rounded-md text-lg font-medium hover:bg-blue-50"
-              >
-                Schedule Free Demo
-              </a>
-              <a
-                href="#contact"
-                className="bg-transparent text-white border border-white px-8 py-4 rounded-md text-lg font-medium hover:bg-blue-700"
-              >
-                Contact Sales
-              </a>
-            </div>
-          </div>
-        </div>
 
-        {/* Footer */}
-        <footer className="bg-gray-900 text-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div>
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center">
-                    <img className="w-[12rem] h-[8  rem]" src="/logo.png" alt="logo" />
-                  </div>                </div>
-                <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-                  The complete solution for modern fleet management.
+          {/* Testimonials Section - Redesigned */}
+          <div id="testimonials" className={darkMode ? "darkmode py-20" : "py-20 bg-white"}>
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+              <div className="text-center mb-16">
+                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">TESTIMONIALS</span>
+                <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
+                  What Our <span className="text-blue-600">Customers Say</span>
+                </h2>
+                <p className={darkMode ? "darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-600 max-w-3xl mx-auto"}>
+                  Hear from our satisfied customers who have transformed their logistics operations with TruckByte.
                 </p>
               </div>
 
-              <div>
-                <h3 className="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Company</h3>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="#about" className="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
-                  <li><a href="#careers" className="text-gray-400 hover:text-white transition duration-300">Careers</a></li>
-                  <li><a href="#blog" className="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
-                  <li><a href="#partners" className="text-gray-400 hover:text-white transition duration-300">Partners</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Resources</h3>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="#documentation" className="text-gray-400 hover:text-white transition duration-300">Documentation</a></li>
-                  <li><a href="#tutorials" className="text-gray-400 hover:text-white transition duration-300">Tutorials</a></li>
-                  <li><a href="#support" className="text-gray-400 hover:text-white transition duration-300">Support</a></li>
-                  <li><a href="#api" className="text-gray-400 hover:text-white transition duration-300">API</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Contact</h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="text-gray-400">📧 preetgusain84@gmail.com</li>
-                  <li className="text-gray-400">📞 1234567890</li>
-                  <li className="text-gray-400">📍 123 Fleet Street, Suite 100</li>
-                  <div className='flex gap-2' > <img className='size-[20px]' src="indian.png" alt="IN flag" /> <li className="text-gray-400">New Delhi - Dwarka</li></div>
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm">
-              <p className="text-gray-400">© 2025 LorryWale. All rights reserved.</p>
-              <div className="mt-4 md:mt-0 flex space-x-6">
-                <a href="https://www.instagram.com/preet_gusain200_/?utm_source=qr&igsh=MXhmenR4ZXgwc2xvbA%3D%3D#" target='_blank'><img className='size-[3rem]' src="/instalogo.png" alt="" /></a>
-                <a href="https://github.com/preetcoder12" target='_blank'><img className='size-[3rem]' src="/githublogo.png" alt="" /></a>
-                <a href="https://www.linkedin.com/in/preet-gusain-986b022a5/" target='_blank'><img className='size-[3rem]' src="/linkedinlogo.png" alt="" /></a>
-                <a href="https://www.youtube.com/@preetgusain" target='_blank'><img className='size-[3rem]' src="/ytlogo.png" alt="" /></a>
-
-              </div>
-            </div>
-          </div>
-        </footer>
-
-      </div >) : (<div>
-        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 relative overflow-hidden">
-          {/* Blurred background elements */}
-          <div className="absolute inset-0 overflow-hidden opacity-20">
-            <div className="absolute top-20 left-20 w-64 h-64 bg-red-500 rounded-full filter blur-3xl"></div>
-            <div className="absolute bottom-20 right-20 w-80 h-80 bg-orange-600 rounded-full filter blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-600 rounded-full filter blur-3xl"></div>
-          </div>
-
-          {/* Header/Logo Area */}
-          <div className="absolute top-8 left-8 flex items-center z-20">
-            <img className="w-12 h-12" src="/logo.png" alt="logo" />
-            <div className="flex flex-col ml-2">
-              <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">LorryWale</h1>
-              <span className="text-xs text-gray-400">Fleet Management</span>
-            </div>
-          </div>
-
-          {/* Main Card content */}
-          <div className="relative z-10 max-w-md w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl shadow-2xl border border-white border-opacity-20 p-8 mx-4">
-            <div className="flex flex-col items-center text-center">
-              <div className="bg-red-500 bg-opacity-20 p-4 rounded-full mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-red-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Account Suspended</h2>
-              <p className="text-gray-300 mb-6">Your account has been temporarily suspended. Please contact our support team for assistance.</p>
-
-              <div className="w-full bg-white bg-opacity-5 rounded-lg p-4 mb-6 border border-white border-opacity-10">
-                <p className="text-gray-400 text-sm">This may be due to payment issues, policy violations, or account security concerns. Our support team can help resolve this matter promptly.</p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full">
-                <button
-                  onClick={() => { handleEmail(user.email) }}
-                  className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-md flex-1 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                  </svg>
-                  Contact Support
-                </button>
-                <a href="/faq" className="px-6 py-3 bg-transparent border border-gray-400 hover:border-white text-gray-300 hover:text-white rounded-lg transition-colors flex-1 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                  </svg>
-                  FAQs
-                </a>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  {
+                    name: "Michael Rodriguez",
+                    role: "Fleet Manager, Express Logistics",
+                    review: "TruckByte has completely transformed how we manage our fleet. The real-time tracking and maintenance alerts have reduced our downtime by 35%.",
+                  },
+                  {
+                    name: "Sarah Johnson",
+                    role: "Operations Director, Midwest Transport",
+                    review: "The ROI on this system has been incredible. We've saved over $120,000 in operational costs in the first year alone through better route planning and fuel management.",
+                  },
+                  {
+                    name: "David Chang",
+                    role: "CEO, Pacific Freight Solutions",
+                    review: "The implementation was seamless and the customer support has been outstanding. Our drivers actually enjoy using the system because it makes their jobs easier.",
+                  },
+                ].map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className={`p-8 rounded-xl shadow-lg transition-all transform hover:scale-105 ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-50"
+                      }`}
+                  >
+                    <p className={darkMode ? "darkmode-text text-gray-300" : "text-gray-600"}>
+                      {testimonial.review}
+                    </p>
+                    <div className="flex items-center mt-6">
+                      <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                        {testimonial.name.charAt(0)}
+                      </div>
+                      <div className="ml-4">
+                        <h3 className={darkMode ? "darkmode-text text-lg font-semibold" : "text-lg font-semibold text-gray-900"}>
+                          {testimonial.name}
+                        </h3>
+                        <p className={darkMode ? "darkmode-text text-gray-400" : "text-gray-500"}>
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="absolute bottom-4 left-0 right-0 text-center text-gray-500 text-sm z-10">
-            <p>© 2025 LorryWale Fleet Management. All rights reserved.</p>
+          {/* Pricing Section - Redesigned */}
+          <div id="pricing" className={darkMode ? "darkmode py-20" : "py-20 bg-gray-50"}>
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+              <div className="text-center mb-16">
+                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">PRICING</span>
+                <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
+                  Affordable Plans for <span className="text-blue-600">Every Business</span>
+                </h2>
+                <p className={darkMode ? "darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-600 max-w-3xl mx-auto"}>
+                  Choose the plan that best suits your business needs.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  {
+                    title: "Basic",
+                    price: "₹ 999/month",
+                    features: ["Real-time Tracking", "Basic Analytics", "Email Support"],
+                  },
+                  {
+                    title: "Pro",
+                    price: "₹ 9999/year",
+                    features: ["Advanced Analytics", "Route Optimization", "24/7 Support"],
+                  },
+                  {
+                    title: "Enterprise",
+                    price: "Custom",
+                    features: ["Custom Solutions", "Dedicated Account Manager", "API Access"],
+                  },
+                ].map((plan, index) => (
+                  <div
+                    key={index}
+                    className={`p-8 rounded-xl shadow-lg transition-all transform hover:scale-105 ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-50"
+                      }`}
+                  >
+                    <h3 className={darkMode ? "darkmode-text text-2xl font-semibold mb-4" : "text-2xl font-semibold text-gray-900 mb-4"}>
+                      {plan.title}
+                    </h3>
+                    <p className={darkMode ? "darkmode-text text-4xl font-bold mb-6" : "text-4xl font-bold text-gray-900 mb-6"}>
+                      {plan.price}
+                    </p>
+                    <ul className="space-y-3 mb-8">
+                      {plan.features.map((feature, index) => (
+                        <li
+                          key={index}
+                          className={darkMode ? "darkmode-text flex items-center" : "flex items-center text-gray-600"}
+                        >
+                          <Check className="w-5 h-5 mr-2 text-blue-600" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      className={`w-full py-3 rounded-lg font-medium transition-all ${darkMode
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                        }`}
+                    >
+                      Get Started
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
+          {/* Contact Section - Redesigned */}
+          <div id="contact" className={darkMode ? "darkmode py-20" : "py-20 bg-white"}>
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+              <div className="text-center mb-16">
+                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">CONTACT</span>
+                <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
+                  Get in <span className="text-blue-600">Touch</span>
+                </h2>
+                <p className={darkMode ? "darkmode-text mt-4 text-lg max-w-3xl mx-auto" : "mt-4 text-lg text-gray-600 max-w-3xl mx-auto"}>
+                  Have questions or need assistance? Reach out to our team, and we'll be happy to help.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Contact Form */}
+                <div className={`p-8 rounded-xl shadow-lg ${darkMode ? "bg-gray-800" : "bg-white"
+                  }`}>
+                  <form>
+                    <div className="mb-6">
+                      <label htmlFor="name" className={darkMode ? "darkmode-text block text-sm font-medium mb-2" : "block text-sm font-medium text-gray-700 mb-2"}>
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        className={`w-full px-4 py-3 rounded-lg ${darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
+                          }`}
+                        placeholder="Your Name"
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <label htmlFor="email" className={darkMode ? "darkmode-text block text-sm font-medium mb-2" : "block text-sm font-medium text-gray-700 mb-2"}>
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        className={`w-full px-4 py-3 rounded-lg ${darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
+                          }`}
+                        placeholder="Your Email"
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <label htmlFor="message" className={darkMode ? "darkmode-text block text-sm font-medium mb-2" : "block text-sm font-medium text-gray-700 mb-2"}>
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        rows="4"
+                        className={`w-full px-4 py-3 rounded-lg ${darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
+                          }`}
+                        placeholder="Your Message"
+                      ></textarea>
+                    </div>
+                    <button
+                      type="submit"
+                      className={`w-full py-3 rounded-lg font-medium transition-all ${darkMode
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                        }`}
+                    >
+                      Send Message
+                    </button>
+                  </form>
+                </div>
+
+                {/* Contact Information */}
+                <div className={`p-8 rounded-xl shadow-lg ${darkMode ? "bg-gray-800" : "bg-white"
+                  }`}>
+                  <h3 className={darkMode ? "darkmode-text text-2xl font-semibold mb-6" : "text-2xl font-semibold text-gray-900 mb-6"}>
+                    Contact Information
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="flex items-center">
+                      <FaPhoneAlt className="h-6 w-6 text-blue-600 mr-4" />
+                      <p className={darkMode ? "darkmode-text" : "text-gray-600"}>+91 1234567890</p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaEnvelope className="h-6 w-6 text-blue-600 mr-4" />
+                      <p className={darkMode ? "darkmode-text" : "text-gray-600"}>support@truckbyte.com</p>
+                    </div>
+                    <div className="flex items-center">
+                      <FaMapMarkerAlt className="h-6 w-6 text-blue-600 mr-4" />
+                      <p className={darkMode ? "darkmode-text" : "text-gray-600"}>RE-32 TruckByte Lane, New Delhi, India</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer - Redesigned */}
+          <footer className={darkMode ? "darkmode py-8 bg-gray-900" : "py-8 bg-gray-800"}>
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+              <div className="flex justify-between items-center">
+                <p className={darkMode ? "darkmode-text" : "text-gray-300"}>© 2023 TruckByte. All rights reserved.</p>
+                <div className="flex space-x-4">
+                  <a href="#" className={darkMode ? "darkmode-text hover:text-yellow-400" : "text-gray-300 hover:text-yellow-400"}>
+                    Privacy Policy
+                  </a>
+
+                  <a href="#" className={darkMode ? "darkmode-text hover:text-yellow-400" : "text-gray-300 hover:text-yellow-400"}>
+                    Terms of Service
+                  </a>
+                  <div className="mt-4 md:mt-0 flex space-x-6">
+                    <a href="https://www.instagram.com/preet_gusain200_/?utm_source=qr&igsh=MXhmenR4ZXgwc2xvbA%3D%3D#" target='_blank'><img className='size-[2rem]' src="/instalogo.png" alt="" /></a>
+                    <a href="https://github.com/preetcoder12" target='_blank'><img className='size-[2rem]' src="/githublogo.png" alt="" /></a>
+                    <a href="https://www.linkedin.com/in/preet-gusain-986b022a5/" target='_blank'><img className='size-[2rem]' src="/linkedinlogo.png" alt="" /></a>
+                    <a href="https://www.youtube.com/@preetgusain" target='_blank'><img className='size-[2rem]' src="/ytlogo.png" alt="" /></a>
+
+                  </div>
+                </div>
+                
+              </div>
+              <h2 className='flex gap-4 text-gray-200 text-sm'> <User className='text-red-400'/>Made by Preet Gusain</h2>
+              <h2 className='flex gap-4 text-gray-200 text-sm'> <MdComputer className='size-6 text-blue-400'/>Project : Truck Management System (TMS)</h2>
+
+            </div>
+          </footer>
         </div>
-      </div>)}
+      ) : null}
     </div>
   );
 };

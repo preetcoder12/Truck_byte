@@ -10,7 +10,7 @@ const BecomeDriver = () => {
         email: "",
         phone: "",
         photo: "",
-        adhaarImage:"",
+        adhaarImage: "",
         gender: "",
         licenseNumber: "",
         licenseType: "",
@@ -40,8 +40,8 @@ const BecomeDriver = () => {
                 toast.error("Please fill in your name");
                 return false;
             }
-            if (!formData.age || formData.age < 18) {
-                toast.error("Age should be at least 18");
+            if (!formData.age || formData.age < 18 || age > 80) {
+                toast.error("Age should be at least 18 and at most 80 years");
                 return false;
             }
             if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
@@ -72,8 +72,8 @@ const BecomeDriver = () => {
                 toast.error("Please select a license type");
                 return false;
             }
-            if (!formData.experience || formData.experience < 1) {
-                toast.error("Experience should be at least 1 year");
+            if (!formData.experience || formData.experience < 1 || formData.experience > 50) {
+                toast.error("Experience should be at least 1 year and at most 50 years");
                 return false;
             }
             if (!formData.address.street.trim()) {
@@ -184,7 +184,7 @@ const BecomeDriver = () => {
     return (
         <>
             <div className="bg-gray-600 flex justify-center">
-                <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">LorryWale</span></a>
+                <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">TruckByte</span></a>
             </div>
             <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center py-12 px-4"
                 style={{
@@ -545,7 +545,7 @@ const BecomeDriver = () => {
                                                     required
                                                 />
                                                 <label htmlFor="terms" className="text-sm text-gray-200">
-                                                    I agree to the terms and conditions, if the world was ending i wanna be next to youuuu... ❤️
+                                                    I agree to the terms and conditions, privacy policy, and cookie policy of TruckByte and its partners.
                                                 </label>
                                             </div>
                                         </div>
@@ -583,27 +583,37 @@ const BecomeDriver = () => {
                     reverseOrder={false}
                     toastOptions={{
                         style: {
-                            background: '#333',
-                            color: '#fff',
-                            borderRadius: '10px',
-                            padding: '16px'
+                            background: '#1E1E1E', 
+                            color: '#EDEDED', 
+                            borderRadius: '12px', 
+                            padding: '14px 18px', 
+                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.4)', 
                         },
                         success: {
-                            duration: 5000,
+                            duration: 4000,
                             iconTheme: {
-                                primary: '#4ade80',
-                                secondary: '#fff'
-                            }
+                                primary: '#22C55E',
+                                secondary: '#fff',
+                            },
+                            style: {
+                                background: '#14532D', 
+                                color: '#D1FAE5', 
+                            },
                         },
                         error: {
                             duration: 5000,
                             iconTheme: {
-                                primary: '#ef4444',
-                                secondary: '#fff'
-                            }
+                                primary: '#DC2626', 
+                                secondary: '#fff',
+                            },
+                            style: {
+                                background: '#7F1D1D',
+                                color: '#FECACA', 
+                            },
                         }
                     }}
                 />
+
             </div>
         </>
     );

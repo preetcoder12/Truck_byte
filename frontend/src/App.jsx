@@ -25,6 +25,7 @@
   import Admin_Control_user from "./pages/Admin_Control_user";
   import Admin_to_ALLuser from "./pages/Admin_to_ALLuser";
 import Subscription from "./pages/Subscription";
+import HelpSupport from "./components/Help_and_Support";
 
   function App() {
     return (
@@ -47,6 +48,7 @@ import Subscription from "./pages/Subscription";
           <Route path="/booktrucksdetails/:truckId" element={<Protect element={<BookTruckProfile />} />} />
           <Route path="/payment" element={<Protect element={<PaymentPage />} />} />
           <Route path="/subscription" element={<Protect element={<Subscription />} />} />
+          <Route path="/helpsupport" element={<Protect element={<HelpSupport />} />} />
 
 
           {/* Admin Routes */}

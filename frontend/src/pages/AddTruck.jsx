@@ -660,9 +660,34 @@ const AddTruck = () => {
                 reverseOrder={false}
                 toastOptions={{
                     style: {
-                        background: '#333',
-                        color: '#fff',
+                        background: '#1E1E1E',
+                        color: '#EDEDED',
+                        borderRadius: '12px',
+                        padding: '14px 18px',
+                        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.4)',
                     },
+                    success: {
+                        duration: 4000,
+                        iconTheme: {
+                            primary: '#22C55E',
+                            secondary: '#fff',
+                        },
+                        style: {
+                            background: '#14532D',
+                            color: '#D1FAE5',
+                        },
+                    },
+                    error: {
+                        duration: 5000,
+                        iconTheme: {
+                            primary: '#DC2626',
+                            secondary: '#fff',
+                        },
+                        style: {
+                            background: '#7F1D1D',
+                            color: '#FECACA',
+                        },
+                    }
                 }}
             />
         </div>

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { FaRupeeSign } from "react-icons/fa";
+import { RingLoader } from "react-spinners";
 
 const PaymentPage = () => {
     const [paymentMethod, setPaymentMethod] = useState("credit");
@@ -10,25 +12,65 @@ const PaymentPage = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [truckdetails, setTruckDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+
+    const validatedetails = () => {
+        if (cardNumber === "" || expiryDate === "" || cvv === "" || name === "" || email === "") {
+            toast.error("Please fill all the details");
+            return false;
+        }
+        if (cardNumber.length < 19) {
+            toast.error("Please enter a valid card number");
+            return false;
+        }
+        if (expiryDate.length < 7) {
+            toast.error("Please enter a valid expiry date");
+            return false;
+        }
+        if (cvv.length < 3) {
+            toast.error("Please enter a valid CVV");
+            return false;
+        }
+        if (name === "") {
+            toast.error("Please enter your name");
+            return false;
+        }
+        if (email === "") {
+            toast.error("Please enter your email");
+            return false;
+        }
+        return true;
+
+    }
+
 
     const selectedTruckId = localStorage.getItem("selectedtruckid");
     console.log("Selected Truck ID:", selectedTruckId);
     const paymentprice = localStorage.getItem("price");
 
     useEffect(() => {
-
         const fetchTruckDetails = async () => {
+            setLoading(true); // ✅ Set loading state to true before request
             try {
                 const response = await axios.get(`http://localhost:8000/trucks/specifictruck/${selectedTruckId}`);
                 setTruckDetails(response.data);
             } catch (err) {
                 console.error("❌ Error fetching truck details:", err);
+            } finally {
+                setLoading(false); // ✅ Ensure loading state is reset
             }
         };
-        fetchTruckDetails();
+
+        if (selectedTruckId) { // ✅ Prevent unnecessary API calls if no ID
+            fetchTruckDetails();
+        }
     }, [selectedTruckId]);
 
 
+    const backto_dash = () => {
+        window.location.href = "/dashboard";
+    }
 
     const handleback = () => {
         window.location.href = "/booktrucks"
@@ -39,16 +81,18 @@ const PaymentPage = () => {
         pickup: '2025-03-15T10:00',
         estimatedCost: '$750.00'
     });
-    const [isProcessing, setIsProcessing] = useState(false);
     const [step, setStep] = useState(1);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setIsProcessing(true);
-
+        setLoading(true);
+        if (!validatedetails()) {
+            setLoading(false);
+            return;
+        }
         setTimeout(() => {
             setStep(3);
-            setIsProcessing(false);
+            setLoading(false);
         }, 2000);
     };
 
@@ -78,6 +122,14 @@ const PaymentPage = () => {
             setCardNumber(value);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-900">
+                <RingLoader color="#FACC15" size={80} />
+            </div>
+        );
+    }
 
     const renderSummary = () => (
         <div className="bg-gray-50 p-4 rounded-lg mb-6">
@@ -309,9 +361,9 @@ const PaymentPage = () => {
                                     <button
                                         type="submit"
                                         className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-md flex items-center"
-                                        disabled={isProcessing}
+                                        disabled={loading}
                                     >
-                                        {isProcessing ? (
+                                        {loading ? (
                                             <>Processing...</>
                                         ) : (
                                             <>Complete Payment</>
@@ -369,15 +421,19 @@ const PaymentPage = () => {
                             <h3 className="font-bold mb-3">Booking Details</h3>
                             <p><span className="font-medium">Booking ID:</span> TRK-{Math.floor(Math.random() * 100000).toString().padStart(5, '0')}</p>
                             <p><span className="font-medium">Pickup Date:</span> {new Date(bookingDetails.pickup).toLocaleString()}</p>
-                            <p><span className="font-medium">Amount Paid:</span> {bookingDetails.estimatedCost}</p>
+                            <p><span className="font-medium "  >Amount Paid:</span>
+                                <div className="flex gap-1">
+                                    <FaRupeeSign className="mt-1"/>{paymentprice}
+                                </div>
+                            </p>
                         </div>
 
                         <div className="flex justify-center space-x-4">
                             <button className="px-6 py-2 bg-blue-600 text-white rounded-lg">
                                 Download Receipt
                             </button>
-                            <button className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg">
-                                View Booking Details
+                            <button onClick={backto_dash} className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg">
+                                Back to dashboard
                             </button>
                         </div>
                     </div>
@@ -394,6 +450,20 @@ const PaymentPage = () => {
                     </div>
                 </div>
             </div>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+                toastOptions={{
+                    style: {
+                        background: '#ff4d4d', // Bright red for visibility
+                        color: '#fff', // White text for contrast
+                        border: '1px solid #cc0000', // Darker red border for depth
+                        boxShadow: '0 4px 10px rgba(255, 77, 77, 0.5)', // Subtle glow effect
+                    },
+                }}
+            />
+
+
         </div>
     );
 };

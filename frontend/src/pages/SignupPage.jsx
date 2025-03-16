@@ -105,7 +105,7 @@ const SignupPage = () => {
                         <div className="bg-blue-500 p-4 rounded-xl inline-block mb-4 shadow-lg">
                             <Truck className="w-12 h-12" />
                         </div>
-                        <h1 className="text-4xl font-bold mb-2">LorryWale</h1>
+                        <h1 className="text-4xl font-bold mb-2">TruckByte</h1>
                         <p className="text-blue-200 text-lg">Connecting Transportation Solutions</p>
                     </div>
 
