@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Mail, Phone, Truck, User, ArrowLeft, Moon, Sun, AlertTriangle } from "lucide-react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const HelpSupport = () => {
     const [userDetails, setUserDetails] = useState(null);
@@ -93,7 +94,7 @@ const HelpSupport = () => {
             );
 
             window.location.href = `mailto:Preetgusain84@gmail.com?subject=${subject}&body=${body}`;
-            alert("Redirecting to Mail... 😊");
+            toast.success("Redirecting to Mail... 😊");
             setFormData({ name: userDetails.username, email: userDetails.email, message: "" });
         }
     };
@@ -247,6 +248,22 @@ const HelpSupport = () => {
                     </div>
                 </div>
             </div>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+                toastOptions={{
+                    success: {
+                        style: {
+                            background: '#4CAF50',  // Green for success
+                            color: '#fff',         // White text for contrast
+                        },
+                        iconTheme: {
+                            primary: '#fff',       // White icon
+                            secondary: '#4CAF50',  // Matches background
+                        },
+                    },
+                }}
+            />
         </div>
     );
 };

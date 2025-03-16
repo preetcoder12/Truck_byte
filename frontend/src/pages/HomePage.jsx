@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Truck, BarChart3, Shield, Clock, Zap, Check, X, LayoutDashboard, ChevronRight, Menu, User } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { MdComputer, MdDarkMode } from "react-icons/md";
 import { FaEnvelope, FaLightbulb, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import axios from 'axios';
-import { BiPurchaseTag } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
@@ -13,6 +12,11 @@ const HomePage = () => {
   const [themeText, setThemeText] = useState("Dark Mode");
   const marqueeRef = useRef(null);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
 
   const [allusers, setAllUsers] = useState([]);
 
@@ -29,8 +33,10 @@ const HomePage = () => {
     };
     if (user.id) fetchAllUsers();
   }, [user.id]);
+  // console.log(allusers?.[0]?.username); // This prevents the error
+  // console.log(allusers?.[0]?.email); // This prevents the error
 
-  // Initialize dashboard state when allusers is updated
+
   const [activeDashboardItems, setActiveDashboardItems] = useState({
     Account: true,
   });
@@ -71,12 +77,11 @@ const HomePage = () => {
     });
   };
 
-  const handledashboard = () => {
-    navigate("/dashboard");
-  }
-
-  const buysubs = () => {
+  const handlepayment = () => {
     navigate("/subscription")
+  }
+  const handledashboard = () => {
+    navigate("/dashboard")
   }
 
   const handleLogout = () => {
@@ -95,18 +100,59 @@ const HomePage = () => {
     }
   }, []);
 
-  const AdminEmail = "preetgusain84@gmail.com";
 
-  const handleEmail = (email) => {
-    const adminMessage = prompt("Enter your message for the Admin:");
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  useEffect(() => {
+    if (allusers.length > 0 && allusers[0].email) {
+      setFormData((prev) => ({
+        ...prev,
+        name: allusers[0].username || "",
+        email: allusers[0].email || "",
+      }));
+    }
+  }, [allusers]);
 
-    if (adminMessage) {
-      const subject = encodeURIComponent(`From ${email} of TruckByte to Admin `);
-      const body = encodeURIComponent(`Hello, this is User with user id : ${user.id} : ${adminMessage} from ${email}.`);
 
-      window.location.href = `mailto:${AdminEmail}?subject=${subject}&body=${body}`;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Ensure email is not empty
+    if (!formData.email || formData.email.trim() === "") {
+      alert("Enter a valid email address!");
+      return;
+    }
+
+    // Regular Expression to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Enter a valid email address!");
+      return;
+    }
+
+    if (formData.message && allusers.length > 0) {
+      const subject = encodeURIComponent(
+        `Help & Support Request from ${formData.name} )`
+      );
+      const body = encodeURIComponent(
+        `Hello Support Team,\n\n${formData.message}\n\nUser Details:\nName: ${formData.name}\nContact: ${allusers[0].phone}\nEmail: ${formData.email}`
+      );
+
+      window.location.href = `mailto:Preetgusain84@gmail.com?subject=${subject}&body=${body}`;
+      toast.success("Redirecting to Mail... 😊");
+
+      setFormData({
+        name: allusers[0].username,
+        email: allusers[0].email,
+        message: "",
+      });
     }
   };
+
+  // console.log("Form Data Email before reset:", formData.email);
+
+
 
   return (
     <div>
@@ -170,7 +216,6 @@ const HomePage = () => {
               <div className="flex flex-col md:flex-row items-center">
                 {/* Left Content */}
                 <div className="md:w-1/2 md:pr-12 mb-10 md:mb-0">
-                  <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">Fleet Management Solution</span>
                   <h1 className={darkMode ? "darkmode-text text-4xl md:text-5xl font-bold leading-tight mb-4" : "text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4"}>
                     Manage Your Fleet with <span className="text-blue-600 relative">Precision
                       <svg className="absolute bottom-0 left-0 w-full h-2 text-blue-300" viewBox="0 0 100 10" preserveAspectRatio="none">
@@ -222,7 +267,6 @@ const HomePage = () => {
           <div id="features" className={darkMode ? "darkmode py-20" : "py-20 bg-white"}>
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
               <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">FEATURES</span>
                 <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
                   Powerful Features for <span className="text-blue-600">Complete Fleet Management</span>
                 </h2>
@@ -270,7 +314,6 @@ const HomePage = () => {
           <div id="benefits" className={darkMode ? "darkmode py-20" : "py-20 bg-gray-50"}>
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
               <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">BENEFITS</span>
                 <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
                   Why Choose <span className="text-blue-600">TruckByte?</span>
                 </h2>
@@ -344,7 +387,6 @@ const HomePage = () => {
           <div id="testimonials" className={darkMode ? "darkmode py-20" : "py-20 bg-white"}>
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
               <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">TESTIMONIALS</span>
                 <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
                   What Our <span className="text-blue-600">Customers Say</span>
                 </h2>
@@ -402,7 +444,6 @@ const HomePage = () => {
           <div id="pricing" className={darkMode ? "darkmode py-20" : "py-20 bg-gray-50"}>
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
               <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">PRICING</span>
                 <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
                   Affordable Plans for <span className="text-blue-600">Every Business</span>
                 </h2>
@@ -451,14 +492,23 @@ const HomePage = () => {
                         </li>
                       ))}
                     </ul>
-                    <button
+                    {plan.title !== "Enterprise" ? (<button
+                      onClick={handlepayment}
                       className={`w-full py-3 rounded-lg font-medium transition-all ${darkMode
                         ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "bg-blue-600 text-white hover:bg-blue-700"
                         }`}
                     >
                       Get Started
-                    </button>
+                    </button>) : (<button
+                      onClick={handledashboard}
+                      className={`w-full py-3 rounded-lg font-medium transition-all ${darkMode
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-green-600 text-white hover:bg-green-700"
+                        }`}
+                    >
+                      Free
+                    </button>)}
                   </div>
                 ))}
               </div>
@@ -469,7 +519,6 @@ const HomePage = () => {
           <div id="contact" className={darkMode ? "darkmode py-20" : "py-20 bg-white"}>
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
               <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">CONTACT</span>
                 <h2 className={darkMode ? "darkmode text-4xl md:text-5xl font-bold leading-snug" : "text-4xl md:text-5xl font-bold text-gray-900 leading-snug"}>
                   Get in <span className="text-blue-600">Touch</span>
                 </h2>
@@ -482,13 +531,15 @@ const HomePage = () => {
                 {/* Contact Form */}
                 <div className={`p-8 rounded-xl shadow-lg ${darkMode ? "bg-gray-800" : "bg-white"
                   }`}>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div className="mb-6">
                       <label htmlFor="name" className={darkMode ? "darkmode-text block text-sm font-medium mb-2" : "block text-sm font-medium text-gray-700 mb-2"}>
                         Name
                       </label>
                       <input
                         type="text"
+                        value={formData.name}
+                        onChange={handleChange}
                         id="name"
                         className={`w-full px-4 py-3 rounded-lg ${darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
                           }`}
@@ -501,6 +552,8 @@ const HomePage = () => {
                       </label>
                       <input
                         type="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         id="email"
                         className={`w-full px-4 py-3 rounded-lg ${darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
                           }`}
@@ -513,11 +566,16 @@ const HomePage = () => {
                       </label>
                       <textarea
                         id="message"
+                        name="message"
                         rows="4"
+                        value={formData.message} // Ensure this is present
+                        onChange={handleChange}
                         className={`w-full px-4 py-3 rounded-lg ${darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
                           }`}
                         placeholder="Your Message"
                       ></textarea>
+
+
                     </div>
                     <button
                       type="submit"
@@ -577,15 +635,32 @@ const HomePage = () => {
 
                   </div>
                 </div>
-                
+
               </div>
-              <h2 className='flex gap-4 text-gray-200 text-sm'> <User className='text-red-400'/>Made by Preet Gusain</h2>
-              <h2 className='flex gap-4 text-gray-200 text-sm'> <MdComputer className='size-6 text-blue-400'/>Project : Truck Management System (TMS)</h2>
+              <h2 className='flex gap-4 text-gray-200 text-sm'> <User className='text-red-400' />Made by Preet Gusain</h2>
+              <h2 className='flex gap-4 text-gray-200 text-sm'> <MdComputer className='size-6 text-blue-400' />Project : Truck Management System (TMS)</h2>
 
             </div>
           </footer>
         </div>
       ) : null}
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          success: {
+            style: {
+              background: '#4CAF50',  // Green for success
+              color: '#fff',         // White text for contrast
+            },
+            iconTheme: {
+              primary: '#fff',       // White icon
+              secondary: '#4CAF50',  // Matches background
+            },
+          },
+        }}
+      />
+
     </div>
   );
 };

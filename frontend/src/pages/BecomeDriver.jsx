@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
-import { User, Truck, ShieldCheck, Home, CreditCard, Phone } from "lucide-react";
+import { User, Truck, ShieldCheck, Home, CreditCard, Phone, ArrowLeft } from "lucide-react";
 
 const BecomeDriver = () => {
     const [formData, setFormData] = useState({
@@ -183,9 +183,7 @@ const BecomeDriver = () => {
 
     return (
         <>
-            <div className="bg-gray-600 flex justify-center">
-                <a href="/dashboard"> <span className="ml-3 text-4xl font-bold text-white">TruckByte</span></a>
-            </div>
+
             <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center py-12 px-4"
                 style={{
                     background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), 
@@ -200,12 +198,25 @@ const BecomeDriver = () => {
 
                     <div className="p-8 md:p-12">
                         <div className="mb-8 text-center">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 tracking-tight">
-                                <span className="bg-clip-text text-white">
-                                    <div className="flex justify-center gap-2">Become a Driver <User className="size-10" /></div>
-                                </span>
-                            </h1>
-                            <p className="text-gray-200 text-lg mb-6">Join our elite team and start earning today</p>
+                            <div className="flex gap-[13rem]">
+                                <a
+                                    href="/dashboard"
+                                    className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-lg shadow-lg transition-all hover:bg-blue-700 hover:scale-105"
+                                >
+                                    <ArrowLeft className="mr-2 size-6" /> Back
+                                </a>
+                                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+                                    <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+                                        <span className="bg-gradient-to-r from-green-400 to-purple-500 bg-clip-text text-transparent">
+                                            Become a Driver
+                                        </span>
+                                        <User className="size-10 text-blue-400" />
+                                    </div>
+                                </h1>
+                            </div>
+
+                            <p className="text-gray-300 text-lg mb-6">Join our elite team and start earning today.</p>
+
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -583,11 +594,11 @@ const BecomeDriver = () => {
                     reverseOrder={false}
                     toastOptions={{
                         style: {
-                            background: '#1E1E1E', 
-                            color: '#EDEDED', 
-                            borderRadius: '12px', 
-                            padding: '14px 18px', 
-                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.4)', 
+                            background: '#1E1E1E',
+                            color: '#EDEDED',
+                            borderRadius: '12px',
+                            padding: '14px 18px',
+                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.4)',
                         },
                         success: {
                             duration: 4000,
@@ -596,19 +607,19 @@ const BecomeDriver = () => {
                                 secondary: '#fff',
                             },
                             style: {
-                                background: '#14532D', 
-                                color: '#D1FAE5', 
+                                background: '#14532D',
+                                color: '#D1FAE5',
                             },
                         },
                         error: {
                             duration: 5000,
                             iconTheme: {
-                                primary: '#DC2626', 
+                                primary: '#DC2626',
                                 secondary: '#fff',
                             },
                             style: {
                                 background: '#7F1D1D',
-                                color: '#FECACA', 
+                                color: '#FECACA',
                             },
                         }
                     }}
