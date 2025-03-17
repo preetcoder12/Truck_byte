@@ -643,7 +643,37 @@ const HomePage = () => {
             </div>
           </footer>
         </div>
-      ) : null}
+      ) : (<div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 relative overflow-hidden">
+        {/* Blurred background elements */}
+        <div className="absolute inset-0 overflow-hidden opacity-20">
+          <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-indigo-600 rounded-full filter blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-700 rounded-full filter blur-3xl"></div>
+        </div>
+
+        {/* Card content */}
+        <div className="relative z-10 max-w-md w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl shadow-2xl border border-white border-opacity-20 p-8 mx-4">
+          <div className="flex flex-col items-center text-center">
+            <div className="bg-red-500 bg-opacity-20 p-4 rounded-full mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-red-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H9m4-3H9m2-3h2M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5c0-1.1.9-2 2-2z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Account has been suspeded</h2>
+            <p className="text-gray-300 mb-6">You don't have access to this homepage. Please contact your administrator for access rights.</p>
+
+            <div className="w-full bg-white bg-opacity-5 rounded-lg p-4 mb-6 border border-white border-opacity-10">
+              <p className="text-gray-400 text-sm">If you believe this is an error, please verify your account permissions or check with your system administrator.</p>
+            </div>
+
+            <div className="flex space-x-4">
+              <a href="/helpsupport" className="px-6 py-2 bg-transparent border border-gray-400 hover:border-white text-gray-300 hover:text-white rounded-lg transition-colors">
+                Get Help
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>)}
       <Toaster
         position="top-right"
         reverseOrder={false}

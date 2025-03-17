@@ -40,7 +40,7 @@ const BecomeDriver = () => {
                 toast.error("Please fill in your name");
                 return false;
             }
-            if (!formData.age || formData.age < 18 || age > 80) {
+            if (!formData.age || formData.age < 18 || formData.age > 80) {
                 toast.error("Age should be at least 18 and at most 80 years");
                 return false;
             }
