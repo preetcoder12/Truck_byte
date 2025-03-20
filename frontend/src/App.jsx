@@ -10,7 +10,6 @@ import EditDriverProfile from "./pages/EditDriverProfile";
 import AddTruck from "./pages/AddTruck";
 import BookTrucks from "./pages/BookTrucks";
 import BookTruckProfile from "./components/BookTruckProfile";
-import LearnMore from "./pages/LearnMore";
 import SelectRole from "./components/Select_ROle"
 import AdminSignup from "./pages/AdminSignupPage";
 import Admin_LoginPage from "./pages/Admin_LoginPage";
@@ -26,6 +25,7 @@ import Admin_Control_user from "./pages/Admin_Control_user";
 import Admin_to_ALLuser from "./pages/Admin_to_ALLuser";
 import Subscription from "./pages/Subscription";
 import HelpSupport from "./components/Help_and_Support";
+import LearnMore from "./pages/Learnmore";
 
 function App() {
   return (
@@ -37,8 +37,8 @@ function App() {
 
         {/* Users and Drivers Routes */}
         <Route path="/" element={<Protect element={<HomePage />} />} />
-        <Route path="/learnmore" element={<Protect element={<LearnMore />} />} />
         <Route path="/dashboard" element={<Protect element={<Dashboard />} />} />
+        <Route path="/learnmore" element={<Protect element={<LearnMore />} />} />
         <Route path="/becomedriver" element={<Protect element={<BecomeDriver />} />} />
         <Route path="/driverprofile" element={<Protect element={<DriverProfile />} />} />
         <Route path="/driverlogin" element={<DriverLogin />} />
