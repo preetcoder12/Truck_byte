@@ -1,0 +1,10 @@
+[33m84ba7a4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: commit: new
+[33m5c47392[m HEAD@{1}: reset: moving to origin/main
+[33m2570b88[m HEAD@{2}: rebase (abort): returning to refs/heads/main
+[33m2570b88[m HEAD@{3}: rebase (abort): returning to refs/heads/main
+[33m98d9c3a[m HEAD@{4}: commit (amend): Updated .gitignore to ignore .env files
+[33mb59af39[m HEAD@{5}: commit (amend): Updated .gitignore to ignore .env files
+[33m4fa66aa[m HEAD@{6}: reset: moving to HEAD~1
+[33m8db6f61[m HEAD@{7}: commit (amend): Updated .gitignore to exclude .env files
+[33m0be4a64[m HEAD@{8}: reset: moving to HEAD~1
+[33m2570b88[m HEAD@{9}: commit: new
