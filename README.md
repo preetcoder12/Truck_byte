@@ -1,4 +1,4 @@
-# 🚛 LoadMate - Truck Management System
+# 🚛 TruckByte - Truck Management System
 
 LoadMate is a **MERN stack** application designed to simplify truck rentals, driver management, and logistics operations. It enables users to book, list, and manage trucks seamlessly.
 
