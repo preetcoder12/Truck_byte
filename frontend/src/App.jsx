@@ -20,7 +20,7 @@ import BecomeDriver from "./pages/BecomeDriver";
 import AdminSeeSelectedTruck from "./pages/AdminSeeSelectedTruck";
 import EditTruckDetails from "./pages/EditTruckDetails";
 import Admin_ToDriver_Profile from "./pages/Admin_ToDriver_Profile";
-import Admin_edit_driverDetails from "./pages/Admin_Edit_driver";
+import Admin_edit_driverDetails from "./pages/Admin_edit_driver";
 import Admin_Control_user from "./pages/Admin_Control_user";
 import Admin_to_ALLuser from "./pages/Admin_to_ALLuser";
 import Subscription from "./pages/Subscription";
