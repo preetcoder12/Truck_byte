@@ -235,7 +235,7 @@ const SignupPage = () => {
                         </button>
 
                         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-                            <div className="flex justify-center mt-4">
+                        <div className="flex justify-center mt-4">
                                 <GoogleLogin
                                     onSuccess={handleGoogleSuccess}
                                     onError={() => {
