@@ -16,12 +16,11 @@ app.use(cookieParser());
 
 app.use(cors({
     origin: [
-        'http://localhost:5173', // Local
-        'https://truck-byte.vercel.app' // Vercel
+        'http://localhost:5173', // For local development
+        'https://truck-byte-645af8s9h-preets-projects-d62880f1.vercel.app' // Vercel frontend URL
     ],
-    credentials: true,
+    credentials: true, // Allows cookies and auth headers
 }));
-
 
 
 mongoose.connect(process.env.MONGO_URI)
