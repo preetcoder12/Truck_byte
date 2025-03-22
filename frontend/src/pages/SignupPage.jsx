@@ -9,7 +9,7 @@ import { toast, Toaster } from "react-hot-toast";
 
 // Access environment variables with fallback values
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://your-backend.onrender.com";
 
 const handleGoogleSuccess = async (credentialResponse) => {
     try {
@@ -235,7 +235,7 @@ const SignupPage = () => {
                         </button>
 
                         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-                        <div className="flex justify-center mt-4">
+                            <div className="flex justify-center mt-4">
                                 <GoogleLogin
                                     onSuccess={handleGoogleSuccess}
                                     onError={() => {
