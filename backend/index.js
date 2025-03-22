@@ -15,9 +15,13 @@ const cors = require("cors");
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:5173', 
-    credentials: true, 
+    origin: [
+        'http://localhost:5173', // For local development
+        'https://truck-byte-git-main-preets-projects-d62880f1.vercel.app' // Vercel frontend URL
+    ],
+    credentials: true, // Allows cookies and auth headers
 }));
+
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ MongoDB Connected"))
