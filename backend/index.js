@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [
         'http://localhost:5173', // For local development
-        'https://truck-byte-git-main-preets-projects-d62880f1.vercel.app/' // Vercel frontend URL
+        'https://truck-byte-3s2yqg4cl-preets-projects-d62880f1.vercel.app/' // Vercel frontend URL
     ],
     credentials: true, // Allows cookies and auth headers
 }));
