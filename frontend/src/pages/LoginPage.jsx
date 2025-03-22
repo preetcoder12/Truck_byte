@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import {
     EyeIcon, EyeOffIcon,
@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 
+
+const API_BASE_URL = "https://your-backend.onrender.com";
 const LoginPage = () => {
     const [formData, setFormData] = useState({
         email: "",
@@ -25,7 +27,7 @@ const LoginPage = () => {
         setIsLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:8000/user/login", formData, {
+            const response = await axios.post(`${API_BASE_URL}/user/login`, formData, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
